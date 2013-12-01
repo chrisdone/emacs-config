@@ -204,6 +204,8 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'after-save-hook 'auto-chmod)
 
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
 
 ;; Auto-loads
 
@@ -211,12 +213,9 @@
 (add-to-list 'auto-mode-alist (cons "\\.cabal\\'" 'haskell-cabal-mode))
 (add-to-list 'auto-mode-alist '("\\.hcr\\'" . haskell-core-mode))
 
-(add-to-list 'auto-mode-alist (cons "\\.js$" 'espresso-mode))
-(add-to-list 'auto-mode-alist (cons "\\.julius$" 'espresso-mode))
 (add-to-list 'auto-mode-alist (cons "\\.lucius$" 'css-mode))
 (add-to-list 'auto-mode-alist (cons "\\.hamlet$" 'html-mode))
-(add-to-list 'auto-mode-alist (cons "\\.el\\'" (lambda () (emacs-lisp-mode) (paredit-mode))))
-(add-to-list 'auto-mode-alist (cons "\\.lisp\\'" (lambda () (lisp-mode) (paredit-mode))))
+(add-to-list 'auto-mode-alist (cons "\\.el\\'" 'emacs-lisp-mode))
 
 
 ;; Environment settings
