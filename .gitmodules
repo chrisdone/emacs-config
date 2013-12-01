@@ -16,9 +16,6 @@
 [submodule "packages/god-mode"]
 	path = packages/god-mode
 	url = git@github.com:chrisdone/god-mode.git
-[submodule "packages/color-theme"]
-	path = packages/color-theme
-	url = git@github.com:chrisdone/color-theme.git
 [submodule "packages/structured-haskell-mode"]
 	path = packages/structured-haskell-mode
 	url = git@github.com:chrisdone/structured-haskell-mode.git

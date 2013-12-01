@@ -13,7 +13,8 @@
     paredit
     haskell-mode
     smex
-    magit))
+    magit
+    turbo-devel-mode))
 
 (defvar configs
   '("global"
