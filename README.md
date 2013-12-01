@@ -7,12 +7,19 @@ To use
     $ cd packages/haskell-mode; make
     $ cd packages/structured-haskell-mode; cabal install
 
-Then
+### Use without affecting existing Emacs configuration
 
-    $ emacs -Q -l config.el
+    $ emacs -Q -l init.el
 
-or add this to your `.emacs`
+### Use by modifying `.emacs`
 
-    (load "/path-to/chrisdone-emacs/config.el")
+Put only this in your `.emacs`
+
+    (load "/path-to/chrisdone-emacs/init.el")
 
 and run Emacs as normal.
+
+### Use by checking out as `~/.emacs.d/`
+
+Check out this project or symlink it as `~/.emacs.d/` and then run
+Emacs as normal.
