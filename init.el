@@ -15,7 +15,8 @@
     smex
     magit
     notify
-    turbo-devel-mode))
+    turbo-devel-mode
+    hsenv))
 
 (defvar configs
   '("global"
