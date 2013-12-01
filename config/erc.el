@@ -41,3 +41,4 @@
 
 (setq erc-max-buffer-size 10000)
 (erc-truncate-mode 1)
+(erc-scrolltobottom-mode 1)
