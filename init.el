@@ -14,6 +14,7 @@
     haskell-mode
     smex
     magit
+    notify
     turbo-devel-mode))
 
 (defvar configs
