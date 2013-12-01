@@ -195,6 +195,8 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
+(setq require-final-newline t)
+
 
 ;; Hooks
 
