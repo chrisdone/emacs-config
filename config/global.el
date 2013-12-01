@@ -1,4 +1,9 @@
 
+;; Requirements
+
+(require 'uniquify)
+
+
 ;; Fundamental functions
 
 (defun indent-buffer ()
@@ -92,11 +97,6 @@
     (erase-buffer)
     (insert (shell-command-to-string (concat "todo " dir)))
     (save-buffer)))
-
-
-;; Requirements
-
-(require 'uniquify)
 
 
 ;; Global keybindings

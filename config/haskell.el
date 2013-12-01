@@ -19,6 +19,7 @@
                                 "espresso-mode"
                                 "ghc-core-mode"
                                 "org-mode")))))
+
 (defun haskell-insert-doc ()
   "Insert the documentation syntax."
   (interactive)
