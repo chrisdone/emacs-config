@@ -1,0 +1,24 @@
+[submodule "packages/zenburn"]
+	path = packages/zenburn
+	url = git@github.com:chrisdone/zenburn.git
+[submodule "packages/magit"]
+	path = packages/magit
+	url = https://github.com/magit/magit.git
+[submodule "packages/smex"]
+	path = packages/smex
+	url = https://github.com/nonsequitur/smex.git
+[submodule "packages/haskell-mode"]
+	path = packages/haskell-mode
+	url = git@github.com:haskell/haskell-mode.git
+[submodule "packages/paredit"]
+	path = packages/paredit
+	url = https://github.com/emacsmirror/paredit.git
+[submodule "packages/god-mode"]
+	path = packages/god-mode
+	url = git@github.com:chrisdone/god-mode.git
+[submodule "packages/color-theme"]
+	path = packages/color-theme
+	url = git@github.com:chrisdone/color-theme.git
+[submodule "packages/structured-haskell-mode"]
+	path = packages/structured-haskell-mode
+	url = git@github.com:chrisdone/structured-haskell-mode.git
