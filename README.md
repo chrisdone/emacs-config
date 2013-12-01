@@ -5,6 +5,7 @@ To use
     $ git submodule init
     $ git submodule update
     $ cd packages/haskell-mode; make
+    $ cd packages/structured-haskell-mode; cabal install
 
 Then
 
