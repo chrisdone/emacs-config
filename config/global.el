@@ -187,6 +187,18 @@
 
 (setq org-log-done t)
 
+(setq ansi-color-names-vector
+      (list zenburn-bg
+            zenburn-red
+            zenburn-green
+            zenburn-yellow
+            zenburn-blue
+            zenburn-magenta
+            zenburn-cyan
+            zenburn-fg))
+
+(setq ansi-color-map (ansi-color-make-color-map))
+
 
 ;; Global settings
 
