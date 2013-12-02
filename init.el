@@ -16,7 +16,8 @@
     magit
     notify
     turbo-devel-mode
-    hsenv))
+    hsenv
+    goto-last-change))
 
 (defvar configs
   '("global"
