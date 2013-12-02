@@ -85,6 +85,7 @@
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
 (define-key haskell-mode-map [f5] 'haskell-process-load-or-reload)
 (define-key haskell-mode-map [f12] 'turbo-devel-reload)
+(define-key html-mode-map [f12] 'turbo-devel-reload)
 (define-key haskell-mode-map (kbd "C-c C-u") 'haskell-insert-undefined)
 (define-key haskell-mode-map (kbd "C-c C-a") 'haskell-insert-doc)
 (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
