@@ -30,11 +30,13 @@
 ;; Load packages
 
 (loop for name in packages
-      do (progn (add-to-list 'load-path
-                             (concat (file-name-directory load-file-name)
-                                     "packages/"
-                                     (symbol-name name)))
-                (require name)))
+      do (progn (unless (fboundp name)
+                  (add-to-list 'load-path
+                               (concat (file-name-directory (or load-file-name
+                                                                (buffer-file-name)))
+                                       "packages/"
+                                       (symbol-name name)))
+                  (require name))))
 
 (add-to-list 'load-path
              (concat (file-name-directory load-file-name)
