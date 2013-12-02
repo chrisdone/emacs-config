@@ -178,6 +178,8 @@
       c-basic-offset 2
       c-indent-level 2)
 
+(setq css-indent-offset 2)
+
 (setq espresso-default-style "bsd"
       espresso-basiespresso-offset 2
       espresso-indent-level 2)
