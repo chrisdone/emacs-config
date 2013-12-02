@@ -185,7 +185,7 @@
       espresso-indent-level 2)
 
 (setq org-priority-faces
-      (quote ((49 . "#e38580") (50 . "#d7e102") (51 . "#02e10c"))))
+      (quote ((49 . zenburn-red) (50 . zenburn-yellow) (51 . zenburn-green))))
 
 (setq org-log-done t)
 
