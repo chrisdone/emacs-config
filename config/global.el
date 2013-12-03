@@ -232,6 +232,9 @@
 (add-to-list 'auto-mode-alist (cons "\\.hamlet$" 'html-mode))
 (add-to-list 'auto-mode-alist (cons "\\.el\\'" 'emacs-lisp-mode))
 
+(add-to-list 'auto-mode-alist (cons "\\.md\\'" 'markdown-mode))
+(add-to-list 'auto-mode-alist (cons "\\.markdown\\'" 'markdown-mode))
+
 
 ;; Environment settings
 

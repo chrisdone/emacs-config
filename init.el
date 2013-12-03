@@ -17,7 +17,8 @@
     notify
     turbo-devel-mode
     hsenv
-    goto-last-change))
+    goto-last-change
+    markdown-mode))
 
 (defvar configs
   '("global"
