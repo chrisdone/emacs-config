@@ -19,3 +19,6 @@
 [submodule "packages/structured-haskell-mode"]
 	path = packages/structured-haskell-mode
 	url = git@github.com:chrisdone/structured-haskell-mode.git
+[submodule "packages/markdown-mode"]
+	path = packages/markdown-mode
+	url = https://github.com/defunkt/markdown-mode.git

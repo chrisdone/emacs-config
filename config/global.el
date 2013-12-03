@@ -228,6 +228,7 @@
 (add-to-list 'auto-mode-alist '("\\.hcr\\'" . haskell-core-mode))
 
 (add-to-list 'auto-mode-alist (cons "\\.lucius$" 'css-mode))
+(add-to-list 'auto-mode-alist (cons "\\.julius$" 'javascript-mode))
 (add-to-list 'auto-mode-alist (cons "\\.hamlet$" 'html-mode))
 (add-to-list 'auto-mode-alist (cons "\\.el\\'" 'emacs-lisp-mode))
 
