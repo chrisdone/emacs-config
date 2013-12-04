@@ -5,6 +5,7 @@
 (require 'haskell-simple-indent)
 (require 'haskell-interactive-mode)
 (require 'haskell-font-lock)
+(require 'sgml-mode)
 
 
 ;; Functions
