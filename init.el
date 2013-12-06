@@ -44,7 +44,7 @@
                      "packages/"
                      "structured-haskell-mode/elisp"))
 
-(require 'structured-haskell-mode)
+(require 'shm)
 
 
 ;; Global/standard Emacs configuration
