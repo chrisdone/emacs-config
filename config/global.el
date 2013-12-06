@@ -98,6 +98,24 @@
     (insert (shell-command-to-string (concat "todo " dir)))
     (save-buffer)))
 
+(defun my-yank (&optional previous-line)
+  "Yank from the kill ring with some special newline behaviour."
+  (interactive "P")
+  (let ((string (current-kill 0)))
+    (cond
+     ((string-match "\n" string)
+      (cond
+       (previous-line
+        (goto-char (line-beginning-position))
+        (save-excursion
+          (clipboard-yank)))
+       (t
+        (goto-char (line-end-position))
+        (forward-char)
+        (save-excursion
+          (clipboard-yank)))))
+     (t (clipboard-yank)))))
+
 
 ;; Global keybindings
 
