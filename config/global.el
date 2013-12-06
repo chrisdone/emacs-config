@@ -146,6 +146,8 @@
 ;; Mode-specific keybindings
 
 (define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
+(define-key paredit-mode-map (kbd "M-a") 'paredit-backward-up)
+
 
 
 ;; Disable default settings
