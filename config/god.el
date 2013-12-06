@@ -16,7 +16,6 @@
 (global-set-key (kbd "C-x C-0") 'delete-window)
 (global-set-key (kbd "<escape>") 'god-local-mode)
 
-(define-key god-local-mode-map (kbd "z") 'ido-switch-buffer)
 (define-key god-local-mode-map (kbd ".") 'repeat)
 (define-key god-local-mode-map (kbd "[") 'paredit-open-square)
 (define-key god-local-mode-map (kbd "]") 'paredit-close-square)
