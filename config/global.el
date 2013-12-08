@@ -116,6 +116,19 @@
           (clipboard-yank)))))
      (t (clipboard-yank)))))
 
+(defun set-ansi-colors ()
+  (interactive)
+  (setq ansi-color-names-vector
+        (list zenburn-bg
+              zenburn-red
+              zenburn-green
+              zenburn-yellow
+              zenburn-blue
+              zenburn-magenta
+              zenburn-cyan
+              zenburn-fg))
+  (setq ansi-color-map (ansi-color-make-color-map)))
+
 
 ;; Global keybindings
 
@@ -209,18 +222,6 @@
 
 (setq org-log-done t)
 
-(setq ansi-color-names-vector
-      (list zenburn-bg
-            zenburn-red
-            zenburn-green
-            zenburn-yellow
-            zenburn-blue
-            zenburn-magenta
-            zenburn-cyan
-            zenburn-fg))
-
-(setq ansi-color-map (ansi-color-make-color-map))
-
 
 ;; Global settings
 
@@ -237,8 +238,8 @@
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'after-save-hook 'auto-chmod)
-
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'shell-mode-hook 'set-ansi-colors)
 
 
 ;; Auto-loads
