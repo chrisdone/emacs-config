@@ -6,6 +6,7 @@ To use
     $ git submodule update
     $ cd packages/haskell-mode; make
     $ cd packages/structured-haskell-mode; cabal install
+    $ cabal install hasktags
 
 ### Use without affecting existing Emacs configuration
 
