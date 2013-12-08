@@ -26,6 +26,14 @@
   (interactive)
   (insert "-- | "))
 
+(defun haskell-insert-undefined ()
+  "Insert undefined."
+  (interactive)
+  (if (and (boundp 'structured-haskell-mode)
+           structured-haskell-mode)
+      (shm-insert-string "undefined")
+    (insert "undefined")))
+
 (defun haskell-move-right ()
   (interactive)
   (haskell-move-nested 1))
