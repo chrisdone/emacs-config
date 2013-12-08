@@ -10,6 +10,8 @@ To use
 
 ### Use without affecting existing Emacs configuration
 
+This is perfect for the “just looking” use-case.
+
     $ emacs -Q -l init.el
 
 ### Use by modifying `.emacs`
