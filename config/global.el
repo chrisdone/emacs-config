@@ -73,7 +73,7 @@
   (let ((number (or ticket
                     (github-get-ticket))))
     (unless (string= number "")
-      (browse-url (concat "https://github.com/fpco/fpco/issues/" number)))))
+      (browse-url (concat github-ticket-prefix number)))))
 
 (defun github-get-ticket ()
   "Get the ticket number at point."
