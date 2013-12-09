@@ -18,7 +18,8 @@
     turbo-devel-mode
     hsenv
     goto-last-change
-    markdown-mode))
+    markdown-mode
+    ace-jump-mode))
 
 (defvar configs
   '("global"

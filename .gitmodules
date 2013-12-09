@@ -22,3 +22,6 @@
 [submodule "packages/markdown-mode"]
 	path = packages/markdown-mode
 	url = https://github.com/defunkt/markdown-mode.git
+[submodule "packages/ace-jump-mode"]
+	path = packages/ace-jump-mode
+	url = https://github.com/winterTTr/ace-jump-mode.git

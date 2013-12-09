@@ -142,6 +142,8 @@
 (global-set-key (kbd "M-a") 'up-list)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 
+(global-set-key (kbd "C-c C-s") 'ace-jump-mode)
+
 (global-set-key (kbd "<left>") 'windmove-left)
 (global-set-key (kbd "<right>") 'windmove-right)
 (global-set-key (kbd "<up>") 'windmove-up)
