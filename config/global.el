@@ -219,10 +219,13 @@
       espresso-basiespresso-offset 2
       espresso-indent-level 2)
 
-(setq org-priority-faces
-      (quote ((49 . zenburn-red) (50 . zenburn-yellow) (51 . zenburn-green))))
-
-(setq org-log-done t)
+(setq org-log-done t
+      org-todo-keywords '((sequence "TODO" "DONE")
+                          (sequence "TODO" "PASS")
+                          (sequence "TODO" "DEFERRED"))
+      org-priority-faces (quote ((49 . zenburn-red)
+                                 (50 . zenburn-yellow)
+                                 (51 . zenburn-green))))
 
 
 ;; Global settings
