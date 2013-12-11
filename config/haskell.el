@@ -79,7 +79,8 @@
  '(haskell-process-reload-with-fbytecode nil)
  '(haskell-process-use-presentation-mode t)
  '(haskell-interactive-mode-include-file-name nil)
- '(haskell-interactive-mode-eval-pretty nil))
+ '(haskell-interactive-mode-eval-pretty nil)
+ '(haskell-process-do-cabal-format-string ":!cd %s && unset GHC_PACKAGE_PATH && %s"))
 
 
 ;; Add hook
