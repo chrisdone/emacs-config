@@ -272,7 +272,7 @@
 ;; Faces
 
 (custom-set-faces
- '(default ((t (:inherit nil :height 130 :width normal :family "Ubuntu Mono")))))
+ '(default ((t (:inherit nil :height 140 :width normal :family "Ubuntu Mono")))))
 
 
 ;; Uniquify
