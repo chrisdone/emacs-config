@@ -162,6 +162,7 @@
 
 (define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
 (define-key paredit-mode-map (kbd "M-a") 'paredit-backward-up)
+(define-key markdown-mode-map (kbd "M-;") 'markdown-blockquote-region)
 
 
 
