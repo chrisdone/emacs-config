@@ -278,3 +278,12 @@
 ;; Uniquify
 
 (setq uniquify-buffer-name-style (quote post-forward-angle-brackets))
+
+
+;; Safe local variables
+
+(custom-set-variables
+ '(safe-local-variable-values
+   (quote ((haskell-indent-spaces . 4)
+           (haskell-indent-spaces . 2)
+           (shm-lambda-indent-style . leftmost-parent)))))
