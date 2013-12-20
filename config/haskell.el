@@ -80,7 +80,9 @@
  '(haskell-process-use-presentation-mode t)
  '(haskell-interactive-mode-include-file-name nil)
  '(haskell-interactive-mode-eval-pretty nil)
- '(haskell-process-do-cabal-format-string ":!cd %s && unset GHC_PACKAGE_PATH && %s"))
+ '(haskell-process-do-cabal-format-string ":!cd %s && unset GHC_PACKAGE_PATH && %s")
+ '(shm-use-hdevtools t)
+ '(shm-use-presentation-mode t))
 
 
 ;; Add hook
@@ -106,6 +108,7 @@
 (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
 (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
 (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
+(define-key haskell-mode-map (kbd "TAB") 'haskell-simple-indent)
 (define-key haskell-mode-map (kbd "<return>") 'haskell-simple-indent-newline-same-col)
 (define-key haskell-mode-map (kbd "C-<return>") 'haskell-simple-indent-newline-indent)
 (define-key haskell-mode-map (kbd "C-<right>") 'haskell-move-right)
@@ -128,3 +131,5 @@
 (define-key haskell-interactive-mode-map (kbd "C-<right>") 'haskell-interactive-mode-error-forward)
 (define-key haskell-interactive-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
 (define-key haskell-interactive-mode-map (kbd "C-c c") 'haskell-process-cabal)
+
+(define-key shm-map (kbd "C-c C-t") 'shm/type-of-node)
