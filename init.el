@@ -19,7 +19,9 @@
     hsenv
     goto-last-change
     markdown-mode
-    ace-jump-mode))
+    ace-jump-mode
+    dash
+    hdevtools))
 
 (defvar configs
   '("global"
