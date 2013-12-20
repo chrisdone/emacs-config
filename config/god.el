@@ -7,6 +7,12 @@
                         'box
                       'bar)))
 
+(defun god-toggle-on-overwrite ()
+  "Toggle god-mode on overwrite-mode."
+  (if (bound-and-true-p overwrite-mode)
+      (god-local-mode-pause)
+    (god-local-mode-resume)))
+
 
 ;; Keybindings
 
@@ -25,3 +31,4 @@
 
 (add-hook 'god-mode-enabled-hook 'god-update-cursor)
 (add-hook 'god-mode-disabled-hook 'god-update-cursor)
+(add-hook 'overwrite-mode-hook 'god-toggle-on-overwrite)
