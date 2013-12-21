@@ -21,7 +21,8 @@
     markdown-mode
     ace-jump-mode
     dash
-    elisp-slime-nav))
+    elisp-slime-nav
+    lpaste))
 
 (defvar configs
   '("global"
