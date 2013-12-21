@@ -24,7 +24,8 @@
     elisp-slime-nav
     lpaste
     echo-keys
-    column-marker))
+    column-marker
+    align-by-current-symbol))
 
 (defvar configs
   '("global"
