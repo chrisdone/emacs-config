@@ -7,6 +7,7 @@ To use
     $ cd packages/haskell-mode; make
     $ cd packages/structured-haskell-mode; cabal install
     $ cabal install hasktags
+    $ git clone https://github.com/bennofs/hdevtools.git && cd hdevtools && cabal install
 
 ### Use without affecting existing Emacs configuration
 
