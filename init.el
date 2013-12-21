@@ -22,7 +22,8 @@
     ace-jump-mode
     dash
     elisp-slime-nav
-    lpaste))
+    lpaste
+    echo-keys))
 
 (defvar configs
   '("global"
