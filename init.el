@@ -21,7 +21,8 @@
     markdown-mode
     ace-jump-mode
     dash
-    hdevtools))
+    hdevtools
+    elisp-slime-nav))
 
 (defvar configs
   '("global"

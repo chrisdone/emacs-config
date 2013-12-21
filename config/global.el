@@ -246,6 +246,8 @@
 (add-hook 'after-save-hook 'auto-chmod)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'shell-mode-hook 'set-ansi-colors)
+(add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
+(add-hook 'ielm-mode-hook 'elisp-slime-nav-mode)
 
 
 ;; Auto-loads

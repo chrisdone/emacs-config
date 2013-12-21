@@ -28,3 +28,6 @@
 [submodule "packages/dash"]
 	path = packages/dash
 	url = https://github.com/magnars/dash.el.git
+[submodule "packages/elisp-slime-nav"]
+	path = packages/elisp-slime-nav
+	url = https://github.com/purcell/elisp-slime-nav.git
