@@ -23,7 +23,8 @@
     dash
     elisp-slime-nav
     lpaste
-    echo-keys))
+    echo-keys
+    column-marker))
 
 (defvar configs
   '("global"
