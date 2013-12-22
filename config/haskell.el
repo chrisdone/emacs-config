@@ -64,6 +64,21 @@
         (rename-buffer "*who-calls*")
         (switch-to-buffer-other-window buffer)))))
 
+(defun haskell-auto-insert-module-template ()
+  "Insert a module template for the newly created buffer."
+  (interactive)
+  (when (= (point-min)
+           (point-max))
+    (insert
+     "-- | "
+     "\n"
+     "\n"
+     "module " (haskell-guess-module-name) " where"
+     "\n"
+     "\n")
+    (goto-char (point-min))
+    (forward-char 5)))
+
 
 ;; Mode settings
 
@@ -89,6 +104,7 @@
 
 (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 (add-hook 'haskell-cabal-mode-hook 'haskell-cabal-hook)
+(add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 
 
 ;; Keybindings
