@@ -6,6 +6,12 @@
 
 ;; Fundamental functions
 
+(defun unfill-paragraph ()
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
 (defun indent-buffer ()
   "Indent the whole buffer."
   (interactive)
@@ -132,6 +138,7 @@
 
 ;; Global keybindings
 
+(global-set-key (kbd "M-Q") 'unfill-paragraph)
 (global-set-key (kbd "M-;") 'comment-dwim-line)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-x C-x") 'goto-last-change)
