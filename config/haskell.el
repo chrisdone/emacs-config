@@ -67,8 +67,9 @@
 (defun haskell-auto-insert-module-template ()
   "Insert a module template for the newly created buffer."
   (interactive)
-  (when (= (point-min)
-           (point-max))
+  (when (and (= (point-min)
+                (point-max))
+             (buffer-file-name))
     (insert
      "-- | "
      "\n"
@@ -97,7 +98,8 @@
  '(haskell-interactive-mode-eval-pretty nil)
  '(haskell-process-do-cabal-format-string ":!cd %s && unset GHC_PACKAGE_PATH && %s")
  '(shm-use-hdevtools t)
- '(shm-use-presentation-mode t))
+ '(shm-use-presentation-mode t)
+ '(shm-auto-insert-skeletons t))
 
 
 ;; Add hook
@@ -147,5 +149,3 @@
 (define-key haskell-interactive-mode-map (kbd "C-<right>") 'haskell-interactive-mode-error-forward)
 (define-key haskell-interactive-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
 (define-key haskell-interactive-mode-map (kbd "C-c c") 'haskell-process-cabal)
-
-(define-key shm-map (kbd "C-c C-t") 'shm/type-of-node)
