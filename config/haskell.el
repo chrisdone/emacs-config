@@ -106,7 +106,6 @@
 
 (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 (add-hook 'haskell-cabal-mode-hook 'haskell-cabal-hook)
-(add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 
 
 ;; Keybindings
