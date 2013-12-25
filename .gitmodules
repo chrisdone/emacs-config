@@ -31,3 +31,6 @@
 [submodule "packages/elisp-slime-nav"]
 	path = packages/elisp-slime-nav
 	url = https://github.com/purcell/elisp-slime-nav.git
+[submodule "packages/rainbow-mode"]
+	path = packages/rainbow-mode
+	url = https://github.com/emacsmirror/rainbow-mode.git

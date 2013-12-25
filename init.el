@@ -25,7 +25,8 @@
     lpaste
     echo-keys
     column-marker
-    align-by-current-symbol))
+    align-by-current-symbol
+    rainbow-mode))
 
 (defvar configs
   '("global"
