@@ -196,6 +196,7 @@
 
 (show-paren-mode 1)
 (line-number-mode 1)
+(column-number-mode 1)
 (size-indication-mode 1)
 (transient-mark-mode 1)
 (delete-selection-mode 1)
