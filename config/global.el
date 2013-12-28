@@ -6,6 +6,26 @@
 
 ;; Fundamental functions
 
+(defun smart-hyphen (n)
+  "Capitalize the next typed letter, or behave as the usual '-'."
+  (interactive "p")
+  (if (memq (get-text-property (point) 'face)
+            '(font-lock-doc-face
+              font-lock-comment-face
+              font-lock-string-face))
+      (self-insert-command n)
+    (insert ?-)
+    (let ((command (key-binding (vector (read-event)))))
+      (if (eq command 'self-insert-command)
+          (insert
+           (let ((next (elt (this-command-keys) 1)))
+             (if (eq ?w (char-syntax next))
+                 (progn
+                   (delete-char -1)
+                   (upcase next))
+               next)))
+        (call-interactively command)))))
+
 (defun unfill-paragraph ()
   "Takes a multi-line paragraph and makes it into a single line of text."
   (interactive)

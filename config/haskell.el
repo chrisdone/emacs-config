@@ -110,6 +110,7 @@
 
 ;; Keybindings
 
+(define-key haskell-mode-map (kbd "-") 'smart-hyphen)
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
 (define-key haskell-mode-map [f5] 'haskell-process-load-or-reload)
 (define-key haskell-mode-map [f12] 'turbo-devel-reload)
