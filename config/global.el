@@ -155,9 +155,39 @@
               zenburn-fg))
   (setq ansi-color-map (ansi-color-make-color-map)))
 
+(defvar zap-up-to-char-last-char nil
+  "The last char used with zap-up-to-char-repeateable.")
+(defvar zap-up-to-char-last-arg 0
+  "The last direction used with zap-up-to-char-repeateable.")
+(defun zap-up-to-char-repeatable (arg char)
+  "Kill up to and including ARGth occurrence of CHAR.
+Case is ignored if `case-fold-search' is non-nil in the current buffer.
+Goes backward if ARG is negative; error if CHAR not found."
+  (interactive (if (and (eq last-command 'zap-up-to-char-repeatable)
+                        (eq 'repeat real-this-command))
+                   (list zap-up-to-char-last-arg
+                         zap-up-to-char-last-char)
+                 (list (prefix-numeric-value current-prefix-arg)
+                       (read-char "Zap to char: " t))))
+  ;; Avoid "obsolete" warnings for translation-table-for-input.
+  (with-no-warnings
+    (if (char-table-p translation-table-for-input)
+    (setq char (or (aref translation-table-for-input char) char))))
+  (kill-region (point)
+               (save-excursion
+                 (when (eq last-command 'zap-up-to-char-repeatable)
+                   (forward-char))
+                 (search-forward (char-to-string char) nil nil arg)
+                 (forward-char -1)
+                 (point)))
+  (setq zap-up-to-char-last-char char)
+  (setq zap-up-to-char-last-arg arg)
+  (setq this-command 'zap-up-to-char-repeatable))
+
 
 ;; Global keybindings
 
+(global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 (global-set-key (kbd "M-;") 'comment-dwim-line)
 (global-set-key (kbd "M-g") 'goto-line)
