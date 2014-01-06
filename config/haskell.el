@@ -80,6 +80,18 @@
     (goto-char (point-min))
     (forward-char 5)))
 
+(defun shm-contextual-space ()
+  "Do contextual space first, and run shm/space if no change in
+the cursor position happened."
+  (interactive)
+  (if god-local-mode
+      (god-mode-self-insert)
+      (let ((point (point)))
+        (haskell-mode-contextual-space)
+        (when (= (1+ point) (point))
+          (delete-char -1)
+          (shm/space)))))
+
 
 ;; Mode settings
 
@@ -130,6 +142,7 @@
 (define-key haskell-mode-map (kbd "C-<return>") 'haskell-simple-indent-newline-indent)
 (define-key haskell-mode-map (kbd "C-<right>") 'haskell-move-right)
 (define-key haskell-mode-map (kbd "C-<left>") 'haskell-move-left)
+(define-key haskell-mode-map (kbd "<space>") 'haskell-mode-contextual-space)
 
 (define-key haskell-interactive-mode-map (kbd "C-c C-v") 'haskell-interactive-toggle-print-mode)
 
@@ -148,3 +161,5 @@
 (define-key haskell-interactive-mode-map (kbd "C-<right>") 'haskell-interactive-mode-error-forward)
 (define-key haskell-interactive-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
 (define-key haskell-interactive-mode-map (kbd "C-c c") 'haskell-process-cabal)
+
+(define-key shm-map (kbd "SPC") 'shm-contextual-space)
