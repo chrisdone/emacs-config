@@ -45,7 +45,13 @@
 (defun haskell-process-cabal-build-and-restart ()
   "Build and restart the Cabal project."
   (interactive)
-  (turbo-devel-reload))
+  (cond
+   (t
+    (haskell-process-cabal-build)
+    (haskell-process-queue-without-filters
+     (haskell-process)
+     (format ":!cd %s && scripts/restart\n" (haskell-session-cabal-dir (haskell-session)))))
+   (t (turbo-devel-reload))))
 
 (defun haskell-who-calls (&optional prompt)
   "Grep the codebase to see who uses the symbol at point."
@@ -86,11 +92,11 @@ the cursor position happened."
   (interactive)
   (if god-local-mode
       (god-mode-self-insert)
-      (let ((point (point)))
-        (haskell-mode-contextual-space)
-        (when (= (1+ point) (point))
-          (delete-char -1)
-          (shm/space)))))
+    (let ((point (point)))
+      (haskell-mode-contextual-space)
+      (when (= (1+ point) (point))
+        (delete-char -1)
+        (shm/space)))))
 
 
 ;; Mode settings
@@ -125,7 +131,14 @@ the cursor position happened."
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
 (define-key haskell-mode-map [f5] 'haskell-process-load-or-reload)
 (define-key haskell-mode-map [f12] 'turbo-devel-reload)
-(define-key html-mode-map [f12] 'turbo-devel-reload)
+
+(define-key html-mode-map [f12] 'haskell-process-cabal-build-and-restart)
+(define-key html-mode-map (kbd "C-`") 'haskell-interactive-bring)
+
+(define-key css-mode-map [f12] 'haskell-process-cabal-build-and-restart)
+(define-key css-mode-map (kbd "C-`") 'haskell-interactive-bring)
+
+(define-key haskell-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key haskell-mode-map (kbd "C-c C-u") 'haskell-insert-undefined)
 (define-key haskell-mode-map (kbd "C-c C-a") 'haskell-insert-doc)
 (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
