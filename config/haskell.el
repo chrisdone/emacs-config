@@ -6,6 +6,7 @@
 (require 'haskell-interactive-mode)
 (require 'haskell-font-lock)
 (require 'sgml-mode)
+(require 'css-mode)
 
 
 ;; Functions
