@@ -325,7 +325,6 @@ Goes backward if ARG is negative; error if CHAR not found."
 ;; Environment settings
 
 (set-language-environment "UTF-8")
-(setenv "PATH" (shell-command-to-string "echo $PATH"))
 
 
 ;; Faces
