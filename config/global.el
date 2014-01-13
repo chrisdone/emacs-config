@@ -172,7 +172,7 @@ Goes backward if ARG is negative; error if CHAR not found."
   ;; Avoid "obsolete" warnings for translation-table-for-input.
   (with-no-warnings
     (if (char-table-p translation-table-for-input)
-    (setq char (or (aref translation-table-for-input char) char))))
+        (setq char (or (aref translation-table-for-input char) char))))
   (kill-region (point)
                (save-excursion
                  (when (eq last-command 'zap-up-to-char-repeatable)
@@ -183,6 +183,19 @@ Goes backward if ARG is negative; error if CHAR not found."
   (setq zap-up-to-char-last-char char)
   (setq zap-up-to-char-last-arg arg)
   (setq this-command 'zap-up-to-char-repeatable))
+
+(defun timeclock-dwim (when-to-leave)
+  "Either clock in or clockout."
+  (interactive "P")
+  (if when-to-leave
+      (let ((buffer "*Haskell-Type*"))
+        (with-help-window buffer
+          (with-current-buffer buffer
+            (erase-buffer)
+            (timeclock-generate-report))))
+    (if (equal (car timeclock-last-event) "i")
+        (timeclock-out)
+      (timeclock-in))))
 
 
 ;; Global keybindings
@@ -213,6 +226,8 @@ Goes backward if ARG is negative; error if CHAR not found."
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
+
+(global-set-key [f9] 'timeclock-dwim)
 
 
 ;; Mode-specific keybindings
@@ -294,6 +309,8 @@ Goes backward if ARG is negative; error if CHAR not found."
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (setq require-final-newline t)
+
+(timeclock-mode-line-display)
 
 
 ;; Hooks
