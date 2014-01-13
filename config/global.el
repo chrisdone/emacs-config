@@ -298,6 +298,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 ;; Hooks
 
+(add-hook 'kill-emacs-query-functions 'timeclock-query-out)
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'after-save-hook 'auto-chmod)
