@@ -188,14 +188,12 @@ Goes backward if ARG is negative; error if CHAR not found."
   "Either clock in or clockout."
   (interactive "P")
   (if when-to-leave
-      (let ((buffer "*Haskell-Type*"))
-        (with-help-window buffer
-          (with-current-buffer buffer
-            (erase-buffer)
-            (timeclock-generate-report))))
+      (with-current-buffer (switch-to-buffer (get-buffer-create "*timeclock-report*"))
+        (erase-buffer)
+        (timeclock-generate-report))
     (if (equal (car timeclock-last-event) "i")
         (timeclock-out)
-      (timeclock-in))))
+      (call-interactively 'timeclock-in))))
 
 
 ;; Global keybindings
