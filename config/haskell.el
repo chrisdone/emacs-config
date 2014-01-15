@@ -124,6 +124,7 @@ the cursor position happened."
 ;; Add hook
 
 (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+(add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 
 
 ;; Keybindings
