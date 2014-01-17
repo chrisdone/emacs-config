@@ -173,13 +173,20 @@ Goes backward if ARG is negative; error if CHAR not found."
   (with-no-warnings
     (if (char-table-p translation-table-for-input)
         (setq char (or (aref translation-table-for-input char) char))))
-  (kill-region (point)
-               (save-excursion
-                 (when (eq last-command 'zap-up-to-char-repeatable)
-                   (forward-char))
-                 (search-forward (char-to-string char) nil nil arg)
-                 (forward-char -1)
-                 (point)))
+  (let ((start (point))
+        (end (save-excursion
+               (when (eq last-command 'zap-up-to-char-repeatable)
+                 (forward-char))
+               (search-forward (char-to-string char) nil nil arg)
+               (forward-char -1)
+               (point))))
+    (cond
+     ((and (eq last-command 'zap-up-to-char-repeatable)
+           (eq 'repeat real-this-command))
+      (let ((last-command 'kill-region))
+        (kill-region start end)))
+     (t
+      (kill-region start end))))
   (setq zap-up-to-char-last-char char)
   (setq zap-up-to-char-last-arg arg)
   (setq this-command 'zap-up-to-char-repeatable))
