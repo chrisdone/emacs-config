@@ -26,7 +26,8 @@
     echo-keys
     column-marker
     align-by-current-symbol
-    rainbow-mode))
+    rainbow-mode
+    lua-mode))
 
 (defvar configs
   '("global"
