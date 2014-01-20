@@ -192,20 +192,19 @@ Goes backward if ARG is negative; error if CHAR not found."
   (setq zap-up-to-char-last-arg arg)
   (setq this-command 'zap-up-to-char-repeatable))
 
-(defun timeclock-dwim (when-to-leave)
+(defun timeclock-dwim (in)
   "Either clock in or clockout."
   (interactive "P")
-  (if when-to-leave
-      (with-current-buffer (switch-to-buffer (get-buffer-create "*timeclock-report*"))
-        (erase-buffer)
-        (timeclock-generate-report))
-    (if (equal (car timeclock-last-event) "i")
-        (timeclock-out)
-      (call-interactively 'timeclock-in))))
+  (if in
+      (progn (shell-command-to-string "clockin")
+             (message "Clocked in."))
+    (progn (shell-command-to-string "clockout")
+           (message "Clocked out."))))
 
 
 ;; Global keybindings
 
+(global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 (global-set-key (kbd "M-;") 'comment-dwim-line)
@@ -232,8 +231,6 @@ Goes backward if ARG is negative; error if CHAR not found."
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
-
-(global-set-key [f9] 'timeclock-dwim)
 
 
 ;; Mode-specific keybindings
@@ -317,12 +314,9 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 (setq require-final-newline t)
 
-(timeclock-mode-line-display)
-
 
 ;; Hooks
 
-(add-hook 'kill-emacs-query-functions 'timeclock-query-out)
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'after-save-hook 'auto-chmod)
