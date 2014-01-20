@@ -2,6 +2,7 @@
 ;; Requirements
 
 (require 'uniquify)
+(require 'sgml-mode)
 
 
 ;; Fundamental functions
