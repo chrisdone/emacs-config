@@ -118,7 +118,8 @@ the cursor position happened."
  '(haskell-process-do-cabal-format-string ":!cd %s && unset GHC_PACKAGE_PATH && %s")
  '(shm-use-hdevtools t)
  '(shm-use-presentation-mode t)
- '(shm-auto-insert-skeletons t))
+ '(shm-auto-insert-skeletons t)
+ '(shm-auto-insert-bangs t))
 
 
 ;; Add hook
