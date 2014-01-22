@@ -3,6 +3,7 @@
 
 (require 'uniquify)
 (require 'sgml-mode)
+(require 'js)
 
 
 ;; Fundamental functions
