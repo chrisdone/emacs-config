@@ -200,8 +200,10 @@ Goes backward if ARG is negative; error if CHAR not found."
 (defun javascript-console-log ()
   "Insert console.log('%o',|)."
   (interactive)
-  (insert "console.log('%o',)")
-  (forward-char -1))
+  (when (not (eolp))
+    (split-line))
+  (insert "console.log('%o',);")
+  (forward-char -2))
 
 
 ;; Global keybindings
