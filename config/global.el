@@ -195,11 +195,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 (defun timeclock-dwim (in)
   "Either clock in or clockout."
   (interactive "P")
-  (if in
-      (progn (shell-command-to-string "clockin")
-             (message "Clocked in."))
-    (progn (shell-command-to-string "clockout")
-           (message "Clocked out."))))
+  (shell-command-to-string "clockin toggle"))
 
 
 ;; Global keybindings
