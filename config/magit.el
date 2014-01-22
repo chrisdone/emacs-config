@@ -46,9 +46,6 @@
            when (string-match "^\\*magit: \\(.+\\)\\*$" name)
            collect (match-string 1 name))))))
 
-(let ((ido-ignore-buffers (cons "\\(:^magit\\)" ido-ignore-buffers)))
-  (ido-switch-buffer))
-
 
 ;; Hooks
 
