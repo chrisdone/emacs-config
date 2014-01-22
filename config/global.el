@@ -197,6 +197,12 @@ Goes backward if ARG is negative; error if CHAR not found."
   (interactive "P")
   (shell-command-to-string "clockin toggle"))
 
+(defun javascript-console-log ()
+  "Insert console.log('%o',|)."
+  (interactive)
+  (insert "console.log('%o',)")
+  (forward-char -1))
+
 
 ;; Global keybindings
 
@@ -212,7 +218,6 @@ Goes backward if ARG is negative; error if CHAR not found."
 (global-set-key (kbd "M-a") 'backward-up-list)
 (global-set-key (kbd "M-a") 'up-list)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
-
 (global-set-key (kbd "C-c C-s") 'ace-jump-mode)
 
 (global-set-key (kbd "<left>") 'windmove-left)
@@ -231,6 +236,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 ;; Mode-specific keybindings
 
+(define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
 (define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
 (define-key paredit-mode-map (kbd "M-a") 'paredit-backward-up)
 (define-key markdown-mode-map (kbd "M-;") 'markdown-blockquote-region)
