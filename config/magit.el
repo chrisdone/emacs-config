@@ -1,3 +1,5 @@
+(require 'magit-blame)
+
 
 ;; Functions
 
