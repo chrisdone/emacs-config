@@ -210,6 +210,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 ;; Global keybindings
 
+(global-set-key (kbd "C-v") 'magit-switch-buffer)
 (global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)

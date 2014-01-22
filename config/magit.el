@@ -33,6 +33,22 @@
   (let ((paths (ed-string "Files or" "  directories: \n")))
     (apply 'magit-log nil "--" (split-string paths))))
 
+(defun magit-switch-buffer ()
+  "Interactively switch to another magit-status buffer."
+  (interactive)
+  (switch-to-buffer
+   (format
+    "*magit: %s*"
+    (ido-completing-read
+     "Magit buffer: "
+     (loop for buffer in (buffer-list)
+           as name = (buffer-name buffer)
+           when (string-match "^\\*magit: \\(.+\\)\\*$" name)
+           collect (match-string 1 name))))))
+
+(let ((ido-ignore-buffers (cons "\\(:^magit\\)" ido-ignore-buffers)))
+  (ido-switch-buffer))
+
 
 ;; Hooks
 
