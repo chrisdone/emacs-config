@@ -78,7 +78,9 @@
 (defun find-alternate-file-with-sudo ()
   "Re-open with sudo."
   (interactive)
-  (find-alternate-file (concat "/sudo::" (buffer-file-name))))
+  (let ((point (point)))
+    (find-alternate-file (concat "/sudo::" (buffer-file-name)))
+    (goto-char point)))
 
 (defun comment-dwim-line (&optional arg)
   "Do-what-I-mean commenting the current line."
