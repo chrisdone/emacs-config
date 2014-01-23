@@ -95,8 +95,7 @@ the cursor position happened."
       (god-mode-self-insert)
     (let ((point (point)))
       (haskell-mode-contextual-space)
-      (when (= (1+ point) (point))
-        (delete-char -1)
+      (when (= point (point))
         (shm/space)))))
 
 
