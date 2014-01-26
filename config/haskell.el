@@ -93,10 +93,19 @@ the cursor position happened."
   (interactive)
   (if god-local-mode
       (god-mode-self-insert)
-    (let ((point (point)))
-      (haskell-mode-contextual-space)
-      (when (= point (point))
-        (shm/space)))))
+    (if (not (haskell-session-maybe))
+        (self-insert-command 1)
+      (cond ((save-excursion (forward-word -1)
+                             (looking-at "^import$"))
+             (insert " ")
+             (let ((module (ido-completing-read "Module: " (haskell-session-all-modules))))
+               (insert module)
+               (haskell-mode-format-imports)))
+            ((not (string= "" (save-excursion (forward-char -1) (haskell-ident-at-point))))
+             (let ((ident (save-excursion (forward-char -1) (haskell-ident-at-point))))
+               (shm/space)
+               (haskell-process-do-try-info ident)))
+            (t (shm/space))))))
 
 
 ;; Mode settings
