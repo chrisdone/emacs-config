@@ -27,7 +27,8 @@
     column-marker
     align-by-current-symbol
     rainbow-mode
-    lua-mode))
+    lua-mode
+    ag))
 
 (defvar configs
   '("global"

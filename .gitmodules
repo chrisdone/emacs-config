@@ -34,3 +34,6 @@
 [submodule "packages/rainbow-mode"]
 	path = packages/rainbow-mode
 	url = https://github.com/emacsmirror/rainbow-mode.git
+[submodule "packages/ag"]
+	path = packages/ag
+	url = https://github.com/Wilfred/ag.el.git

@@ -63,13 +63,16 @@
     (let ((existing (get-buffer "*who-calls*")))
       (when existing
         (kill-buffer existing)))
-    (let ((buffer
-           (grep-find (format "cd %s && find . -name '*.hs' -exec grep -inH -e %s {} +"
-                              (haskell-session-current-dir (haskell-session))
-                              sym))))
-      (with-current-buffer buffer
-        (rename-buffer "*who-calls*")
-        (switch-to-buffer-other-window buffer)))))
+    (cond
+     ;; Use grep
+     (nil (let ((buffer
+                 (grep-find (format "cd %s && find . -name '*.hs' -exec grep -inH -e %s {} +"
+                                    (haskell-session-current-dir (haskell-session))
+                                    sym))))
+            (with-current-buffer buffer
+              (rename-buffer "*who-calls*")
+              (switch-to-buffer-other-window buffer))))
+     (t (ag sym (haskell-session-current-dir (haskell-session)))))))
 
 (defun haskell-auto-insert-module-template ()
   "Insert a module template for the newly created buffer."
