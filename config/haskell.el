@@ -130,7 +130,8 @@ the cursor position happened."
  '(shm-use-hdevtools t)
  '(shm-use-presentation-mode t)
  '(shm-auto-insert-skeletons t)
- '(shm-auto-insert-bangs t))
+ '(shm-auto-insert-bangs t)
+ '(haskell-process-show-debug-tips nil))
 
 
 ;; Add hook
