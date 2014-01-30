@@ -37,7 +37,8 @@
     "haskell"
     "erc"
     "magit"
-    "notmuch"))
+    "notmuch"
+    "email"))
 
 
 ;; Load packages
