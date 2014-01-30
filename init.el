@@ -36,7 +36,8 @@
     "god"
     "haskell"
     "erc"
-    "magit"))
+    "magit"
+    "notmuch"))
 
 
 ;; Load packages
