@@ -28,7 +28,8 @@
     align-by-current-symbol
     rainbow-mode
     lua-mode
-    ag))
+    ag
+    notmuch))
 
 (defvar configs
   '("global"

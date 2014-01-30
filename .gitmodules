@@ -37,3 +37,6 @@
 [submodule "packages/ag"]
 	path = packages/ag
 	url = https://github.com/Wilfred/ag.el.git
+[submodule "packages/notmuch"]
+	path = packages/notmuch
+	url = git@github.com:chrisdone/notmuch.git
