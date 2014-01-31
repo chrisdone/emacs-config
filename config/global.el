@@ -208,6 +208,12 @@ Goes backward if ARG is negative; error if CHAR not found."
   (insert "console.log('%o',);")
   (forward-char -2))
 
+(defun goto-notmuch-inbox ()
+  "Go to the inbox."
+  (interactive)
+  (switch-to-buffer-other-window "*notmuch-saved-search-inbox*")
+  (notmuch-refresh-this-buffer))
+
 
 ;; Global keybindings
 
@@ -238,6 +244,8 @@ Goes backward if ARG is negative; error if CHAR not found."
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
+
+(global-set-key [f11] 'goto-notmuch-inbox)
 
 
 ;; Mode-specific keybindings
