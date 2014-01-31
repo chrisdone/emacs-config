@@ -211,8 +211,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 (defun goto-notmuch-inbox ()
   "Go to the inbox."
   (interactive)
-  (switch-to-buffer-other-window "*notmuch-saved-search-inbox*")
-  (notmuch-refresh-this-buffer))
+  (notmuch-search "tag:inbox"))
 
 
 ;; Global keybindings
