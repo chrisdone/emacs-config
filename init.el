@@ -9,6 +9,7 @@
 (defvar packages
   '(color-theme
     zenburn
+    sunburn
     god-mode
     paredit
     haskell-mode
@@ -71,7 +72,7 @@
 ;; Mode initializations
 
 (smex-initialize)
-(zenburn)
+(sunburn)
 (god-mode)
 (turn-on-haskell-simple-indent)
 (load "haskell-mode-autoloads.el")
