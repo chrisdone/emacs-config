@@ -134,7 +134,8 @@ the cursor position happened."
  '(shm-use-presentation-mode t)
  '(shm-auto-insert-skeletons t)
  '(shm-auto-insert-bangs t)
- '(haskell-process-show-debug-tips nil))
+ '(haskell-process-show-debug-tips nil)
+ '(haskell-interactive-mode-do-fast-keys t))
 
 
 ;; Add hook
