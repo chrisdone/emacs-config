@@ -7,18 +7,21 @@
   (interactive "*P")
   (let ((sym (dabbrev--abbrev-at-point)))
     (cond
-     ((string-match "^-" sym)
-      (save-excursion
-        (backward-sexp 1)
-        (insert (emacs-lisp-module-name)))
+     ((string-prefix-p "-" sym)
+      (let ((namespace (emacs-lisp-module-name)))
+        (when namespace
+          (save-excursion
+            (backward-sexp 1)
+            (insert namespace))))
       (dabbrev-expand arg))
      (t (dabbrev-expand arg)))))
 
 (defun emacs-lisp-module-name ()
   "Search the buffer for `provide' declaration."
   (save-excursion
-    (search-forward-regexp "^(provide '")
-    (symbol-name (symbol-at-point))))
+    (goto-char (point-min))
+    (when (search-forward-regexp "^(provide '" nil t 1)
+      (symbol-name (symbol-at-point)))))
 
 
 ;; Keybindings
