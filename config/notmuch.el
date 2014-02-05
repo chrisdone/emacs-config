@@ -22,6 +22,7 @@
   "Mark this email as deleted."
   (interactive)
   (notmuch-show-add-tag (list "+deleted"))
-  (notmuch-kill-this-buffer))
+  (notmuch-kill-this-buffer)
+  (notmuch-refresh-this-buffer))
 
 (define-key notmuch-show-mode-map (kbd "d") 'notmuch-mark-deleted)
