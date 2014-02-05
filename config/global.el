@@ -369,6 +369,21 @@ Goes backward if ARG is negative; error if CHAR not found."
 (custom-set-faces
  '(default ((t (:inherit nil :height 140 :width normal :family "Ubuntu Mono")))))
 
+(defface esk-paren-face
+  '((((class color) (background dark))
+     (:foreground "grey50"))
+    (((class color) (background light))
+     (:foreground "#bbbbbb")))
+  "Face used to dim parentheses."
+  :group 'starter-kit-faces)
+
+;; Change lambda to an actual lambda symbol
+(mapc (lambda (major-mode)
+        (font-lock-add-keywords
+         major-mode
+         '(("(\\|)" . 'esk-paren-face))))
+      '(emacs-lisp-mode haskell-mode))
+
 
 ;; Uniquify
 
