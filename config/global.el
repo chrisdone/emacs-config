@@ -213,6 +213,11 @@ Goes backward if ARG is negative; error if CHAR not found."
   (interactive)
   (notmuch-search "tag:inbox"))
 
+(defun conditionally-enable-paredit-mode ()
+  "enable paredit-mode during eval-expression"
+  (if (eq this-command 'eval-expression)
+      (paredit-mode 1)))
+
 
 ;; Global keybindings
 
@@ -342,6 +347,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 (add-hook 'shell-mode-hook 'set-ansi-colors)
 (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
 (add-hook 'ielm-mode-hook 'elisp-slime-nav-mode)
+(add-hook 'minibuffer-setup-hook 'conditionally-enable-paredit-mode)
 
 
 ;; Auto-loads
@@ -377,11 +383,19 @@ Goes backward if ARG is negative; error if CHAR not found."
   "Face used to dim parentheses."
   :group 'starter-kit-faces)
 
+(defface dark-paren-face
+  '((((class color) (background dark))
+     (:foreground "#ffffff"))
+    (((class color) (background light))
+     (:foreground "#000000")))
+  "Face used to darken parentheses."
+  :group 'starter-kit-faces)
+
 ;; Change lambda to an actual lambda symbol
 (mapc (lambda (major-mode)
         (font-lock-add-keywords
          major-mode
-         '(("(\\|)" . 'esk-paren-face))))
+         '(("(\\|)\\|\\[\\|\\]" . 'esk-paren-face))))
       '(emacs-lisp-mode haskell-mode))
 
 
