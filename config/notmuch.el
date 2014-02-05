@@ -17,3 +17,11 @@
       notmuch-search-line-faces
       `(("unread" :weight bold)
         ("flagged" :foreground ,sunburn-blue)))
+
+(defun notmuch-mark-deleted ()
+  "Mark this email as deleted."
+  (interactive)
+  (notmuch-show-add-tag (list "+deleted"))
+  (notmuch-kill-this-buffer))
+
+(define-key notmuch-show-mode-map (kbd "d") 'notmuch-mark-deleted)
