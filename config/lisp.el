@@ -10,7 +10,8 @@
      ((string-match "^-" sym)
       (save-excursion
         (backward-sexp 1)
-        (insert (emacs-lisp-module-name))))
+        (insert (emacs-lisp-module-name)))
+      (dabbrev-expand arg))
      (t (dabbrev-expand arg)))))
 
 (defun emacs-lisp-module-name ()
