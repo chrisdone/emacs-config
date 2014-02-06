@@ -193,5 +193,3 @@ the cursor position happened."
 (define-key haskell-interactive-mode-map (kbd "C-<left>") 'haskell-interactive-mode-error-backward)
 (define-key haskell-interactive-mode-map (kbd "C-<right>") 'haskell-interactive-mode-error-forward)
 (define-key haskell-interactive-mode-map (kbd "C-c c") 'haskell-process-cabal)
-
-(define-key shm-map (kbd "SPC") 'shm-contextual-space)
