@@ -28,3 +28,5 @@
 (define-key notmuch-show-mode-map (kbd "d") 'notmuch-mark-deleted)
 (define-key notmuch-show-mode-map (kbd "RET") 'goto-address-at-point)
 (define-key notmuch-show-mode-map (kbd "TAB") 'notmuch-show-toggle-message)
+(define-key notmuch-search-mode-map (kbd "g") 'notmuch-refresh-this-buffer)
+(define-key notmuch-hello-mode-map (kbd "g") 'notmuch-refresh-this-buffer)
