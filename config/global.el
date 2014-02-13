@@ -259,6 +259,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 (define-key paredit-mode-map (kbd "M-a") 'paredit-backward-up)
 (define-key markdown-mode-map (kbd "M-;") 'markdown-blockquote-region)
 (define-key sgml-mode-map (kbd "/") nil)
+(define-key c-mode-map (kbd "/") nil)
 
 (define-key ag-mode-map (kbd "p") 'previous-error-no-select)
 (define-key ag-mode-map (kbd "n") 'next-error-no-select)
