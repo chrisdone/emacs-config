@@ -411,4 +411,5 @@ Goes backward if ARG is negative; error if CHAR not found."
  '(safe-local-variable-values
    (quote ((haskell-indent-spaces . 4)
            (haskell-indent-spaces . 2)
+           (haskell-process-type . cabal-repl)
            (shm-lambda-indent-style . leftmost-parent)))))
