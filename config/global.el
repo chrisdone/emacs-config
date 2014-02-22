@@ -218,10 +218,32 @@ Goes backward if ARG is negative; error if CHAR not found."
   (if (eq this-command 'eval-expression)
       (paredit-mode 1)))
 
+(defun sign-comment-dwim ()
+  "Add a signed comment."
+  (interactive)
+  (unless (or (eq 'font-lock-comment-delimiter-face
+              (get-text-property (point) 'face))
+          (eq 'font-lock-doc-face
+              (get-text-property (point) 'face))
+          (eq 'font-lock-comment-face
+              (get-text-property (point) 'face)))
+    (insert "-- "))
+  (insert sign-comment-author-name
+              " ("
+              (replace-regexp-in-string "\n" ""
+                                        (shell-command-to-string "date +'%Y-%m-%d'"))
+              "): "))
+
+(defun upcase-word-letter ()
+  "Upcase the first letter of the word."
+  (interactive)
+  (upcase-region (point) (1+ (point))))
+
 
 ;; Global keybindings
 
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
+(global-set-key (kbd "M-U") 'upcase-word-letter)
 (global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
