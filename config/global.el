@@ -234,16 +234,10 @@ Goes backward if ARG is negative; error if CHAR not found."
                                         (shell-command-to-string "date +'%Y-%m-%d'"))
               "): "))
 
-(defun upcase-word-letter ()
-  "Upcase the first letter of the word."
-  (interactive)
-  (upcase-region (point) (1+ (point))))
-
 
 ;; Global keybindings
 
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
-(global-set-key (kbd "M-U") 'upcase-word-letter)
 (global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
