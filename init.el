@@ -30,7 +30,8 @@
     rainbow-mode
     lua-mode
     ag
-    notmuch))
+    notmuch
+    w3m))
 
 (defvar configs
   '("global"
@@ -39,7 +40,9 @@
     "erc"
     "magit"
     "notmuch"
-    "email"))
+    "email"
+    "lisp"
+    "w3m"))
 
 
 ;; Load packages
