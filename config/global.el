@@ -291,6 +291,8 @@ Goes backward if ARG is negative; error if CHAR not found."
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message t)
 
+(set-default 'tags-case-fold-search nil)
+
 (put 'erase-buffer 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
