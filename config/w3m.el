@@ -5,3 +5,4 @@
 
 ;; Bindings I need
 (define-key w3m-mode-map (kbd "RET") 'w3m-view-this-url)
+(define-key w3m-mode-map [f5] 'w3m-reload-this-page)
