@@ -66,12 +66,12 @@
     (cond
      ;; Use grep
      (nil (let ((buffer
-               (grep-find (format "cd %s && find . -name '*.hs' -exec grep -inH -e %s {} +"
-                                  (haskell-session-current-dir (haskell-session))
-                                  sym))))
-          (with-current-buffer buffer
-            (rename-buffer "*who-calls*")
-            (switch-to-buffer-other-window buffer))))
+                 (grep-find (format "cd %s && find . -name '*.hs' -exec grep -inH -e %s {} +"
+                                    (haskell-session-current-dir (haskell-session))
+                                    sym))))
+            (with-current-buffer buffer
+              (rename-buffer "*who-calls*")
+              (switch-to-buffer-other-window buffer))))
      ;; Use ag
      (t (ag-files sym
                   "\\.hs$"
@@ -113,6 +113,26 @@ the cursor position happened."
                (haskell-process-do-try-info ident)))
             (t (shm/space))))))
 
+(defun haskell-process-get-data-type (name)
+  "Get the data type definition of the given name."
+  (let ((reply
+         (haskell-process-queue-sync-request (haskell-process)
+                                             (format ":i %s\n" name))))
+    (car (split-string reply "[\n\t ]+-- Defined "))))
+
+(defun shm-case-split (name)
+  "Do a case split on NAME at point."
+  (interactive (list (read-from-minibuffer "Type: ")))
+  (let ((column (current-column)))
+    (insert "case undefined ")
+    (shm-evaporate (- (point) (+ 1 (length "undefined")))
+                   (- (point) 1))
+    (insert "of\n")
+    (indent-to (+ column 2))
+    (shm-case-split-insert-alts
+     (shm-case-split-alts-from-data-decl
+      (haskell-process-get-data-type name)))))
+
 
 ;; Mode settings
 
@@ -142,6 +162,7 @@ the cursor position happened."
 
 (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+(add-hook 'w3m-display-hook 'w3m-haddock-display)
 
 
 ;; Keybindings
