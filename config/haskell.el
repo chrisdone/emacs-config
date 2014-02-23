@@ -123,15 +123,16 @@ the cursor position happened."
 (defun shm-case-split (name)
   "Do a case split on NAME at point."
   (interactive (list (read-from-minibuffer "Type: ")))
-  (let ((column (current-column)))
-    (insert "case undefined ")
-    (shm-evaporate (- (point) (+ 1 (length "undefined")))
-                   (- (point) 1))
-    (insert "of\n")
-    (indent-to (+ column 2))
-    (shm-case-split-insert-alts
-     (shm-case-split-alts-from-data-decl
-      (haskell-process-get-data-type name)))))
+  (save-excursion
+    (let ((column (current-column)))
+      (insert "case undefined ")
+      (shm-evaporate (- (point) (+ 1 (length "undefined")))
+                     (- (point) 1))
+      (insert "of\n")
+      (indent-to (+ column 2))
+      (shm-case-split-insert-alts
+       (shm-case-split-alts-from-data-decl
+        (haskell-process-get-data-type name))))))
 
 
 ;; Mode settings
