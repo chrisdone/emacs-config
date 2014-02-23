@@ -134,6 +134,14 @@ the cursor position happened."
        (shm-case-split-alts-from-data-decl
         (haskell-process-get-data-type name))))))
 
+(defun shm-expand-pattern (name)
+  "Expand a pattern match on a data type."
+  (interactive (list (read-from-minibuffer "Type: ")))
+  (save-excursion
+    (shm-case-split-insert-pattern
+     (shm-case-split-alts-from-data-decl
+      (haskell-process-get-data-type name)))))
+
 
 ;; Mode settings
 
