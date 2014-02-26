@@ -113,34 +113,20 @@ the cursor position happened."
                (haskell-process-do-try-info ident)))
             (t (shm/space))))))
 
-(defun haskell-process-get-data-type (name)
-  "Get the data type definition of the given name."
-  (let ((reply
-         (haskell-process-queue-sync-request (haskell-process)
-                                             (format ":i %s\n" name))))
-    (car (split-string reply "[\n\t ]+-- Defined "))))
-
-(defun shm-case-split (name)
-  "Do a case split on NAME at point."
-  (interactive (list (read-from-minibuffer "Type: ")))
-  (save-excursion
-    (let ((column (current-column)))
-      (insert "case undefined ")
-      (shm-evaporate (- (point) (+ 1 (length "undefined")))
-                     (- (point) 1))
-      (insert "of\n")
-      (indent-to (+ column 2))
-      (shm-case-split-insert-alts
-       (shm-case-split-alts-from-data-decl
-        (haskell-process-get-data-type name))))))
-
-(defun shm-expand-pattern (name)
-  "Expand a pattern match on a data type."
-  (interactive (list (read-from-minibuffer "Type: ")))
-  (save-excursion
-    (shm-case-split-insert-pattern
-     (shm-case-split-alts-from-data-decl
-      (haskell-process-get-data-type name)))))
+(defun shm/insert-putstrln ()
+  "Insert a putStrLn."
+  (interactive)
+  (let ((name
+         (save-excursion
+           (goto-char (car (shm-decl-points)))
+           (buffer-substring-no-properties
+            (point)
+            (1- (search-forward " "))))))
+    (insert
+     (format "putStrLn \"%s:%s:%d\""
+             (file-name-nondirectory (buffer-file-name))
+             name
+             (line-number-at-pos)))))
 
 
 ;; Mode settings
@@ -223,3 +209,6 @@ the cursor position happened."
 (define-key haskell-interactive-mode-map (kbd "C-<left>") 'haskell-interactive-mode-error-backward)
 (define-key haskell-interactive-mode-map (kbd "C-<right>") 'haskell-interactive-mode-error-forward)
 (define-key haskell-interactive-mode-map (kbd "C-c c") 'haskell-process-cabal)
+
+(define-key shm-map (kbd "C-c C-p") 'shm/expand-pattern)
+(define-key shm-map (kbd "C-c C-s") 'shm/case-split)
