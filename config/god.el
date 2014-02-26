@@ -32,3 +32,5 @@
 (add-hook 'god-mode-enabled-hook 'god-update-cursor)
 (add-hook 'god-mode-disabled-hook 'god-update-cursor)
 (add-hook 'overwrite-mode-hook 'god-toggle-on-overwrite)
+
+(add-to-list 'god-exempt-major-modes 'message-mode)
