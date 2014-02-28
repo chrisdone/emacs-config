@@ -87,11 +87,20 @@
      "-- | "
      "\n"
      "\n"
-     "module " (haskell-guess-module-name) " where"
-     "\n"
-     "\n")
+     "module "
+     )
+    (let ((name (haskell-guess-module-name)))
+      (if (string= name "")
+          (progn (insert "Main")
+                 (shm-evaporate (- (point) 5)
+                                (point)))
+        (insert name)))
+    (insert " where"
+            "\n"
+            "\n")
     (goto-char (point-min))
-    (forward-char 5)))
+    (forward-char 5)
+    (god-mode)))
 
 (defun shm-contextual-space ()
   "Do contextual space first, and run shm/space if no change in
