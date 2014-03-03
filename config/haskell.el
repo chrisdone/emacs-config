@@ -47,6 +47,24 @@
   "Build and restart the Cabal project."
   (interactive)
   (cond
+   (haskell-process-use-ghci
+    ;; Reload main module where `main' function is
+    (haskell-process-queue-without-filters
+     (haskell-process)
+     ":l Main")
+    ;; Include neccessary modules
+    (haskell-process-queue-without-filters
+     (haskell-process)
+     ":m + Foreign.Store Control.Concurrent Control.Monad")
+    ;; Kill any existing thread
+    (haskell-process-queue-without-filters
+     (haskell-process)
+     "lookupStore 0 >>= maybe (return ()) (\\s -> readStore s >>= killThread >> deleteStore s)")
+    ;; Start new thread and new store
+    (haskell-process-queue-without-filters
+     (haskell-process)
+     "forkIO main >>= newStore >>= print")
+    (message "Restarted."))
    (t
     (haskell-process-cabal-build)
     (haskell-process-queue-without-filters
@@ -99,7 +117,7 @@
             "\n"
             "\n")
     (goto-char (point-min))
-    (forward-char 5)
+    (forward-char 4)
     (god-mode)))
 
 (defun shm-contextual-space ()
