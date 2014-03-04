@@ -43,11 +43,15 @@
   (interactive)
   (haskell-move-nested -1))
 
+(defvar haskell-process-use-ghci nil)
+
 (defun haskell-process-cabal-build-and-restart ()
   "Build and restart the Cabal project."
   (interactive)
   (cond
    (haskell-process-use-ghci
+    (when (buffer-file-name)
+      (save-buffer))
     ;; Reload main module where `main' function is
     (haskell-process-queue-without-filters
      (haskell-process)
@@ -125,20 +129,10 @@
 the cursor position happened."
   (interactive)
   (if god-local-mode
-      (god-mode-self-insert)
-    (if (not (haskell-session-maybe))
-        (self-insert-command 1)
-      (cond ((save-excursion (forward-word -1)
-                             (looking-at "^import$"))
-             (insert " ")
-             (let ((module (ido-completing-read "Module: " (haskell-session-all-modules))))
-               (insert module)
-               (haskell-mode-format-imports)))
-            ((not (string= "" (save-excursion (forward-char -1) (haskell-ident-at-point))))
-             (let ((ident (save-excursion (forward-char -1) (haskell-ident-at-point))))
-               (shm/space)
-               (haskell-process-do-try-info ident)))
-            (t (shm/space))))))
+      (call-interactively 'god-mode-self-insert)
+    (if (looking-back "import")
+        (call-interactively 'haskell-mode-contextual-space)
+      (call-interactively 'shm/space))))
 
 (defun shm/insert-putstrln ()
   "Insert a putStrLn."
@@ -154,6 +148,25 @@ the cursor position happened."
              (file-name-nondirectory (buffer-file-name))
              name
              (line-number-at-pos)))))
+
+(defvar haskell-w3m-haddock-dir
+  "/home/chris/Projects/fpco/.hsenvs/current/.hsenv/cabal/share/doc/")
+
+(defun haskell-w3m-open-haddock (package-dir)
+  "Open a haddock page in w3m."
+  (interactive
+   (list
+    (ido-completing-read
+     "Package: "
+     (remove-if (lambda (s) (string= s ""))
+                (split-string (shell-command-to-string (concat "ls -1 " haskell-w3m-haddock-dir))
+                              "\n")))))
+  (w3m-browse-url (concat "file://"
+                          haskell-w3m-haddock-dir
+                          "/"
+                          package-dir
+                          "/html/index.html")
+                  t))
 
 
 ;; Mode settings
@@ -188,6 +201,8 @@ the cursor position happened."
 
 
 ;; Keybindings
+
+(define-key haskell-mode-map (kbd "C-c C-d") 'haskell-w3m-open-haddock)
 
 (define-key haskell-mode-map (kbd "-") 'smart-hyphen)
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
@@ -239,3 +254,4 @@ the cursor position happened."
 
 (define-key shm-map (kbd "C-c C-p") 'shm/expand-pattern)
 (define-key shm-map (kbd "C-c C-s") 'shm/case-split)
+(define-key shm-map (kbd "SPC") 'shm-contextual-space)
