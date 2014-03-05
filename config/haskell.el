@@ -152,21 +152,27 @@ the cursor position happened."
 (defvar haskell-w3m-haddock-dir
   "/home/chris/Projects/fpco/.hsenvs/current/.hsenv/cabal/share/doc/")
 
-(defun haskell-w3m-open-haddock (package-dir)
+(defun haskell-w3m-open-haddock ()
   "Open a haddock page in w3m."
-  (interactive
-   (list
-    (ido-completing-read
-     "Package: "
-     (remove-if (lambda (s) (string= s ""))
-                (split-string (shell-command-to-string (concat "ls -1 " haskell-w3m-haddock-dir))
-                              "\n")))))
-  (w3m-browse-url (concat "file://"
-                          haskell-w3m-haddock-dir
-                          "/"
-                          package-dir
-                          "/html/index.html")
-                  t))
+  (interactive)
+  (let* ((entries (remove-if (lambda (s) (string= s ""))
+                             (split-string (shell-command-to-string (concat "ls -1 " haskell-w3m-haddock-dir))
+                                           "\n")))
+         (package-dir (ido-completing-read
+                       "Package: "
+                       entries)))
+    (cond
+     ((member package-dir entries)
+      (w3m-browse-url (concat "file://"
+                              haskell-w3m-haddock-dir
+                              "/"
+                              package-dir
+                              "/html/index.html")
+                      t))
+     (t
+      (w3m-browse-url (concat "http://hackage.haskell.org/package/"
+                              package-dir)
+                      t)))))
 
 
 ;; Mode settings
