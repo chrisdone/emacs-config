@@ -149,9 +149,6 @@ the cursor position happened."
              name
              (line-number-at-pos)))))
 
-(defvar haskell-w3m-haddock-dir
-  "/home/chris/Projects/fpco/.hsenvs/current/.hsenv/cabal/share/doc/")
-
 (defun haskell-w3m-open-haddock ()
   "Open a haddock page in w3m."
   (interactive)

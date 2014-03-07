@@ -62,6 +62,7 @@
                      "structured-haskell-mode/elisp"))
 
 (require 'shm)
+(require 'w3m-haddock)
 
 
 ;; Global/standard Emacs configuration
