@@ -222,21 +222,31 @@ Goes backward if ARG is negative; error if CHAR not found."
   "Add a signed comment."
   (interactive)
   (unless (or (eq 'font-lock-comment-delimiter-face
-              (get-text-property (point) 'face))
-          (eq 'font-lock-doc-face
-              (get-text-property (point) 'face))
-          (eq 'font-lock-comment-face
-              (get-text-property (point) 'face)))
+                  (get-text-property (point) 'face))
+              (eq 'font-lock-doc-face
+                  (get-text-property (point) 'face))
+              (eq 'font-lock-comment-face
+                  (get-text-property (point) 'face)))
     (insert "-- "))
   (insert sign-comment-author-name
-              " ("
-              (replace-regexp-in-string "\n" ""
-                                        (shell-command-to-string "date +'%Y-%m-%d'"))
-              "): "))
+          " ("
+          (replace-regexp-in-string "\n" ""
+                                    (shell-command-to-string "date +'%Y-%m-%d'"))
+          "): "))
+
+(defun jump-to-register-digit ()
+  "Jump to the register in the digit key pressed to invoke this
+interactive command."
+  (interactive)
+  (jump-to-register
+   (+ ?0
+      (1+ (- (elt (this-command-keys-vector) 0)
+             (elt (read-kbd-macro "M-1") 0))))) )
 
 
 ;; Global keybindings
 
+(global-set-key (kbd "M-`") 'window-configuration-to-register)
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
 (global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
