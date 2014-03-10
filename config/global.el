@@ -243,10 +243,29 @@ interactive command."
       (1+ (- (elt (this-command-keys-vector) 0)
              (elt (read-kbd-macro "M-1") 0))))) )
 
+(defun save-window-config ()
+  "Saves the current window configuration."
+  (interactive)
+  (message "Entering recursive window configuration ...")
+  (save-window-excursion
+    (recursive-edit)))
+
+(defun restore-window-config ()
+  "Restores the window configuration."
+  (interactive)
+  (exit-recursive-edit)
+  (message "Restored window configuration."))
+
 
 ;; Global keybindings
 
+(loop for i from 1 to 9
+      do (global-set-key (kbd (format "M-%d" i)) 'jump-to-register-digit))
 (global-set-key (kbd "M-`") 'window-configuration-to-register)
+
+(global-set-key (kbd "s-s") 'save-window-config)
+(global-set-key (kbd "s-g") 'restore-window-config)
+
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
 (global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
