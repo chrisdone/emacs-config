@@ -53,22 +53,7 @@
     (when (buffer-file-name)
       (save-buffer))
     ;; Reload main module where `main' function is
-    (haskell-process-queue-without-filters
-     (haskell-process)
-     ":l Main")
-    ;; Include neccessary modules
-    (haskell-process-queue-without-filters
-     (haskell-process)
-     ":m + Foreign.Store Control.Concurrent Control.Monad")
-    ;; Kill any existing thread
-    (haskell-process-queue-without-filters
-     (haskell-process)
-     "lookupStore 0 >>= maybe (return ()) (\\s -> readStore s >>= killThread >> deleteStore s)")
-    ;; Start new thread and new store
-    (haskell-process-queue-without-filters
-     (haskell-process)
-     "forkIO main >>= newStore >>= print")
-    (message "Restarted."))
+    (haskell-process-reload-devel-main))
    (t
     (haskell-process-cabal-build)
     (haskell-process-queue-without-filters
@@ -148,28 +133,6 @@ the cursor position happened."
              (file-name-nondirectory (buffer-file-name))
              name
              (line-number-at-pos)))))
-
-(defun haskell-w3m-open-haddock ()
-  "Open a haddock page in w3m."
-  (interactive)
-  (let* ((entries (remove-if (lambda (s) (string= s ""))
-                             (split-string (shell-command-to-string (concat "ls -1 " haskell-w3m-haddock-dir))
-                                           "\n")))
-         (package-dir (ido-completing-read
-                       "Package: "
-                       entries)))
-    (cond
-     ((member package-dir entries)
-      (w3m-browse-url (concat "file://"
-                              haskell-w3m-haddock-dir
-                              "/"
-                              package-dir
-                              "/html/index.html")
-                      t))
-     (t
-      (w3m-browse-url (concat "http://hackage.haskell.org/package/"
-                              package-dir)
-                      t)))))
 
 
 ;; Mode settings
