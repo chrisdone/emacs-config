@@ -234,14 +234,7 @@ Goes backward if ARG is negative; error if CHAR not found."
                                     (shell-command-to-string "date +'%Y-%m-%d'"))
           "): "))
 
-(defun jump-to-register-digit ()
-  "Jump to the register in the digit key pressed to invoke this
-interactive command."
-  (interactive)
-  (jump-to-register
-   (+ ?0
-      (1+ (- (elt (this-command-keys-vector) 0)
-             (elt (read-kbd-macro "M-1") 0))))) )
+(defvar window-config-n 0)
 
 (defun save-window-config ()
   "Saves the current window configuration."
@@ -259,9 +252,6 @@ interactive command."
 
 ;; Global keybindings
 
-(loop for i from 1 to 9
-      do (global-set-key (kbd (format "M-%d" i)) 'jump-to-register-digit))
-(global-set-key (kbd "M-`") 'window-configuration-to-register)
 
 (global-set-key (kbd "s-s") 'save-window-config)
 (global-set-key (kbd "s-g") 'restore-window-config)
