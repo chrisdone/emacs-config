@@ -16,14 +16,14 @@
       notmuch-search-oldest-first nil
       notmuch-search-line-faces
       `(("unread" :weight bold)
-        ("flagged" :foreground ,sunburn-blue)))
+        ("flagged" :foreground ,sunburn-fg)))
 
 (defun notmuch-mark-deleted ()
   "Mark this email as deleted."
   (interactive)
-  (notmuch-show-add-tag (list "+deleted"))
-  (notmuch-kill-this-buffer)
-  (notmuch-refresh-this-buffer))
+  (when (y-or-n-p "Are you sure you want to this message?")
+    (notmuch-show-add-tag (list "+deleted"))
+    (notmuch-show-next-thread)))
 
 (define-key notmuch-show-mode-map (kbd "d") 'notmuch-mark-deleted)
 (define-key notmuch-show-mode-map (kbd "RET") 'goto-address-at-point)
