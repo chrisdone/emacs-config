@@ -234,24 +234,35 @@ Goes backward if ARG is negative; error if CHAR not found."
                                     (shell-command-to-string "date +'%Y-%m-%d'"))
           "): "))
 
+(defun reorder-buffer-list (sort-list)
+  "Re-order the buffer list."
+  (let ((sort-len (length sort-list)))
+    (while sort-list
+      (bury-buffer (car sort-list))
+      (setq sort-list (cdr sort-list)))
+    (let* ((buffers (buffer-list))
+           (buffers-len (length buffers)))
+      (loop repeat (- buffers-len sort-len)
+            for buf in buffers
+            do (bury-buffer buf)))))
+
 (defun save-window-config ()
   "Saves the current window configuration."
   (interactive)
   (message "Entering recursive window configuration ...")
-  (save-window-excursion
-    (recursive-edit)))
-
-(defun restore-window-config ()
-  "Restores the window configuration."
-  (interactive)
-  (exit-recursive-edit)
-  (message "Restored window configuration."))
+  (let ((buffers (buffer-list)))
+    (save-window-excursion
+      (recursive-edit)
+      (message "Restored window configuration."))
+    (reorder-buffer-list buffers)))
 
 
 ;; Global keybindings
 
 (global-set-key (kbd "s-s") 'save-window-config)
-(global-set-key (kbd "s-g") 'restore-window-config)
+(global-set-key (kbd "s-g") 'exit-recursive-edit)
+(global-set-key (kbd "s-u") 'winner-mode-undo)
+
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
 (global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
