@@ -250,7 +250,6 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 ;; Global keybindings
 
-
 (global-set-key (kbd "s-s") 'save-window-config)
 (global-set-key (kbd "s-g") 'restore-window-config)
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
