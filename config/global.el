@@ -234,8 +234,6 @@ Goes backward if ARG is negative; error if CHAR not found."
                                     (shell-command-to-string "date +'%Y-%m-%d'"))
           "): "))
 
-(defvar window-config-n 0)
-
 (defun save-window-config ()
   "Saves the current window configuration."
   (interactive)
@@ -255,7 +253,6 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 (global-set-key (kbd "s-s") 'save-window-config)
 (global-set-key (kbd "s-g") 'restore-window-config)
-
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
 (global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
