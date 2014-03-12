@@ -31,7 +31,8 @@
     lua-mode
     ag
     notmuch
-    w3m))
+    w3m
+    goto-last-point))
 
 (defvar configs
   '("global"
@@ -78,5 +79,6 @@
 (smex-initialize)
 (sunburn)
 (god-mode)
+(goto-last-point-mode)
 (turn-on-haskell-simple-indent)
 (load "haskell-mode-autoloads.el")
