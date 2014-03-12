@@ -70,7 +70,8 @@
               (eq this-command 'self-insert-command))
     (unless (local-variable-p 'goto-last-point-stack)
       (make-local-variable 'goto-last-point-stack)
-      (make-local-variable 'goto-last-point-next))
+      (make-local-variable 'goto-last-point-next)
+      (make-local-variable 'goto-last-point-length))
     (when (and goto-last-point-next
                (/= goto-last-point-next
                    (point)))
