@@ -234,12 +234,11 @@ Goes backward if ARG is negative; error if CHAR not found."
                                     (shell-command-to-string "date +'%Y-%m-%d'"))
           "): "))
 
-(defun reorder-buffer-list (sort-list)
+(defun reorder-buffer-list (pre-sort-list)
   "Re-order the buffer list."
-  (let ((sort-len (length sort-list)))
-    (while sort-list
-      (bury-buffer (car sort-list))
-      (setq sort-list (cdr sort-list)))
+  (let* ((sort-list (remove-if-not #'buffer-live-p pre-sort-list))
+         (sort-len (length sort-list)))
+    (mapc #'bury-buffer sort-list)
     (let* ((buffers (buffer-list))
            (buffers-len (length buffers)))
       (loop repeat (- buffers-len sort-len)
