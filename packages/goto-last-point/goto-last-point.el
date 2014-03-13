@@ -29,9 +29,6 @@
 (defvar goto-last-point-stack nil
   "The point undo stack.")
 
-(defvar goto-last-point-length 0
-  "Length of the stack.")
-
 (defvar goto-last-point-record-hook nil
   "Hook called after a new point is recorded.")
 
@@ -50,10 +47,8 @@
   "Jump to the last point."
   (interactive)
   (when (local-variable-p 'goto-last-point-stack)
-    (let ((point (pop goto-last-point-stack)))
-      (setq goto-last-point-length
-            (max 0 (1- goto-last-point-length)))
-      (when point
+    (when (not (ring-empty-p goto-last-point-stack))
+      (let ((point (ring-remove goto-last-point-stack 0)))
         (setq goto-last-point-next nil)
         (goto-char point)
         (run-hooks 'goto-last-point-goto-hook)))))
@@ -70,9 +65,8 @@
 
 (defun goto-last-point-clear (_ _1 _2)
   "Clear the last point after changes occur."
-  (setq goto-last-point-stack nil)
+  (setq goto-last-point-stack (make-ring goto-last-point-max-length))
   (setq goto-last-point-next nil)
-  (setq goto-last-point-length 0)
   (run-hooks 'goto-last-point-clear-hook))
 
 (defun goto-last-point-record ()
@@ -80,19 +74,14 @@
   (unless (or (minibufferp)
               (eq this-command 'self-insert-command))
     (unless (local-variable-p 'goto-last-point-stack)
-      (make-local-variable 'goto-last-point-stack)
-      (make-local-variable 'goto-last-point-next)
-      (make-local-variable 'goto-last-point-length))
+      (set (make-local-variable 'goto-last-point-stack)
+           (make-ring goto-last-point-max-length))
+      (make-local-variable 'goto-last-point-next))
     (when (and goto-last-point-next
                (/= goto-last-point-next
                    (point)))
-      (setq goto-last-point-length (1+ goto-last-point-length))
-      (setq goto-last-point-stack (cons goto-last-point-next
-                                        goto-last-point-stack))
-      (when (> goto-last-point-length
-               goto-last-point-max-length)
-        (setq goto-last-point-length goto-last-point-max-length)
-        (nbutlast goto-last-point-stack 1)))
+      (ring-insert goto-last-point-stack
+                   goto-last-point-next))
     (setq goto-last-point-next (point))
     (run-hooks 'goto-last-point-record-hook)))
 
