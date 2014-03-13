@@ -29,12 +29,6 @@
 (defvar goto-last-point-stack nil
   "The point undo stack.")
 
-(defvar goto-last-point-record-hook nil
-  "Hook called after a new point is recorded.")
-
-(defvar goto-last-point-clear-hook nil
-  "Hook called after the points are reset.")
-
 (defvar goto-last-point-goto-hook nil
   "Hook called after a jump happens.")
 
@@ -66,8 +60,7 @@
 (defun goto-last-point-clear (_ _1 _2)
   "Clear the last point after changes occur."
   (setq goto-last-point-stack nil)
-  (setq goto-last-point-next nil)
-  (run-hooks 'goto-last-point-clear-hook))
+  (setq goto-last-point-next nil))
 
 (defun goto-last-point-record ()
   "Record the current point in the current buffer."
@@ -83,7 +76,6 @@
                    (point)))
       (ring-insert goto-last-point-stack
                    goto-last-point-next))
-    (setq goto-last-point-next (point))
-    (run-hooks 'goto-last-point-record-hook)))
+    (setq goto-last-point-next (point))))
 
 (provide 'goto-last-point)

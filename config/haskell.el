@@ -168,13 +168,6 @@ the cursor position happened."
 
 ;; Keybindings
 
-(define-key haskell-mode-map (kbd "C-c C-d") 'haskell-w3m-open-haddock)
-
-(define-key haskell-mode-map (kbd "-") 'smart-hyphen)
-(define-key haskell-mode-map [f8] 'haskell-navigate-imports)
-(define-key haskell-mode-map [f5] 'haskell-process-load-or-reload)
-(define-key haskell-mode-map [f12] 'turbo-devel-reload)
-
 (define-key html-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key html-mode-map (kbd "C-`") 'haskell-interactive-bring)
 (define-key html-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
@@ -182,6 +175,11 @@ the cursor position happened."
 (define-key css-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key css-mode-map (kbd "C-`") 'haskell-interactive-bring)
 
+(define-key haskell-mode-map (kbd "C-c C-d") 'haskell-w3m-open-haddock)
+(define-key haskell-mode-map (kbd "-") 'smart-hyphen)
+(define-key haskell-mode-map [f8] 'haskell-navigate-imports)
+(define-key haskell-mode-map [f5] 'haskell-process-load-or-reload)
+(define-key haskell-mode-map [f12] 'turbo-devel-reload)
 (define-key haskell-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key haskell-mode-map (kbd "C-c C-u") 'haskell-insert-undefined)
 (define-key haskell-mode-map (kbd "C-c C-a") 'haskell-insert-doc)
@@ -201,8 +199,6 @@ the cursor position happened."
 (define-key haskell-mode-map (kbd "C-<left>") 'haskell-move-left)
 (define-key haskell-mode-map (kbd "<space>") 'haskell-mode-contextual-space)
 
-(define-key haskell-interactive-mode-map (kbd "C-c C-v") 'haskell-interactive-toggle-print-mode)
-
 (define-key haskell-cabal-mode-map [f9] 'haskell-interactive-mode-visit-error)
 (define-key haskell-cabal-mode-map [f11] 'haskell-process-cabal-build)
 (define-key haskell-cabal-mode-map [f12] 'haskell-process-cabal-build-and-restart)
@@ -211,6 +207,7 @@ the cursor position happened."
 (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
 (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
 
+(define-key haskell-interactive-mode-map (kbd "C-c C-v") 'haskell-interactive-toggle-print-mode)
 (define-key haskell-interactive-mode-map [f9] 'haskell-interactive-mode-visit-error)
 (define-key haskell-interactive-mode-map [f11] 'haskell-process-cabal-build)
 (define-key haskell-interactive-mode-map [f12] 'haskell-process-cabal-build-and-restart)
@@ -221,3 +218,4 @@ the cursor position happened."
 (define-key shm-map (kbd "C-c C-p") 'shm/expand-pattern)
 (define-key shm-map (kbd "C-c C-s") 'shm/case-split)
 (define-key shm-map (kbd "SPC") 'shm-contextual-space)
+(define-key shm-map (kbd "C-\\") 'shm/goto-last-point)
