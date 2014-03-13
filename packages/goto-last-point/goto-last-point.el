@@ -65,7 +65,7 @@
 
 (defun goto-last-point-clear (_ _1 _2)
   "Clear the last point after changes occur."
-  (setq goto-last-point-stack (make-ring goto-last-point-max-length))
+  (setq goto-last-point-stack nil)
   (setq goto-last-point-next nil)
   (run-hooks 'goto-last-point-clear-hook))
 
@@ -73,7 +73,8 @@
   "Record the current point in the current buffer."
   (unless (or (minibufferp)
               (eq this-command 'self-insert-command))
-    (unless (local-variable-p 'goto-last-point-stack)
+    (unless (and (local-variable-p 'goto-last-point-stack)
+                 goto-last-point-stack)
       (set (make-local-variable 'goto-last-point-stack)
            (make-ring goto-last-point-max-length))
       (make-local-variable 'goto-last-point-next))
