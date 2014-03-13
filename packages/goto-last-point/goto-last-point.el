@@ -32,6 +32,15 @@
 (defvar goto-last-point-length 0
   "Length of the stack.")
 
+(defvar goto-last-point-record-hook nil
+  "Hook called after a new point is recorded.")
+
+(defvar goto-last-point-clear-hook nil
+  "Hook called after the points are reset.")
+
+(defvar goto-last-point-goto-hook nil
+  "Hook called after a jump happens.")
+
 (define-minor-mode goto-last-point-mode nil :global t
   (if goto-last-point-mode
       (goto-last-point-add-hooks)
@@ -46,7 +55,8 @@
             (max 0 (1- goto-last-point-length)))
       (when point
         (setq goto-last-point-next nil)
-        (goto-char point)))))
+        (goto-char point)
+        (run-hooks 'goto-last-point-goto-hook)))))
 
 (defun goto-last-point-add-hooks ()
   "Add hooks for recording point."
@@ -62,7 +72,8 @@
   "Clear the last point after changes occur."
   (setq goto-last-point-stack nil)
   (setq goto-last-point-next nil)
-  (setq goto-last-point-length 0))
+  (setq goto-last-point-length 0)
+  (run-hooks 'goto-last-point-clear-hook))
 
 (defun goto-last-point-record ()
   "Record the current point in the current buffer."
@@ -82,6 +93,7 @@
                goto-last-point-max-length)
         (setq goto-last-point-length goto-last-point-max-length)
         (nbutlast goto-last-point-stack 1)))
-    (setq goto-last-point-next (point))))
+    (setq goto-last-point-next (point))
+    (run-hooks 'goto-last-point-record-hook)))
 
 (provide 'goto-last-point)
