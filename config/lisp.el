@@ -59,10 +59,18 @@
     (delete-region (point)
                    (line-end-position)))))
 
+(defun emacs-lisp-return-or-backslash ()
+  "Return to previous point in god-mode."
+  (interactive)
+  (if god-local-mode
+      (call-interactively 'god-mode-self-insert)
+    (call-interactively 'paredit-backslash)))
+
 
 ;; Keybindings
 
 (define-key emacs-lisp-mode-map (kbd "M-/") 'emacs-lisp-expand-clever)
+(define-key paredit-mode-map (kbd "\\") 'emacs-lisp-return-or-backslash)
 
 
 ;; Hooks
