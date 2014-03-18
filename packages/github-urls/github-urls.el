@@ -23,6 +23,7 @@
 
 (defun github-urls-current-file-url-copy ()
   "Copy the current file URL to the clipboard."
+  (interactive)
   (github-urls-copy (github-urls-current-file-url)))
 
 (defun github-urls-copy (string)
