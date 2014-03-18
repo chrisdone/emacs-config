@@ -63,6 +63,7 @@
                      "structured-haskell-mode/elisp"))
 
 (require 'shm)
+(require 'shm-case-split)
 (require 'w3m-haddock)
 
 
