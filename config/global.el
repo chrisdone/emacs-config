@@ -328,6 +328,10 @@ Goes backward if ARG is negative; error if CHAR not found."
 (ido-mode 1)
 (global-font-lock-mode 1)
 
+(require 'dired-x)
+(setq-default dired-omit-files-p t)
+(setq dired-omit-files ".hi$\\|\\.o$")
+
 
 ;; Enable cool defaults
 
