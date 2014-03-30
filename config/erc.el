@@ -12,6 +12,13 @@
   (setq erc-ignore-list '("cntrational" "selpa`i"))
   (setq erc-ignore-reply-list '("cntrational" "selpa`i")))
 
+(defun erc-goto-def ()
+  "Jump to the definition of the thing at point."
+  (interactive)
+  (cond
+   ((string= "#fpco" (buffer-name))
+    (call-interactively 'haskell-mode-tag-find))))
+
 (defun erc-insert-emoticon ()
   "Prompt to insert an emoticon."
   (interactive)
@@ -679,6 +686,7 @@
 ;; Keybindings
 
 (define-key erc-mode-map (kbd "C-c e") 'erc-insert-emoticon)
+(define-key erc-mode-map (kbd "M-.") 'erc-goto-def)
 
 
 ;; Hooks
