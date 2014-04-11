@@ -32,7 +32,8 @@
     ag
     notmuch
     w3m
-    goto-last-point))
+    goto-last-point
+    github-urls))
 
 (defvar configs
   '("global"
