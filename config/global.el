@@ -380,6 +380,8 @@ Goes backward if ARG is negative; error if CHAR not found."
                                  (50 . sunburn-yellow)
                                  (51 . sunburn-green))))
 
+(setq js-indent-level 2)
+
 
 ;; Global settings
 
