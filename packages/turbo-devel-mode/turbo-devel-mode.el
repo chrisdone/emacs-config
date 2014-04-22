@@ -39,11 +39,14 @@
                                                     default-directory)))
         (command (read-from-minibuffer "Command: " (format "%s %d"
                                                            turbo-devel-command
-                                                           turbo-devel-port))))
-    (shell (get-buffer-create "*turbo-devel*"))
-    (with-current-buffer "*turbo-devel*"
+                                                           turbo-devel-port)))
+        (buf (get-buffer-create (read-from-minibuffer "Buffer name: " "*turbo-devel*"))))
+    (shell buf)
+    (with-current-buffer buf
       (turbo-devel-mode)
       (insert "cd " path)
+      (comint-send-input nil t)
+      (insert "unset GHC_PACKAGE_PATH")
       (comint-send-input nil t)
       (insert command)
       (comint-send-input nil t)
