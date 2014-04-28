@@ -157,7 +157,8 @@ the cursor position happened."
  '(shm-auto-insert-skeletons t)
  '(shm-auto-insert-bangs t)
  '(haskell-process-show-debug-tips nil)
- '(haskell-interactive-mode-do-fast-keys t))
+ '(haskell-interactive-mode-do-fast-keys t)
+ '(haskell-process-suggest-hoogle-imports t))
 
 
 ;; Add hook
