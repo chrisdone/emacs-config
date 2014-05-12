@@ -163,7 +163,7 @@ the cursor position happened."
 ;; Add hook
 
 (add-hook 'haskell-mode-hook 'structured-haskell-mode)
-(add-hook 'haskell-interactive-mode-hook 'structured-haskell-mode)
+(add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
 
@@ -181,6 +181,7 @@ the cursor position happened."
 (define-key haskell-mode-map (kbd "-") 'smart-hyphen)
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
 (define-key haskell-mode-map [f5] 'haskell-process-load-or-reload)
+(define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
 (define-key haskell-mode-map [f12] 'turbo-devel-reload)
 (define-key haskell-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key haskell-mode-map (kbd "C-c C-u") 'haskell-insert-undefined)
