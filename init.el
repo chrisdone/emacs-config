@@ -44,7 +44,8 @@
     "notmuch"
     "email"
     "lisp"
-    "w3m"))
+    "w3m"
+    "markdown"))
 
 
 ;; Load packages
