@@ -157,13 +157,13 @@ the cursor position happened."
  '(shm-auto-insert-skeletons t)
  '(shm-auto-insert-bangs t)
  '(haskell-process-show-debug-tips nil)
- '(haskell-interactive-mode-do-fast-keys t)
  '(haskell-process-suggest-hoogle-imports t))
 
 
 ;; Add hook
 
 (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+(add-hook 'haskell-interactive-mode-hook 'structured-haskell-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
 
