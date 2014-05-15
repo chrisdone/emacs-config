@@ -188,7 +188,7 @@ the cursor position happened."
 (define-key haskell-mode-map (kbd "C-c C-a") 'haskell-insert-doc)
 (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
 (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
-(define-key haskell-mode-map (kbd "M-.") 'haskell-mode-tag-find)
+(define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def-or-tag)
 (define-key haskell-mode-map (kbd "M-,") 'haskell-who-calls)
 (define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
 (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
