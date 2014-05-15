@@ -29,7 +29,8 @@
   "Picks up changes."
   (when (string-match "Devel application launched: " input)
     (message "turbo-devel: Restarted.")
-    (notify "turbo-devel" "Restarted.")))
+    (notify "turbo-devel" "Restarted.")
+    (shell-command-to-string "alert-done")))
 
 (defun run-turbo-devel ()
   "Run the turbo devel server."
