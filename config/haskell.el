@@ -159,6 +159,8 @@ the cursor position happened."
  '(haskell-process-show-debug-tips nil)
  '(haskell-process-suggest-hoogle-imports t))
 
+(setq haskell-interactive-mode-eval-mode 'haskell-mode)
+
 
 ;; Add hook
 
