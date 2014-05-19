@@ -67,7 +67,5 @@ If you prefer a dark terminal, comment out this:
     You may redistribute copies of Emacs
     under the terms of the GNU General Public License.
     For more information about these matters, see the file named COPYING.
-
     $ ghc --version
     The Glorious Glasgow Haskell Compilation System, version 7.6.2
-    $
