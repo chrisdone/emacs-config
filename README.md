@@ -5,7 +5,7 @@ To use
     $ git submodule init
     $ git submodule update
     $ cd packages/haskell-mode; make
-    $ cd packages/structured-haskell-mode; cabal install
+    $ cd packages/structured-haskell-mode; cabal install; cd elisp; make
     $ cabal install hasktags
 
 Optionally, for experimental type of subexpression:
