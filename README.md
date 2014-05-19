@@ -6,7 +6,8 @@ To use
     $ git submodule update
     $ cd packages/haskell-mode; make
     $ cd packages/structured-haskell-mode; cabal install; cd elisp; make
-    $ cabal install hasktags
+    $ cabal install hasktags hoogle
+    $ hoogle data
 
 Optionally, for `:present <exp>` support in the REPL:
 
@@ -19,11 +20,6 @@ Optionally, for experimental type of subexpression:
 Optionally, for browsing haddocks inside Emacs:
 
     $ sudo apt-get install w3m
-
-Optionally, for Hoogle support:
-
-    $ cabal install hoogle
-    $ hoogle data
 
 ### I'm just here to see your Haskell config
 
