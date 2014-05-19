@@ -37,7 +37,7 @@ Emacs as normal.
 
 ### Weird stuff you might want to disable
 
-You might want to comment out the following things in init.el
+You might want to comment out the following things in [init.el](https://github.com/chrisdone/chrisdone-emacs/blob/master/init.el).
 
 God-mode is a modal input mode for Emacs like Vim:
 
@@ -46,6 +46,12 @@ God-mode is a modal input mode for Emacs like Vim:
 If you prefer a dark terminal, comment out this:
 
     (sunburn)
+
+### I'm just here for the Haskell stuff
+
+Then you want to look inside
+[config/haskell.el](https://github.com/chrisdone/chrisdone-emacs/blob/master/config/haskell.el)
+and steal anything that looks interesting.
 
 ### My software versions
 
