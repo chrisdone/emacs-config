@@ -12,6 +12,10 @@ Optionally, for experimental type of subexpression:
 
     $ git clone https://github.com/bennofs/hdevtools.git && cd hdevtools && cabal install
 
+Optionally, for browsing haddocks inside Emacs:
+
+    $ sudo apt-get install w3m
+
 ### Use without affecting existing Emacs configuration
 
 This is perfect for the “just looking” use-case.
@@ -30,6 +34,18 @@ and run Emacs as normal.
 
 Check out this project or symlink it as `~/.emacs.d/` and then run
 Emacs as normal.
+
+### Weird stuff you might want to disable
+
+You might want to comment out the following things in init.el
+
+God-mode is a modal input mode for Emacs like Vim:
+
+    (god-mode)
+
+If you prefer a dark terminal, comment out this:
+
+    (sunburn)
 
 ### My software versions
 
