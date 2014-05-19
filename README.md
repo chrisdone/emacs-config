@@ -8,6 +8,10 @@ To use
     $ cd packages/structured-haskell-mode; cabal install; cd elisp; make
     $ cabal install hasktags
 
+Optionally, for `:present <exp>` support in the REPL:
+
+    $ cabal install present
+
 Optionally, for experimental type of subexpression:
 
     $ git clone https://github.com/bennofs/hdevtools.git && cd hdevtools && cabal install
