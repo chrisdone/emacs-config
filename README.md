@@ -9,7 +9,7 @@ To use
     $ cabal install hasktags hoogle
     $ hoogle data
 
-Optionally, for `:present <exp>` support in the REPL:
+Optionally, for [`:present <exp>` support in the REPL](https://github.com/haskell/haskell-mode/wiki/Haskell-Interactive-Mode-REPL#presentations):
 
     $ cabal install present
 
