@@ -13,7 +13,8 @@ Optionally, for [`:present <exp>` support in the REPL](https://github.com/haskel
 
     $ cabal install present
 
-Optionally, for experimental type of subexpression:
+Optionally, for experimental type of subexpression (so you can use
+`M-x shm/type-of-node`):
 
     $ git clone https://github.com/bennofs/hdevtools.git && cd hdevtools && cabal install
 
