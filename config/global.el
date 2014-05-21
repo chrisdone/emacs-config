@@ -355,8 +355,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 (setq ido-ignore-files '("\\.hi$" "\\.o$" "\\.tags$" "^\\.ghci$"))
 (setq ido-max-directory-size 200000)
 
-(setq browse-url-generic-program "firefox"
-      browse-url-browser-function gnus-button-url)
+(setq browse-url-browser-function gnus-button-url)
 
 (setq c-default-style "bsd"
       c-basic-offset 2
