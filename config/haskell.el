@@ -173,10 +173,8 @@ the cursor position happened."
 ;; Keybindings
 
 (define-key hamlet-mode-map [f12] 'haskell-process-cabal-build-and-restart)
-
-(define-key html-mode-map [f12] 'haskell-process-cabal-build-and-restart)
-(define-key html-mode-map (kbd "C-`") 'haskell-interactive-bring)
-(define-key html-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+(define-key hamlet-mode-map (kbd "C-`") 'haskell-interactive-bring)
+(define-key hamlet-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
 
 (define-key css-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key css-mode-map (kbd "C-`") 'haskell-interactive-bring)
