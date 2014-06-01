@@ -33,7 +33,9 @@
     notmuch
     w3m
     goto-last-point
-    github-urls))
+    github-urls
+    s
+    hamlet-mode))
 
 (defvar configs
   '("global"

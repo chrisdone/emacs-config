@@ -412,7 +412,6 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 (add-to-list 'auto-mode-alist (cons "\\.lucius$" 'css-mode))
 (add-to-list 'auto-mode-alist (cons "\\.julius$" 'javascript-mode))
-(add-to-list 'auto-mode-alist (cons "\\.hamlet$" 'html-mode))
 (add-to-list 'auto-mode-alist (cons "\\.el\\'" 'emacs-lisp-mode))
 
 (add-to-list 'auto-mode-alist (cons "\\.md\\'" 'markdown-mode))
