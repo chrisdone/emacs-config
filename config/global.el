@@ -255,6 +255,11 @@ Goes backward if ARG is negative; error if CHAR not found."
       (message "Restored window configuration."))
     (reorder-buffer-list buffers)))
 
+(defun echo-mode ()
+  "Start grepping /tmp/echo."
+  (interactive)
+  (grep "tail -f /tmp/echo -n 0"))
+
 
 ;; Global keybindings
 
