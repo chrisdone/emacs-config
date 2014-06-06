@@ -157,7 +157,11 @@ the cursor position happened."
  '(shm-auto-insert-skeletons t)
  '(shm-auto-insert-bangs t)
  '(haskell-process-show-debug-tips nil)
- '(haskell-process-suggest-hoogle-imports t))
+ '(haskell-process-suggest-hoogle-imports t)
+ '(haskell-complete-module-preferred
+   '("Data.ByteString"
+     "Data.ByteString.Lazy"
+     "Data.Function")))
 
 (setq haskell-interactive-mode-eval-mode 'haskell-mode)
 
