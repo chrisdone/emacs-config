@@ -29,10 +29,10 @@
              (= (point-min)
                 (point-max)))
     (let ((module-name
-         (replace-regexp-in-string
-          "\\.el$" ""
-          (file-name-nondirectory (buffer-file-name)))))
-    (insert (format ";;; %s.el --- $DESC$
+           (replace-regexp-in-string
+            "\\.el$" ""
+            (file-name-nondirectory (buffer-file-name)))))
+      (insert (format ";;; %s.el --- $DESC$
 
 ;; Copyright (c) 2014 Chris Done. All rights reserved.
 
@@ -55,9 +55,9 @@
 
 \(provide '%s)" module-name (if (string-match "^shm-" module-name)
                                 "(require 'shm-core)\n\n" "") module-name))
-    (search-backward "$DESC$")
-    (delete-region (point)
-                   (line-end-position)))))
+      (search-backward "$DESC$")
+      (delete-region (point)
+                     (line-end-position)))))
 
 (defun emacs-lisp-return-or-backslash ()
   "Return to previous point in god-mode."
