@@ -66,11 +66,57 @@
       (call-interactively 'god-mode-self-insert)
     (call-interactively 'paredit-backslash)))
 
+(defun paredit-delete-sexp ()
+  "Delete the sexp at point."
+  (interactive)
+  (cond
+   ((paredit-in-comment-p)
+    (call-interactively 'delete-char))
+   ;; Strings don't behave the same as normal sexps in paredit.
+   ((paredit-in-string-p)
+    (delete-region (save-excursion (paredit-backward-up)
+                                   (point))
+                   (save-excursion (paredit-backward-up)
+                                   (paredit-forward)
+                                   (point))))
+   ((paredit-inside-sexp-p)
+    (delete-region (save-excursion (paredit-backward)
+                                   (point))
+                   (save-excursion (paredit-forward)
+                                   (point))))
+   ((paredit-start-of-sexp-p)
+    (delete-region (point)
+                   (save-excursion (paredit-forward)
+                                   (point))))
+   ;; Otherwise we're at the end of a sexp.
+   (t
+    (delete-region (save-excursion (paredit-backward)
+                                   (point))
+                   (save-excursion (paredit-backward)
+                                   (paredit-forward)
+                                   (point))))))
+
+(defun paredit-inside-sexp-p ()
+  "Are we inside the bounds of a sexp?"
+  (= (save-excursion (paredit-forward)
+                     (point))
+     (save-excursion (paredit-backward)
+                     (paredit-forward)
+                     (point))))
+
+(defun paredit-start-of-sexp-p ()
+  "Are we at the start of a sexp?"
+  (= (save-excursion (paredit-forward)
+                     (paredit-backward)
+                     (point))
+     (point)))
+
 
 ;; Keybindings
 
 (define-key emacs-lisp-mode-map (kbd "M-/") 'emacs-lisp-expand-clever)
 (define-key paredit-mode-map (kbd "\\") 'emacs-lisp-return-or-backslash)
+(define-key paredit-mode-map (kbd "<delete>") 'paredit-delete-sexp)
 
 
 ;; Hooks
