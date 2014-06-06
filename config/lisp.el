@@ -66,6 +66,22 @@
       (call-interactively 'god-mode-self-insert)
     (call-interactively 'paredit-backslash)))
 
+(defun paredit-kill-sexp ()
+  "Kill the sexp at point."
+  (interactive)
+  (cond
+   ((paredit-in-string-p)
+    (paredit-backward-up)
+    (call-interactively 'kill-sexp))
+   ((paredit-inside-sexp-p)
+    (paredit-backward)
+    (call-interactively 'kill-sexp))
+   ((paredit-start-of-sexp-p)
+    (call-interactively 'kill-sexp))
+   (t
+    (paredit-backward)
+    (call-interactively 'kill-sexp))))
+
 (defun paredit-delete-sexp ()
   "Delete the sexp at point."
   (interactive)
@@ -117,6 +133,8 @@
 (define-key emacs-lisp-mode-map (kbd "M-/") 'emacs-lisp-expand-clever)
 (define-key paredit-mode-map (kbd "\\") 'emacs-lisp-return-or-backslash)
 (define-key paredit-mode-map (kbd "<delete>") 'paredit-delete-sexp)
+(define-key paredit-mode-map (kbd "C-M-k") 'paredit-kill-sexp)
+(define-key paredit-mode-map (kbd "M-k") 'paredit-kill-sexp)
 
 
 ;; Hooks
