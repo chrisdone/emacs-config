@@ -118,7 +118,11 @@ the cursor position happened."
       (call-interactively 'god-mode-self-insert)
     (if (looking-back "import")
         (call-interactively 'haskell-mode-contextual-space)
-      (call-interactively 'shm/space))))
+      (progn
+        (let ((ident (haskell-ident-at-point)))
+          (when ident
+              (haskell-process-do-try-type ident)))
+        (call-interactively 'shm/space)))))
 
 (defun shm/insert-putstrln ()
   "Insert a putStrLn."
