@@ -2,6 +2,7 @@
 ;; Requirements
 
 (require 'haskell-mode)
+(require 'haskell-process)
 (require 'haskell-simple-indent)
 (require 'haskell-interactive-mode)
 (require 'haskell-font-lock)
@@ -161,14 +162,18 @@ the cursor position happened."
  '(shm-auto-insert-skeletons t)
  '(shm-auto-insert-bangs t)
  '(haskell-process-show-debug-tips nil)
- '(haskell-process-suggest-hoogle-imports t))
-
+ '(haskell-process-suggest-hoogle-imports nil)
+ '(haskell-process-suggest-haskell-docs-imports nil))
 
 (setq haskell-complete-module-preferred
       '("Data.ByteString"
         "Data.ByteString.Lazy"
         "Data.Function"
-        ))
+        "Data.List"
+        "Data.Map"
+        "Data.Maybe"
+        "Data.Monoid"
+        "Data.Ord"))
 
 (setq haskell-interactive-mode-eval-mode 'haskell-mode)
 
@@ -179,9 +184,16 @@ the cursor position happened."
 (add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
 
 ;; Keybindings
+
+(define-key interactive-haskell-mode-map [f5] 'haskell-process-load-or-reload)
+(define-key interactive-haskell-mode-map [f12] 'turbo-devel-reload)
+(define-key interactive-haskell-mode-map [f12] 'haskell-process-cabal-build-and-restart)
+(define-key interactive-haskell-mode-map (kbd "M-,") 'haskell-who-calls)
+(define-key interactive-haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
 
 (define-key hamlet-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key hamlet-mode-map (kbd "C-`") 'haskell-interactive-bring)
@@ -197,23 +209,14 @@ the cursor position happened."
 (define-key haskell-mode-map (kbd "C-c C-d") 'haskell-w3m-open-haddock)
 (define-key haskell-mode-map (kbd "-") 'smart-hyphen)
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
-(define-key haskell-mode-map [f5] 'haskell-process-load-or-reload)
-(define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
-(define-key haskell-mode-map [f12] 'turbo-devel-reload)
-(define-key haskell-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key haskell-mode-map (kbd "C-c C-u") 'haskell-insert-undefined)
 (define-key haskell-mode-map (kbd "C-c C-a") 'haskell-insert-doc)
-(define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
-(define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
 (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def-or-tag)
 (define-key haskell-mode-map (kbd "M-,") 'haskell-who-calls)
 (define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
 (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
 (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
 (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
-(define-key haskell-mode-map (kbd "TAB") 'haskell-simple-indent)
-(define-key haskell-mode-map (kbd "<backtab>") 'haskell-simple-indent-backtab)
-(define-key haskell-mode-map (kbd "<return>") 'haskell-simple-indent-newline-same-col)
 (define-key haskell-mode-map (kbd "C-<return>") 'haskell-simple-indent-newline-indent)
 (define-key haskell-mode-map (kbd "C-<right>") 'haskell-move-right)
 (define-key haskell-mode-map (kbd "C-<left>") 'haskell-move-left)
