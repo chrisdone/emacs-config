@@ -46,10 +46,15 @@
            when (string-match "^\\*magit: \\(.+\\)\\*$" name)
            collect (match-string 1 name))))))
 
+(defun magit-insert-clock-string ()
+  (interactive)
+  (insert (replace-regexp-in-string "%" "%%" org-clock-heading)))
+
 
 ;; Hooks
 
 (add-hook 'magit-log-edit-commit-hook 'magit-hook-prompt-missing-ticket)
+(add-hook 'magit-log-edit-mode-hook 'magit-insert-clock-string)
 
 (magit-key-mode-insert-action
  'logging "p" "Paths" 'ofv-magit-log-for-paths)
