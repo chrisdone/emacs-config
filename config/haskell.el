@@ -163,7 +163,7 @@ the cursor position happened."
  '(shm-auto-insert-bangs t)
  '(haskell-process-show-debug-tips nil)
  '(haskell-process-suggest-hoogle-imports nil)
- '(haskell-process-suggest-haskell-docs-imports nil))
+ '(haskell-process-suggest-haskell-docs-imports t))
 
 (setq haskell-complete-module-preferred
       '("Data.ByteString"
