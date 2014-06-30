@@ -54,7 +54,8 @@
 ;; Hooks
 
 (add-hook 'magit-log-edit-commit-hook 'magit-hook-prompt-missing-ticket)
-(add-hook 'magit-log-edit-mode-hook 'magit-insert-clock-string)
+
+(define-key magit-log-edit-mode-map (kbd "C-c t") 'magit-insert-clock-string)
 
 (magit-key-mode-insert-action
  'logging "p" "Paths" 'ofv-magit-log-for-paths)
