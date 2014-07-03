@@ -35,7 +35,8 @@
     goto-last-point
     github-urls
     s
-    hamlet-mode))
+    hamlet-mode
+    service))
 
 (defvar configs
   '("global"
