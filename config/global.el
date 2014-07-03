@@ -296,6 +296,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
 
+(global-set-key [f10] 'service/restart)
 (global-set-key [f11] 'goto-notmuch-inbox)
 
 
