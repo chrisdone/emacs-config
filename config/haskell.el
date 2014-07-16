@@ -232,6 +232,7 @@ the cursor position happened."
 (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
 
 (define-key haskell-interactive-mode-map (kbd "C-c C-v") 'haskell-interactive-toggle-print-mode)
+(define-key haskell-interactive-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
 (define-key haskell-interactive-mode-map [f9] 'haskell-interactive-mode-visit-error)
 (define-key haskell-interactive-mode-map [f11] 'haskell-process-cabal-build)
 (define-key haskell-interactive-mode-map [f12] 'haskell-process-cabal-build-and-restart)
