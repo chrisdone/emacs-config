@@ -181,14 +181,4 @@ place."
       (length (match-string 1 string))
     0))
 
-(defun number-add (string)
-  "Add to the number at point."
-  (interactive
-   (list
-    (number-read
-     (read-from-minibuffer
-      "Number to add: "
-      ""
-      nil)))))
-
 (provide 'number)
