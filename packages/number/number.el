@@ -44,7 +44,6 @@
 ;; (global-set-key (kbd "C-c C--") 'number/sub)
 ;; (global-set-key (kbd "C-c C-*") 'number/multiply)
 ;; (global-set-key (kbd "C-c C-/") 'number/divide)
-;; (global-set-key (kbd "C-c C-/") 'number/divide)
 ;; (global-set-key (kbd "C-c C-0") 'number/pad)
 
 ;;; Code:
