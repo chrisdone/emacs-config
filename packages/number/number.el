@@ -32,12 +32,46 @@
   (interactive (list (number-read-from-minibuffer)))
   (number-arith-op n '/))
 
-(defun number/pad (n)
+(defun number/pad ()
   "Pad the number at point."
-  (interactive "P")
+  (interactive)
   (number-transform
    (lambda (number)
-     (number-modify :padding (lambda (p) (or n 0)) number))))
+     (ecase (number-get number :type)
+       (integral
+        (number-modify
+         :padding
+         (lambda (p)
+           (number-read-padding
+            number
+            :padding
+            "Pad (default: %d): "))
+         number))
+       (decimal
+        (number-modify
+         :decimal-padding
+         (lambda (p)
+           (number-read-padding
+            number
+            :decimal-padding
+            "Decimal precision (default: %d): "))
+         (number-modify
+          :padding
+          (lambda (p)
+            (number-read-padding
+             number
+             :padding
+             "Pad (default: %d): "))
+          number)))))))
+
+(defun number-read-padding (number key caption)
+  "Read a padding value for a number."
+  (or (let ((str (read-from-minibuffer
+                  (format caption
+                          (number-get number key)))))
+        (unless (string= "" str)
+          (string-to-number str)))
+      (number-get number key)))
 
 (defun number/mark ()
   "Mark the number at point."
@@ -62,14 +96,16 @@
 
 (defun number-transform (f)
   "Transform the number at point in some way."
-  (save-excursion
+  (let ((point (point)))
     (let* ((beg-end (progn (unless (region-active-p)
                              (number-mark))
                            (list (region-beginning)
                                  (region-end))))
            (string (apply 'buffer-substring-no-properties beg-end)))
-      (apply 'delete-region beg-end)
-      (insert (number-format (funcall f (number-read string)))))))
+      (let ((new (number-format (funcall f (number-read string)))))
+        (apply 'delete-region beg-end)
+        (insert new)))
+    (goto-char point)))
 
 (defun number-modify (key f number)
   "Modify the number contained in a number specifier."
@@ -82,9 +118,26 @@
 (defun number-format (number)
   "Format the given number specifier to a string."
   (ecase (number-get number :type)
-    (decimal (format "%f" (number-get number :number)))
-    (integral (format (format "%%0.%dd" (number-get number :padding))
-                      (number-get number :number)))))
+    (decimal
+     (if (= 0 (number-get number :padding))
+         (format (format "%%.%df" (number-get number :decimal-padding))
+                 (number-get number :number))
+         (number-pad-decimal (number-get number :padding)
+                             (number-get number :decimal-padding)
+                             (number-get number :number))))
+    (integral
+     (format (format "%%0.%dd" (number-get number :padding))
+             (number-get number :number)))))
+
+(defun number-pad-decimal (left-pad right-pad n)
+  "Pad a decimal on the left- and right-hand side of the decimal
+place."
+  (let ((precision right-pad)
+        (total (+ left-pad 1 right-pad 1)))
+    (format (format "%%0%d.%df"
+                    total
+                    precision)
+            n)))
 
 (defun number-get (number key)
   "Get the KEY value from NUMBER."
@@ -101,16 +154,24 @@
     `((:string . ,string)
       (:number . ,(string-to-number string))
       (:type . decimal)
-      (:padding . ,(number-padding string))))
+      (:padding . ,(number-padding string))
+      (:decimal-padding . ,(number-decimal-padding string))))
    ((string-match "[-+]?[0-9]+" string)
     `((:string . ,string)
       (:number . ,(string-to-number string))
       (:type . integral)
-      (:padding . ,(number-padding string))))))
+      (:padding . ,(number-padding string))))
+   (t (error "Unable to parse a number."))))
 
 (defun number-padding (string)
   "Calculate the padding a number has."
   (if (string-match "[-+]?\\(\\(0+\\)[^\\.]*\\)" string)
+      (length (match-string 1 string))
+    0))
+
+(defun number-decimal-padding (string)
+  "Calculate the padding a number has."
+  (if (string-match "\\.\\([0-9]+\\)$" string)
       (length (match-string 1 string))
     0))
 
