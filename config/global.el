@@ -8,6 +8,30 @@
 
 ;; Fundamental functions
 
+(defun eval-replacing-region (read)
+  "Eval an expression on the region and replace the region with the
+  result."
+  (interactive "P")
+  (unless (region-active-p)
+    (error "Region is not active!"))
+  (let* ((string
+            (buffer-substring-no-properties
+             (region-beginning)
+             (region-end)))
+           (function
+            (eval
+             `(lambda (x)
+                ,(read-from-minibuffer "Expression on x: " "" nil t))))
+           (result (funcall function (if read (read string) string)))
+           (start (point)))
+      (delete-region (region-beginning)
+                     (region-end))
+      (insert (case (type-of result)
+                (string (format "%s" result))
+                (t (format "%S" result))))
+      (set-mark (point))
+      (goto-char start)))
+
 (defun smart-hyphen (n)
   "Capitalize the next typed letter, or behave as the usual '-'."
   (interactive "p")
@@ -269,6 +293,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 (global-set-key (kbd "C-c C-/") 'number/divide)
 (global-set-key (kbd "C-c C-0") 'number/pad)
 (global-set-key (kbd "C-c C-=") 'number/eval)
+(global-set-key (kbd "C-c C-:") 'eval-replacing-region)
 
 (global-set-key (kbd "s-s") 'save-window-config)
 (global-set-key (kbd "s-g") 'exit-recursive-edit)
