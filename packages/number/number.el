@@ -133,7 +133,7 @@
   "Pad a decimal on the left- and right-hand side of the decimal
 place."
   (let ((precision right-pad)
-        (total (+ left-pad 1 right-pad 1)))
+        (total (+ left-pad 1 right-pad (if (< n 0) 1 0))))
     (format (format "%%0%d.%df"
                     total
                     precision)
