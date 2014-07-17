@@ -263,6 +263,13 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 ;; Global keybindings
 
+(global-set-key (kbd "C-c C-+") 'number/add)
+(global-set-key (kbd "C-c C--") 'number/sub)
+(global-set-key (kbd "C-c C-*") 'number/multiply)
+(global-set-key (kbd "C-c C-/") 'number/divide)
+(global-set-key (kbd "C-c C-/") 'number/divide)
+(global-set-key (kbd "C-c C->") 'number/pad)
+
 (global-set-key (kbd "s-s") 'save-window-config)
 (global-set-key (kbd "s-g") 'exit-recursive-edit)
 (global-set-key (kbd "s-u") 'winner-mode-undo)

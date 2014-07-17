@@ -15,12 +15,31 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;; Commentary:
+
+;; Sample keybindings
+
+;; The following keybindings might be nice to use:
+;;
+;; (global-set-key (kbd "C-c C-+") 'number/add)
+;; (global-set-key (kbd "C-c C--") 'number/sub)
+;; (global-set-key (kbd "C-c C-*") 'number/multiply)
+;; (global-set-key (kbd "C-c C-/") 'number/divide)
+;; (global-set-key (kbd "C-c C-/") 'number/divide)
+;; (global-set-key (kbd "C-c C->") 'number/pad)
+
+
 ;;; Code:
 
 (defun number/add (n)
   "Add to the number at point."
   (interactive (list (number-read-from-minibuffer)))
   (number-arith-op n '+))
+
+(defun number/sub (n)
+  "Subtract to the number at point."
+  (interactive (list (number-read-from-minibuffer)))
+  (number-arith-op n '-))
 
 (defun number/multiply (n)
   "Multiply the number at point."
