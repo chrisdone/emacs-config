@@ -45,6 +45,7 @@
 ;; (global-set-key (kbd "C-c C-*") 'number/multiply)
 ;; (global-set-key (kbd "C-c C-/") 'number/divide)
 ;; (global-set-key (kbd "C-c C-0") 'number/pad)
+;; (global-set-key (kbd "C-c C-=") 'number/eval)
 
 ;;; Code:
 
@@ -67,6 +68,19 @@
   "Divide the number at point."
   (interactive (list (number-read-from-minibuffer)))
   (number-arith-op n '/))
+
+(defun number/eval ()
+  (interactive)
+  (number-transform
+   (lambda (number)
+     (number-modify
+      :number
+      (lambda (x)
+        (funcall (eval
+                  `(lambda (n)
+                     ,(read-from-minibuffer "Eval (e.g. (* n 2)): " "" nil t)))
+                 x))
+      number))))
 
 (defun number/pad ()
   "Pad the number at point."
@@ -158,9 +172,9 @@
      (if (= 0 (number-get number :padding))
          (format (format "%%.%df" (number-get number :decimal-padding))
                  (number-get number :number))
-         (number-pad-decimal (number-get number :padding)
-                             (number-get number :decimal-padding)
-                             (number-get number :number))))
+       (number-pad-decimal (number-get number :padding)
+                           (number-get number :decimal-padding)
+                           (number-get number :number))))
     (integral
      (format (format "%%0.%dd" (number-get number :padding))
              (number-get number :number)))))
