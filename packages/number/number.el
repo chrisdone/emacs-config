@@ -148,7 +148,7 @@
   "Transform the number at point in some way."
   (let ((point (point)))
     (let* ((beg-end (progn (unless (region-active-p)
-                             (number-mark))
+                             (number/mark))
                            (list (region-beginning)
                                  (region-end))))
            (string (apply 'buffer-substring-no-properties beg-end)))
