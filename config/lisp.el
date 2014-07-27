@@ -1,20 +1,28 @@
 
 ;; Fundamental functions
 
-(defun emacs-lisp-expand-clever (arg)
+(defun emacs-lisp-expand-clever ()
   "Cleverly expand symbols with normal dabbrev-expand, but also
-  if the symbol is -foo, then expand to module-name-foo."
-  (interactive "*P")
-  (let ((sym (dabbrev--abbrev-at-point)))
-    (cond
-     ((string-prefix-p "-" sym)
-      (let ((namespace (emacs-lisp-module-name)))
-        (when namespace
-          (save-excursion
-            (backward-sexp 1)
-            (insert namespace))))
-      (dabbrev-expand arg))
-     (t (dabbrev-expand arg)))))
+if the symbol is -foo, then expand to module-name-foo."
+  (interactive)
+  (if (save-excursion
+        (backward-sexp)
+        (when (looking-at "#?'") (search-forward "'"))
+        (looking-at "-"))
+      (if (eq last-command this-command)
+          (call-interactively 'dabbrev-expand)
+        (let ((module-name (emacs-lisp-module-name)))
+          (progn
+            (save-excursion
+              (backward-sexp)
+              (when (looking-at "#?'") (search-forward "'"))
+              (unless (string= (buffer-substring-no-properties
+                                (point)
+                                (min (point-max) (+ (point) (length module-name))))
+                               module-name)
+                (insert module-name)))
+            (call-interactively 'dabbrev-expand))))
+    (call-interactively 'dabbrev-expand)))
 
 (defun emacs-lisp-module-name ()
   "Search the buffer for `provide' declaration."
