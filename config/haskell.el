@@ -184,7 +184,7 @@ the cursor position happened."
 (add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
-(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
 
 ;; Keybindings
@@ -194,6 +194,10 @@ the cursor position happened."
 (define-key interactive-haskell-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key interactive-haskell-mode-map (kbd "M-,") 'haskell-who-calls)
 (define-key interactive-haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
+(define-key interactive-haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+(define-key interactive-haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+(define-key interactive-haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
+(define-key interactive-haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def-or-tag)
 
 (define-key hamlet-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key hamlet-mode-map (kbd "C-`") 'haskell-interactive-bring)
@@ -211,12 +215,7 @@ the cursor position happened."
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
 (define-key haskell-mode-map (kbd "C-c C-u") 'haskell-insert-undefined)
 (define-key haskell-mode-map (kbd "C-c C-a") 'haskell-insert-doc)
-(define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def-or-tag)
 (define-key haskell-mode-map (kbd "M-,") 'haskell-who-calls)
-(define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
-(define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-(define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-(define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
 (define-key haskell-mode-map (kbd "C-<return>") 'haskell-simple-indent-newline-indent)
 (define-key haskell-mode-map (kbd "C-<right>") 'haskell-move-right)
 (define-key haskell-mode-map (kbd "C-<left>") 'haskell-move-left)
@@ -242,5 +241,5 @@ the cursor position happened."
 
 (define-key shm-map (kbd "C-c C-p") 'shm/expand-pattern)
 (define-key shm-map (kbd "C-c C-s") 'shm/case-split)
-(define-key shm-map (kbd "SPC") 'shm-contextual-space)
+;(define-key shm-map (kbd "SPC") 'shm-contextual-space)
 (define-key shm-map (kbd "C-\\") 'shm/goto-last-point)
