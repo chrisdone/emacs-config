@@ -71,18 +71,18 @@
   (interactive)
   (if (eq last-command 'kill-region)
       (call-interactively 'kill-sexp)
-      (cond
-       ((paredit-in-string-p)
-        (paredit-backward-up)
-        (call-interactively 'kill-sexp))
-       ((paredit-inside-sexp-p)
-        (paredit-backward)
-        (call-interactively 'kill-sexp))
-       ((paredit-start-of-sexp-p)
-        (call-interactively 'kill-sexp))
-       (t
-        (paredit-backward)
-        (call-interactively 'kill-sexp)))))
+    (cond
+     ((paredit-in-string-p)
+      (paredit-backward-up)
+      (call-interactively 'kill-sexp))
+     ((paredit-inside-sexp-p)
+      (paredit-backward)
+      (call-interactively 'kill-sexp))
+     ((paredit-start-of-sexp-p)
+      (call-interactively 'kill-sexp))
+     (t
+      (paredit-backward)
+      (call-interactively 'kill-sexp)))))
 
 (defun paredit-delete-sexp ()
   "Delete the sexp at point."
