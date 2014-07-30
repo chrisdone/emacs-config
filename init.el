@@ -36,7 +36,8 @@
     github-urls
     s
     hamlet-mode
-    service))
+    service
+    number))
 
 (defvar configs
   '("global"
