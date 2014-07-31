@@ -68,7 +68,13 @@
                      "packages/"
                      "structured-haskell-mode/elisp"))
 
+(add-to-list 'load-path
+             (concat (file-name-directory load-file-name)
+                     "packages/"
+                     "ghc-server/elisp"))
+
 (require 'shm)
+(require 'ghc)
 (require 'shm-case-split)
 (require 'w3m-haddock)
 

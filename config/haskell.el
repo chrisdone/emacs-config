@@ -9,6 +9,7 @@
 (require 'haskell-debug)
 (require 'sgml-mode)
 (require 'css-mode)
+(require 'ghc-mode)
 
 
 ;; Functions
@@ -184,7 +185,7 @@ the cursor position happened."
 (add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
-(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+(add-hook 'haskell-mode-hook 'ghc-mode)
 
 
 ;; Keybindings

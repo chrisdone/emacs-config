@@ -39,13 +39,16 @@
 	url = https://github.com/Wilfred/ag.el.git
 [submodule "packages/notmuch"]
 	path = packages/notmuch
-	url = git@github.com:chrisdone/notmuch.git
+	url = http://github.com/chrisdone/notmuch.git
 [submodule "packages/w3m"]
 	path = packages/w3m
 	url = https://github.com/emacsmirror/w3m.git
 [submodule "packages/hamlet-mode"]
 	path = packages/hamlet-mode
-	url = git@github.com:chrisdone/hamlet-mode.git
+	url = http://github.com/chrisdone/hamlet-mode.git
 [submodule "packages/s"]
 	path = packages/s
-	url = git@github.com:magnars/s.el.git
+	url = http://github.com/magnars/s.el.git
+[submodule "packages/ghc-server"]
+	path = packages/ghc-server
+	url = http://github.com/chrisdone/ghc-server.git
