@@ -123,7 +123,7 @@ the cursor position happened."
       (progn
         (let ((ident (haskell-ident-at-point)))
           (when ident
-              (haskell-process-do-try-type ident)))
+            (haskell-process-do-try-type ident)))
         (call-interactively 'shm/space)))))
 
 (defun shm/insert-putstrln ()
@@ -140,6 +140,30 @@ the cursor position happened."
              (file-name-nondirectory (buffer-file-name))
              name
              (line-number-at-pos)))))
+
+(defun haskell-switch-mode (mode)
+  "Switch the interaction mode."
+  (interactive
+   (list (ido-completing-read "Mode: " '("interactive-mode" "ghc-mode"))))
+  (cond
+   ((string= mode "interactive-mode")
+    (remove-hook 'haskell-mode-hook 'ghc-mode)
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (loop for buffer
+          in (buffer-list)
+          do (with-current-buffer buffer
+               (when (eq major-mode 'haskell-mode)
+                 (ghc-mode -1)
+                 (interactive-haskell-mode 1)))))
+   ((string= mode "ghc-mode")
+    (add-hook 'haskell-mode-hook 'ghc-mode)
+    (remove-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (loop for buffer
+          in (buffer-list)
+          do (with-current-buffer buffer
+               (when (eq major-mode 'haskell-mode)
+                 (ghc-mode 1)
+                 (interactive-haskell-mode -1)))))))
 
 
 ;; Mode settings
@@ -185,7 +209,14 @@ the cursor position happened."
 (add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
-(add-hook 'haskell-mode-hook 'ghc-mode)
+
+(setq haskell-i-mode 'interactive-mode)
+
+(case haskell-i-mode
+  (interactive-mode
+   (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
+  (ghc-mode
+   (add-hook 'haskell-mode-hook 'ghc-mode)))
 
 
 ;; Keybindings
@@ -244,5 +275,5 @@ the cursor position happened."
 
 (define-key shm-map (kbd "C-c C-p") 'shm/expand-pattern)
 (define-key shm-map (kbd "C-c C-s") 'shm/case-split)
-;(define-key shm-map (kbd "SPC") 'shm-contextual-space)
+(define-key shm-map (kbd "SPC") 'shm-contextual-space)
 (define-key shm-map (kbd "C-\\") 'shm/goto-last-point)
