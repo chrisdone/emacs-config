@@ -123,7 +123,8 @@ the cursor position happened."
       (progn
         (let ((ident (haskell-ident-at-point)))
           (when ident
-            (haskell-process-do-try-type ident)))
+            (and interactive-haskell-mode
+                 (haskell-process-do-try-type ident))))
         (call-interactively 'shm/space)))))
 
 (defun shm/insert-putstrln ()
@@ -193,6 +194,7 @@ the cursor position happened."
 (setq haskell-complete-module-preferred
       '("Data.ByteString"
         "Data.ByteString.Lazy"
+        "Data.Conduit"
         "Data.Function"
         "Data.List"
         "Data.Map"
