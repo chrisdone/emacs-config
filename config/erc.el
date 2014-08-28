@@ -29,7 +29,8 @@
 (defvar
   *japanese-emoticons*
   '(("Angry Japanese Emoticons" .
-     ("ლ(ಠ益ಠლ)"
+     ("(￣ー￣)"
+      "ლ(ಠ益ಠლ)"
       "(°¬°)"
       "ಠ╭╮ಠ"
       "(╯°□°）╯︵ ┻━┻"
