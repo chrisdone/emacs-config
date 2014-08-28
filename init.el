@@ -73,7 +73,13 @@
                      "packages/"
                      "ghc-server/elisp"))
 
+(add-to-list 'load-path
+             (concat (file-name-directory load-file-name)
+                     "packages/"
+                     "hindent/elisp"))
+
 (require 'shm)
+(require 'hindent)
 (require 'ghc)
 (require 'shm-case-split)
 (require 'w3m-haddock)

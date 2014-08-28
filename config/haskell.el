@@ -2,6 +2,7 @@
 ;; Requirements
 
 (require 'haskell-mode)
+(require 'hindent)
 (require 'haskell-process)
 (require 'haskell-simple-indent)
 (require 'haskell-interactive-mode)
@@ -189,7 +190,8 @@ the cursor position happened."
  '(shm-auto-insert-bangs t)
  '(haskell-process-show-debug-tips nil)
  '(haskell-process-suggest-hoogle-imports nil)
- '(haskell-process-suggest-haskell-docs-imports t))
+ '(haskell-process-suggest-haskell-docs-imports t)
+ '(hindent-style "chrisdone"))
 
 (setq haskell-complete-module-preferred
       '("Data.ByteString"
@@ -246,6 +248,7 @@ the cursor position happened."
 (define-key css-mode-map [f12] 'haskell-process-cabal-build-and-restart)
 (define-key css-mode-map (kbd "C-`") 'haskell-interactive-bring)
 
+(define-key haskell-mode-map (kbd "C-c i") 'hindent/reformat-decl)
 (define-key haskell-mode-map (kbd "C-c C-d") 'haskell-w3m-open-haddock)
 (define-key haskell-mode-map (kbd "-") 'smart-hyphen)
 (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
