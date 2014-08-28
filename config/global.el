@@ -406,16 +406,13 @@ Goes backward if ARG is negative; error if CHAR not found."
       espresso-indent-level 2)
 
 (setq org-log-done t
-      org-todo-keywords '((sequence "TODO" "DONE")
-                          (sequence "TODO" "PASS")
-                          (sequence "TODO" "DEFERRED"))
+      org-todo-keywords '((sequence "BLOCKED" "TODO" "DONE")
+                          (sequence "PASS")
+                          (sequence "DEFERRED"))
       org-priority-faces (quote ((49 . zenburn-red)
                                  (50 . zenburn-yellow)
                                  (51 . zenburn-green))))
-
-(setq org-priority-faces (quote ((49 . sunburn-red)
-                                 (50 . sunburn-yellow)
-                                 (51 . sunburn-green))))
+(setq org-use-fast-todo-selection t)
 
 (setq js-indent-level 2)
 
