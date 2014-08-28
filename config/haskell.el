@@ -226,6 +226,7 @@ the cursor position happened."
 ;; Keybindings
 
 (define-key ghc-mode-map [f5] 'ghc/load)
+(define-key ghc-mode-map (kbd "C-`") 'ghc/msgs)
 
 (define-key interactive-haskell-mode-map [f5] 'haskell-process-load-or-reload)
 (define-key interactive-haskell-mode-map [f12] 'turbo-devel-reload)
