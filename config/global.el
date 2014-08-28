@@ -15,22 +15,22 @@
   (unless (region-active-p)
     (error "Region is not active!"))
   (let* ((string
-            (buffer-substring-no-properties
-             (region-beginning)
-             (region-end)))
-           (function
-            (eval
-             `(lambda (x)
-                ,(read-from-minibuffer "Expression on x: " "" nil t))))
-           (result (funcall function (if read (read string) string)))
-           (start (point)))
-      (delete-region (region-beginning)
-                     (region-end))
-      (insert (case (type-of result)
-                (string (format "%s" result))
-                (t (format "%S" result))))
-      (set-mark (point))
-      (goto-char start)))
+          (buffer-substring-no-properties
+           (region-beginning)
+           (region-end)))
+         (function
+          (eval
+           `(lambda (x)
+              ,(read-from-minibuffer "Expression on x: " "" nil t))))
+         (result (funcall function (if read (read string) string)))
+         (start (point)))
+    (delete-region (region-beginning)
+                   (region-end))
+    (insert (case (type-of result)
+              (string (format "%s" result))
+              (t (format "%S" result))))
+    (set-mark (point))
+    (goto-char start)))
 
 (defun smart-hyphen (n)
   "Capitalize the next typed letter, or behave as the usual '-'."
