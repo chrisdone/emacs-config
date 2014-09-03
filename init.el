@@ -15,28 +15,19 @@
     haskell-mode
     smex
     magit
-    notify
-    turbo-devel-mode
-    hsenv
     goto-last-change
     markdown-mode
-    ace-jump-mode
     dash
     elisp-slime-nav
     lpaste
     echo-keys
-    column-marker
     align-by-current-symbol
-    rainbow-mode
-    lua-mode
     ag
-    notmuch
     w3m
     goto-last-point
     github-urls
     s
     hamlet-mode
-    service
     number)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
@@ -54,7 +45,6 @@
     "haskell"
     "erc"
     "magit"
-    "notmuch"
     "email"
     "lisp"
     "w3m"

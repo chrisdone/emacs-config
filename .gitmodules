@@ -22,24 +22,15 @@
 [submodule "packages/markdown-mode"]
 	path = packages/markdown-mode
 	url = https://github.com/defunkt/markdown-mode.git
-[submodule "packages/ace-jump-mode"]
-	path = packages/ace-jump-mode
-	url = https://github.com/winterTTr/ace-jump-mode.git
 [submodule "packages/dash"]
 	path = packages/dash
 	url = https://github.com/magnars/dash.el.git
 [submodule "packages/elisp-slime-nav"]
 	path = packages/elisp-slime-nav
 	url = https://github.com/purcell/elisp-slime-nav.git
-[submodule "packages/rainbow-mode"]
-	path = packages/rainbow-mode
-	url = https://github.com/emacsmirror/rainbow-mode.git
 [submodule "packages/ag"]
 	path = packages/ag
 	url = https://github.com/Wilfred/ag.el.git
-[submodule "packages/notmuch"]
-	path = packages/notmuch
-	url = http://github.com/chrisdone/notmuch.git
 [submodule "packages/w3m"]
 	path = packages/w3m
 	url = https://github.com/emacsmirror/w3m.git
