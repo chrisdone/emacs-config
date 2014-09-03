@@ -37,7 +37,16 @@
     s
     hamlet-mode
     service
-    number))
+    number)
+  "Packages whose location follows the
+  packages/package-name/package-name.el format.")
+
+(defvar custom-load-paths
+  '("structured-haskell-mode/elisp"
+    "ghc-server/elisp"
+    "hindent/elisp")
+  "Custom load paths that don't follow the normal
+  package-name/module-name.el format.")
 
 (defvar configs
   '("global"
@@ -49,7 +58,9 @@
     "email"
     "lisp"
     "w3m"
-    "markdown"))
+    "markdown")
+  "Configuration files that follow the config/foo.el file path
+  format.")
 
 
 ;; Load packages
@@ -63,20 +74,11 @@
                                        (symbol-name name)))
                   (require name))))
 
-(add-to-list 'load-path
+(loop for location in custom-load-paths
+      do (add-to-list 'load-path
              (concat (file-name-directory load-file-name)
                      "packages/"
-                     "structured-haskell-mode/elisp"))
-
-(add-to-list 'load-path
-             (concat (file-name-directory load-file-name)
-                     "packages/"
-                     "ghc-server/elisp"))
-
-(add-to-list 'load-path
-             (concat (file-name-directory load-file-name)
-                     "packages/"
-                     "hindent/elisp"))
+                     location)))
 
 (require 'shm)
 (require 'hindent)
@@ -85,7 +87,7 @@
 (require 'w3m-haddock)
 
 
-;; Global/standard Emacs configuration
+;; Emacs configurations
 
 (loop for name in configs
       do (load (concat (file-name-directory load-file-name)
