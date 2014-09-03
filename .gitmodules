@@ -54,4 +54,4 @@
 	url = http://github.com/chrisdone/ghc-server.git
 [submodule "packages/hindent"]
 	path = packages/hindent
-	url = git@github.com:chrisdone/hindent.git
+	url = http://github.com/chrisdone/hindent.git
