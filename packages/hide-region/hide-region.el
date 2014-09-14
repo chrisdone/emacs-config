@@ -23,6 +23,7 @@
   (let ((o (make-overlay beg end)))
     (overlay-put o 'invisible t)
     (overlay-put o 'intangible t)
+    (overlay-put o 'evaporate t)
     (overlay-put o 'after-string "...")
     (overlay-put o 'hide-region t)))
 
