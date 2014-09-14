@@ -28,7 +28,8 @@
     github-urls
     s
     hamlet-mode
-    number)
+    number
+    hide-region)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
