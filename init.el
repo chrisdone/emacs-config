@@ -31,7 +31,8 @@
     number
     hide-region
     ats-mode
-    multiple-cursors)
+    multiple-cursors
+    projects-mode)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
