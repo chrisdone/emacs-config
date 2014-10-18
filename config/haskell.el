@@ -284,3 +284,4 @@ the cursor position happened."
 (define-key shm-map (kbd "SPC") 'shm-contextual-space)
 (define-key shm-map (kbd "C-\\") 'shm/goto-last-point)
 (define-key shm-map (kbd "C-c C-f") 'shm-fold-toggle-decl)
+(define-key shm-map (kbd "C-c i") 'shm-reformat-decl)
