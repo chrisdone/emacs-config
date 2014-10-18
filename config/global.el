@@ -379,7 +379,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 (require 'dired-x)
 (setq-default dired-omit-files-p t)
-(setq dired-omit-files ".hi$\\|\\.o$")
+(setq dired-omit-files "\\.dyn_hi$\\|\\.dyn_o$\\|\\.hi$\\|\\.o$")
 
 
 ;; Enable cool defaults
@@ -401,7 +401,7 @@ Goes backward if ARG is negative; error if CHAR not found."
 
 (setq gnus-button-url 'browse-url-generic)
 
-(setq ido-ignore-files '("\\.hi$" "\\.o$" "\\.tags$" "^\\.ghci$"))
+(setq ido-ignore-files '("\\.dyn_hi$""\\.dyn_o$""\\.hi$" "\\.o$" "\\.tags$" "^\\.ghci$"))
 (setq ido-max-directory-size 200000)
 
 (setq browse-url-browser-function gnus-button-url)
