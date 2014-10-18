@@ -67,7 +67,8 @@
     (redisplay)
     (let ((str (shell-command-to-string "projects")))
       (erase-buffer)
-      (insert str))
+      (insert str)
+      (sort-lines nil (point-min) (point-max)))
     (goto-line line)))
 
 (provide 'projects-mode)
