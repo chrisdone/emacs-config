@@ -29,7 +29,9 @@
     s
     hamlet-mode
     number
-    hide-region)
+    hide-region
+    ats-mode
+    multiple-cursors)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -75,6 +77,7 @@
 (require 'hindent)
 (require 'ghc)
 (require 'shm-case-split)
+(require 'shm-reformat)
 (require 'w3m-haddock)
 
 

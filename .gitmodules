@@ -46,3 +46,6 @@
 [submodule "packages/hindent"]
 	path = packages/hindent
 	url = http://github.com/chrisdone/hindent.git
+[submodule "packages/multiple-cursors"]
+	path = packages/multiple-cursors
+	url = git@github.com:magnars/multiple-cursors.el.git
