@@ -24,6 +24,7 @@
   (projects-revert))
 
 (define-key projects-mode-map (kbd "g") 'projects-revert)
+(define-key projects-mode-map (kbd "RET") 'projects-mode-go)
 
 (defvar projects-mode-keywords
   '((".* has unpushed .*" . 'projects-mode-unpushed-face)
@@ -58,6 +59,7 @@
   (projects-mode))
 
 (defun projects-revert ()
+  "Revert list."
   (interactive)
   (let ((inhibit-read-only t)
         (line (line-number-at-pos)))
@@ -67,8 +69,17 @@
     (redisplay)
     (let ((str (shell-command-to-string "projects")))
       (erase-buffer)
-      (insert str)
+      (loop for line in (remove-if (lambda (s) (string= "" s)) (split-string str "\n"))
+            do (insert (propertize (replace-regexp-in-string "^[^ ]+ " "" line)
+                                   'fp
+                                   (replace-regexp-in-string "^\\([^ ]+\\) .*" "\\1" line))
+                       "\n"))
       (sort-lines nil (point-min) (point-max)))
     (goto-line line)))
+
+(defun projects-mode-go ()
+  "Go to the repo at point."
+  (interactive)
+  (magit-status (get-text-property (point) 'fp)))
 
 (provide 'projects-mode)
