@@ -24,6 +24,8 @@
   (projects-revert))
 
 (define-key projects-mode-map (kbd "g") 'projects-revert)
+(define-key projects-mode-map (kbd "n") 'projects-mode-next)
+(define-key projects-mode-map (kbd "p") 'projects-mode-prev)
 (define-key projects-mode-map (kbd "RET") 'projects-mode-go)
 
 (defvar projects-mode-keywords
@@ -81,5 +83,15 @@
   "Go to the repo at point."
   (interactive)
   (magit-status (get-text-property (point) 'fp)))
+
+(defun projects-mode-next ()
+  "Go to the repo at point."
+  (interactive)
+  (forward-line 1))
+
+(defun projects-mode-prev ()
+  "Go to the repo at point."
+  (interactive)
+  (forward-line -1))
 
 (provide 'projects-mode)
