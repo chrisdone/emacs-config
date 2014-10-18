@@ -284,8 +284,19 @@ Goes backward if ARG is negative; error if CHAR not found."
   (interactive)
   (grep "tail -f /tmp/echo -n 0"))
 
+(defun upcase-word-and-backwards (p)
+  "Upcase the following word, or on prefix arg, the previous word."
+  (interactive "P")
+  (if p
+      (save-excursion
+        (forward-word -1)
+        (call-interactively 'upcase-word))
+    (call-interactively 'upcase-word)))
+
 
 ;; Global keybindings
+
+(global-set-key (kbd "M-u") 'upcase-word-and-backwards)
 
 (global-set-key (kbd "C-c C-+") 'number/add)
 (global-set-key (kbd "C-c C--") 'number/sub)
