@@ -318,7 +318,7 @@ prefix argument."
 
 (global-set-key [remap paredit-kill] (bol-with-prefix paredit-kill))
 (global-set-key [remap org-kill-line] (bol-with-prefix org-kill-line))
-(global-set-key [remap kill-line] (bol-with-prefix paredit-kill))
+(global-set-key [remap kill-line] (bol-with-prefix kill-line))
 
 (global-set-key (kbd "M-u") 'upcase-word-and-backwards)
 
