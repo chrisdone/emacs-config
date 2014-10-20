@@ -10,7 +10,6 @@
 (require 'haskell-debug)
 (require 'sgml-mode)
 (require 'css-mode)
-(require 'ghc-mode)
 
 
 ;; Functions
@@ -143,30 +142,6 @@ the cursor position happened."
              name
              (line-number-at-pos)))))
 
-(defun haskell-switch-mode (mode)
-  "Switch the interaction mode."
-  (interactive
-   (list (ido-completing-read "Mode: " '("interactive-mode" "ghc-mode"))))
-  (cond
-   ((string= mode "interactive-mode")
-    (remove-hook 'haskell-mode-hook 'ghc-mode)
-    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (loop for buffer
-          in (buffer-list)
-          do (with-current-buffer buffer
-               (when (eq major-mode 'haskell-mode)
-                 (ghc-mode -1)
-                 (interactive-haskell-mode 1)))))
-   ((string= mode "ghc-mode")
-    (add-hook 'haskell-mode-hook 'ghc-mode)
-    (remove-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (loop for buffer
-          in (buffer-list)
-          do (with-current-buffer buffer
-               (when (eq major-mode 'haskell-mode)
-                 (ghc-mode 1)
-                 (interactive-haskell-mode -1)))))))
-
 
 ;; Mode settings
 
@@ -216,19 +191,8 @@ the cursor position happened."
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
 
-(setq haskell-i-mode 'interactive-mode)
-
-(case haskell-i-mode
-  (interactive-mode
-   (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
-  (ghc-mode
-   (add-hook 'haskell-mode-hook 'ghc-mode)))
-
 
 ;; Keybindings
-
-(define-key ghc-mode-map [f5] 'ghc/load)
-(define-key ghc-mode-map (kbd "C-`") 'ghc/status)
 
 (define-key interactive-haskell-mode-map [f5] 'haskell-process-load-or-reload)
 (define-key interactive-haskell-mode-map [f12] 'turbo-devel-reload)
