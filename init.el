@@ -38,7 +38,6 @@
 
 (defvar custom-load-paths
   '("structured-haskell-mode/elisp"
-    "ghc-server/elisp"
     "hindent/elisp")
   "Custom load paths that don't follow the normal
   package-name/module-name.el format.")
@@ -76,7 +75,6 @@
 
 (require 'shm)
 (require 'hindent)
-(require 'ghc)
 (require 'shm-case-split)
 (require 'shm-reformat)
 (require 'w3m-haddock)

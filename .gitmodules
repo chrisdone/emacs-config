@@ -40,9 +40,6 @@
 [submodule "packages/s"]
 	path = packages/s
 	url = http://github.com/magnars/s.el.git
-[submodule "packages/ghc-server"]
-	path = packages/ghc-server
-	url = http://github.com/chrisdone/ghc-server.git
 [submodule "packages/hindent"]
 	path = packages/hindent
 	url = http://github.com/chrisdone/hindent.git
