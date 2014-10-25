@@ -46,3 +46,6 @@
 [submodule "packages/multiple-cursors"]
 	path = packages/multiple-cursors
 	url = git@github.com:magnars/multiple-cursors.el.git
+[submodule "packages/ace-jump-mode"]
+	path = packages/ace-jump-mode
+	url = git@github.com:winterTTr/ace-jump-mode.git

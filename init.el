@@ -16,6 +16,7 @@
     smex
     magit
     goto-last-change
+    ace-jump-mode
     markdown-mode
     dash
     elisp-slime-nav
