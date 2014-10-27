@@ -52,7 +52,8 @@
     "email"
     "lisp"
     "w3m"
-    "markdown")
+    "markdown"
+    "org")
   "Configuration files that follow the config/foo.el file path
   format.")
 
