@@ -4,6 +4,7 @@
 (require 'uniquify)
 (require 'sgml-mode)
 (require 'js)
+(require 'org-agenda)
 
 
 ;; Fundamental functions
@@ -336,7 +337,6 @@ prefix argument."
 
 (global-set-key (kbd "C-\\") 'goto-last-point)
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
-(global-set-key [f9] 'timeclock-dwim)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 (global-set-key (kbd "M-;") 'comment-dwim-line)
@@ -363,8 +363,11 @@ prefix argument."
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
 
-(global-set-key [f10] 'service/restart)
+(global-set-key [f9] 'timeclock-dwim)
+(global-set-key [f10] 'org-fast-task-reclock)
 (global-set-key [f11] 'goto-notmuch-inbox)
+
+(global-set-key (kbd "C-x C-a") 'org-agenda-list)
 
 
 ;; Mode-specific keybindings
@@ -447,6 +450,10 @@ prefix argument."
       org-priority-faces (quote ((49 . zenburn-red)
                                  (50 . zenburn-yellow)
                                  (51 . zenburn-green))))
+
+(setq org-priority-faces (quote ((49 . sunburn-red)
+                                 (50 . sunburn-yellow)
+                                 (51 . sunburn-green))))
 (setq org-use-fast-todo-selection t)
 
 (setq js-indent-level 2)
