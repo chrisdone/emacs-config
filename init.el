@@ -39,7 +39,8 @@
 
 (defvar custom-load-paths
   '("structured-haskell-mode/elisp"
-    "hindent/elisp")
+    "hindent/elisp"
+    "git-modes")
   "Custom load paths that don't follow the normal
   package-name/module-name.el format.")
 
@@ -48,7 +49,7 @@
     "god"
     "haskell"
     "erc"
-    "magit"
+    ;; "magit"
     "email"
     "lisp"
     "w3m"
@@ -60,6 +61,12 @@
 
 ;; Load packages
 
+(loop for location in custom-load-paths
+      do (add-to-list 'load-path
+             (concat (file-name-directory load-file-name)
+                     "packages/"
+                     location)))
+
 (loop for name in packages
       do (progn (unless (fboundp name)
                   (add-to-list 'load-path
@@ -68,12 +75,6 @@
                                        "packages/"
                                        (symbol-name name)))
                   (require name))))
-
-(loop for location in custom-load-paths
-      do (add-to-list 'load-path
-             (concat (file-name-directory load-file-name)
-                     "packages/"
-                     location)))
 
 (require 'shm)
 (require 'hindent)

@@ -49,3 +49,6 @@
 [submodule "packages/ace-jump-mode"]
 	path = packages/ace-jump-mode
 	url = git@github.com:winterTTr/ace-jump-mode.git
+[submodule "git-modes"]
+	path = git-modes
+	url = git@github.com:magit/git-modes.git
