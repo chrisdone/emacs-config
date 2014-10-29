@@ -1,6 +1,6 @@
-(defun org-fast-task-reclock ()
+(defun org-fast-task-reclock (&optional no-clock)
   "Quickly make a new task and clock into it."
-  (interactive)
+  (interactive "P")
   (let ((file (ido-completing-read "Org-file: " (reverse org-agenda-files))))
     (find-file file)
     (let ((headings (list)))
@@ -23,5 +23,5 @@
               (org-metaright 1)
               (org-todo "TODO")
               (insert (read-from-minibuffer "Task title: "))
-              (org-clock-in))
+              (unless no-clock (org-clock-in)))
             (end-of-line)))))))
