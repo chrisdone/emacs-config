@@ -348,7 +348,7 @@ prefix argument."
 (global-set-key (kbd "M-a") 'backward-up-list)
 (global-set-key (kbd "M-a") 'up-list)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
-(global-set-key (kbd "C-c s") 'ace-jump-mode)
+(global-set-key (kbd "C-,") 'ace-jump-mode)
 
 (global-set-key (kbd "<left>") 'windmove-left)
 (global-set-key (kbd "<right>") 'windmove-right)
@@ -368,6 +368,13 @@ prefix argument."
 (global-set-key [f11] 'goto-notmuch-inbox)
 
 (global-set-key (kbd "C-x C-a") 'org-agenda-list)
+
+;; Convenience bindings for god-mode
+
+(global-set-key (kbd "C->") 'end-of-buffer)
+(global-set-key (kbd "C-<") 'beginning-of-buffer)
+(global-set-key (kbd "C-!") 'eval-defun)
+(define-key org-mode-map (kbd "C-,") nil)
 
 
 ;; Mode-specific keybindings
