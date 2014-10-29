@@ -256,3 +256,20 @@ the cursor position happened."
 (define-key shm-map (kbd "C-\\") 'shm/goto-last-point)
 (define-key shm-map (kbd "C-c C-f") 'shm-fold-toggle-decl)
 (define-key shm-map (kbd "C-c i") 'shm-reformat-decl)
+
+(defun haskell-process-all-types ()
+  "List all types in a grep-mode buffer."
+  (interactive)
+  (let ((session (haskell-session)))
+    (switch-to-buffer (get-buffer-create (format "*%s:all-types*"
+                                                 (haskell-session-name (haskell-session)))))
+    (setq haskell-session session)
+    (cd (haskell-session-current-dir session))
+    (let ((inhibit-read-only t))
+      (erase-buffer)
+      (let ((haskell-process-log nil))
+        (insert (haskell-process-queue-sync-request (haskell-process) ":all-types")))
+      (unless (eq major-mode  'compilation-mode)
+        (compilation-mode)
+        (setq compilation-error-regexp-alist
+              haskell-compilation-error-regexp-alist)))))
