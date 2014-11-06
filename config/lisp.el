@@ -1,6 +1,14 @@
 
 ;; Fundamental functions
 
+(defun paredit-backward-delete. ()
+  "A less enraging `paredit-backward-delete'."
+  (interactive)
+  (if (region-active-p)
+      (delete-region (region-beginning)
+                     (region-end))
+    (call-interactively 'paredit-backward-delete)))
+
 (defun emacs-lisp-expand-clever ()
   "Cleverly expand symbols with normal dabbrev-expand, but also
 if the symbol is -foo, then expand to module-name-foo."
@@ -155,6 +163,7 @@ if the symbol is -foo, then expand to module-name-foo."
 (define-key paredit-mode-map (kbd "<delete>") 'paredit-delete-sexp)
 (define-key paredit-mode-map (kbd "C-M-k") 'paredit-kill-sexp)
 (define-key paredit-mode-map (kbd "M-k") 'paredit-kill-sexp)
+(define-key paredit-mode-map (kbd "DEL") 'paredit-backward-delete.)
 
 
 ;; Hooks
