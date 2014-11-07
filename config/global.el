@@ -314,6 +314,12 @@ prefix argument."
              (forward-char col))))
        ',name)))
 
+(defun ielm-clear ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (ielm-return)))
+
 
 ;; Global keybindings
 
@@ -378,10 +384,13 @@ prefix argument."
 (global-set-key (kbd "C->") 'end-of-buffer)
 (global-set-key (kbd "C-<") 'beginning-of-buffer)
 (global-set-key (kbd "C-!") 'eval-defun)
-(define-key org-mode-map (kbd "C-,") nil)
 
 
 ;; Mode-specific keybindings
+
+(define-key inferior-emacs-lisp-mode-map (kbd "C-c C-k") 'ielm-clear)
+
+(define-key org-mode-map (kbd "C-,") nil)
 
 (define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
 (define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
