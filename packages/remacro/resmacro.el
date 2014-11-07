@@ -35,14 +35,14 @@ invoked, excluding the last (presumed to be error) command run."
              (unmuddied-keys
               (apply #'vector
                      (cl-loop for i from 0 to (1- (- (length keys)
-                                                  (length (this-command-keys))))
-                           collect (elt keys i)))))
+                                                     (length (this-command-keys))))
+                              collect (elt keys i)))))
         (let ((start-keys resmacro-start-keys))
           (setq resmacro-start-keys (this-command-keys))
           (resmacro-user-prompt-resume
            arg
            (resmacro-recent-keys start-keys
-                               unmuddied-keys))))
+                                 unmuddied-keys))))
     (progn (setq resmacro-start-keys (this-command-keys))
            (kmacro-start-macro nil))))
 
@@ -71,8 +71,8 @@ keyboard macro."
                            "Resume macro with (RET: continue, DEL: remove last): "
                            'face 'minibuffer-prompt)
                           (mapconcat #'resmacro-show-key
-                                     (loop for i from 0 to (max 0 (- (length keys) 2))
-                                           collect (elt keys i))
+                                     (cl-loop for i from 0 to (max 0 (- (length keys) 2))
+                                              collect (elt keys i))
                                      " ")
                           " "
                           (propertize (resmacro-show-key
@@ -84,15 +84,15 @@ keyboard macro."
           (backspace
            (setq keys
                  (apply #'vector
-                        (loop for i from 0 to (max 0 (- (length keys) 2))
-                              collect (elt keys i))))
+                        (cl-loop for i from 0 to (max 0 (- (length keys) 2))
+                                 collect (elt keys i))))
            (when (= 0 (length keys))
              (setq done t)))
           (return
            (setq done t))))))
   (unless (= (length keys) 0)
     (setq last-kbd-macro keys)
-    (kmacroq-start-macro arg)))
+    (kmacro-start-macro arg)))
 
 (defun resmacro-recent-keys (prefix keys)
   "Get the keys of the current macro, by searching for the start
@@ -104,56 +104,56 @@ specified by PREFIX."
          keys
        (apply #'vector
               (let ((result (list)))
-                (loop for i from 0 to (1- (length keys))
-                      ;; Constantly append to the buffer.
-                      do (add-to-list 'result (elt keys i) t (lambda (_x _y) nil))
-                      ;; Reset whenever the `prefix' is invalidated.
-                      when (and (< j (length prefix))
-                                (not (equal (elt keys i) (elt prefix j))))
-                      do (setq j 0)
-                      ;; Reset whenever we encounter the start of the
-                      ;; `prefix' (this assumes no repeated start keys).
-                      when (equal (elt keys i) (elt prefix 0))
-                      do (setq j 0)
-                      ;; While prefix is being satisfied, increment `j'.
-                      ;; Resets the `result' buffer when we've finished
-                      ;; identifying the `prefix'.
-                      when (and (< j (length prefix))
-                                (equal (elt keys i) (elt prefix j)))
-                      do (progn (setq j (1+ j))
-                                (when (= j (length prefix))
-                                  ;; If we're at the end of the vector, that means the last
-                                  ;; key sequence pressed was our prefix. So let's strip that
-                                  ;; off.
-                                  (if (= i (1- (length keys)))
-                                      (setq result (nbutlast result
-                                                             (length prefix)))
-                                    (setq result (list))))))
+                (cl-loop for i from 0 to (1- (length keys))
+                         ;; Constantly append to the buffer.
+                         do (add-to-list 'result (elt keys i) t (lambda (_x _y) nil))
+                         ;; Reset whenever the `prefix' is invalidated.
+                         when (and (< j (length prefix))
+                                   (not (equal (elt keys i) (elt prefix j))))
+                         do (setq j 0)
+                         ;; Reset whenever we encounter the start of the
+                         ;; `prefix' (this assumes no repeated start keys).
+                         when (equal (elt keys i) (elt prefix 0))
+                         do (setq j 0)
+                         ;; While prefix is being satisfied, increment `j'.
+                         ;; Resets the `result' buffer when we've finished
+                         ;; identifying the `prefix'.
+                         when (and (< j (length prefix))
+                                   (equal (elt keys i) (elt prefix j)))
+                         do (progn (setq j (1+ j))
+                                   (when (= j (length prefix))
+                                     ;; If we're at the end of the vector, that means the last
+                                     ;; key sequence pressed was our prefix. So let's strip that
+                                     ;; off.
+                                     (if (= i (1- (length keys)))
+                                         (setq result (nbutlast result
+                                                                (length prefix)))
+                                       (setq result (list))))))
                 result))))))
 
 (defun resmacro-test-recent-keys ()
   "Run tests for `resmacro-recent-keys'."
   (interactive)
-  (loop for test in '((([] []) . [])
-                      (([] [1]) . [1])
-                      (([] [1 2]) . [1 2])
-                      (([1] [1 2]) . [2])
-                      (([1] [1]) . [])
-                      (([1 2] [1 2]) . [])
-                      (([1] [1 2 3 4 5]) . [2 3 4 5])
-                      (([1 2] [1 2 3 4 5]) . [3 4 5])
-                      (([1 2] [1 2 3 1 2 4 5]) . [4 5])
-                      (([1 2] [1 2 3 1 2]) . [3])
-                      (([1 2 3] [1 2]) . [1 2])
-                      (([1 2 3] []) . [])
-                      (([0 1] [right up 1 11 f3 102 111 111 7 21 0 1]) .
-                       [right up 1 11 f3 102 111 111 21]))
-        when (not (equalp (apply #'resmacro-recent-keys (car test))
-                          (cdr test)))
-        do (error "Test failed for %S:\n\nexpected: %S\nactual: %S"
-                  `(resmacro-recent-keys ,(caar test) ,(cadar test))
-                  (cdr test)
-                  (apply #'resmacro-recent-keys (car test))))
+  (cl-loop for test in '((([] []) . [])
+                         (([] [1]) . [1])
+                         (([] [1 2]) . [1 2])
+                         (([1] [1 2]) . [2])
+                         (([1] [1]) . [])
+                         (([1 2] [1 2]) . [])
+                         (([1] [1 2 3 4 5]) . [2 3 4 5])
+                         (([1 2] [1 2 3 4 5]) . [3 4 5])
+                         (([1 2] [1 2 3 1 2 4 5]) . [4 5])
+                         (([1 2] [1 2 3 1 2]) . [3])
+                         (([1 2 3] [1 2]) . [1 2])
+                         (([1 2 3] []) . [])
+                         (([0 1] [right up 1 11 f3 102 111 111 7 21 0 1]) .
+                          [right up 1 11 f3 102 111 111 21]))
+           when (not (equalp (apply #'resmacro-recent-keys (car test))
+                             (cdr test)))
+           do (error "Test failed for %S:\n\nexpected: %S\nactual: %S"
+                     `(resmacro-recent-keys ,(caar test) ,(cadar test))
+                     (cdr test)
+                     (apply #'resmacro-recent-keys (car test))))
   (message "OK."))
 
 (provide 'resmacro)
