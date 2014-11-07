@@ -26,7 +26,7 @@
 (defun resmacro-start-macro (arg)
   "A version of `kmacro-start-macro' which when ARG is passed
 will resume recording with the keys pressed since it was last
-invoked, excluding the last (presumed to be error) command run."
+invoked, prompting to remove any erroneous keys."
   (interactive "P")
   (if (and (not (or defining-kbd-macro executing-kbd-macro))
            arg)
