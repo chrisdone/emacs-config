@@ -368,6 +368,9 @@ prefix argument."
 (global-set-key [f10] 'org-fast-task-reclock)
 (global-set-key [f11] 'goto-notmuch-inbox)
 
+(global-set-key [f3] 'resmacro-start-macro)
+(global-set-key (kbd "C-x (") 'resmacro-start-macro)
+
 (global-set-key (kbd "C-x C-a") 'org-agenda-list)
 
 ;; Convenience bindings for god-mode
@@ -400,6 +403,7 @@ prefix argument."
 
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message t)
+(setq kmacro-execute-before-append nil)
 
 (set-default 'tags-case-fold-search nil)
 
