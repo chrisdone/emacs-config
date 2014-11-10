@@ -275,3 +275,25 @@ the cursor position happened."
         (compilation-mode)
         (setq compilation-error-regexp-alist
               haskell-compilation-error-regexp-alist)))))
+
+
+;; for ghcjs
+(when nil
+  (defun haskell-process-compile-ghcjs ()
+    (interactive)
+    (save-buffer)
+    (haskell-process-file-loadish
+     (format "!sh check.sh %s"
+             (buffer-file-name))
+     nil
+     (current-buffer)))
+  (define-key interactive-haskell-mode-map [f5] 'haskell-process-compile-ghcjs)
+  (defun haskell-process-build-ghcjs ()
+    (interactive)
+    (save-buffer)
+    (haskell-process-file-loadish
+     (format "!ghcjs -O2 %s"
+             (buffer-file-name))
+     nil
+     (current-buffer)))
+  (define-key interactive-haskell-mode-map (kbd "C-c C-c") 'haskell-process-compile-ghcjs))
