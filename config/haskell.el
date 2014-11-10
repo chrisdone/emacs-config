@@ -183,6 +183,8 @@ the cursor position happened."
 
 (setq haskell-process-path-ghci "ghci-ng")
 
+(setq haskell-process-args-ghci '("-ferror-spans"))
+
 (setq haskell-process-args-cabal-repl
       '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
 
