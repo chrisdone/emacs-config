@@ -5,6 +5,7 @@
 (require 'sgml-mode)
 (require 'js)
 (require 'org-agenda)
+(require 'ielm)
 
 
 ;; Fundamental functions
