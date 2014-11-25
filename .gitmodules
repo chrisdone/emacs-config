@@ -52,3 +52,6 @@
 [submodule "git-modes"]
 	path = git-modes
 	url = git@github.com:magit/git-modes.git
+[submodule "packages/flycheck"]
+	path = packages/flycheck
+	url = git@github.com:flycheck/flycheck.git
