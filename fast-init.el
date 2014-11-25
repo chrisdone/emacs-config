@@ -1,7 +1,7 @@
 
 ;; Start-up mode
 
-(defvar fast-startup nil)
+(defvar fast-startup t)
 
 
 ;; Standard libraries needed
@@ -42,10 +42,12 @@
 
 ;; Emacs configurations
 
-(loop for name in configs
-      do (load (concat (file-name-directory load-file-name)
-                       "config/"
-                       name ".el")))
+(add-to-list 'load-path
+             (concat (file-name-directory (or load-file-name
+                                              (buffer-file-name)))
+                     "config/"))
+(load "global")
+(load "god")
 
 
 ;; Mode initializations

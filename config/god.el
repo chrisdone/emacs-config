@@ -34,3 +34,5 @@
 (add-hook 'overwrite-mode-hook 'god-toggle-on-overwrite)
 
 (add-to-list 'god-exempt-major-modes 'message-mode)
+
+(provide 'god)

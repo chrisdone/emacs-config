@@ -1,11 +1,12 @@
 
 ;; Requirements
 
-(require 'uniquify)
-(require 'sgml-mode)
-(require 'js)
-(require 'org-agenda)
-(require 'ielm)
+(unless (bound-and-true-p fast-startup)
+  (require 'uniquify)
+  (require 'sgml-mode)
+  (require 'js)
+  (require 'org-agenda)
+  (require 'ielm))
 
 
 ;; Fundamental functions
@@ -389,13 +390,12 @@ prefix argument."
 
 ;; Mode-specific keybindings
 
-(define-key inferior-emacs-lisp-mode-map (kbd "C-c C-k") 'ielm-clear)
-
-(define-key org-mode-map (kbd "C-,") nil)
-
-(define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
-(define-key sgml-mode-map (kbd "/") nil)
-(define-key c-mode-map (kbd "/") nil)
+(unless (bound-and-true-p fast-startup)
+  (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-k") 'ielm-clear)
+  (define-key org-mode-map (kbd "C-,") nil)
+  (define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
+  (define-key sgml-mode-map (kbd "/") nil)
+  (define-key c-mode-map (kbd "/") nil))
 
 (when (fboundp 'ag)
   (define-key ag-mode-map (kbd "p") 'previous-error-no-select)
@@ -463,7 +463,8 @@ prefix argument."
       espresso-basiespresso-offset 2
       espresso-indent-level 2)
 
-(setq org-log-done t
+(unless (bound-and-true-p fast-startup)
+  (setq org-log-done t
       org-todo-keywords '((sequence "BLOCKED" "TODO" "DONE")
                           (sequence "PASS")
                           (sequence "DEFERRED"))
@@ -474,7 +475,7 @@ prefix argument."
 (setq org-priority-faces (quote ((49 . sunburn-red)
                                  (50 . sunburn-yellow)
                                  (51 . sunburn-green))))
-(setq org-use-fast-todo-selection t)
+(setq org-use-fast-todo-selection t))
 
 (setq js-indent-level 2)
 
@@ -562,3 +563,5 @@ prefix argument."
            (haskell-indent-spaces . 2)
            (haskell-process-type . cabal-repl)
            (shm-lambda-indent-style . leftmost-parent)))))
+
+(provide 'global)

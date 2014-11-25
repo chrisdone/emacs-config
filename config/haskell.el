@@ -112,6 +112,12 @@
     (forward-char 4)
     (god-mode)))
 
+(defun shm-comma-god ()
+  (interactive)
+  (if god-local-mode
+      (call-interactively 'god-mode-self-insert)
+    (call-interactively 'shm/comma)))
+
 (defun shm-contextual-space ()
   "Do contextual space first, and run shm/space if no change in
 the cursor position happened."
@@ -150,7 +156,7 @@ the cursor position happened."
  '(haskell-process-args-ghci '())
  '(haskell-notify-p t)
  '(haskell-stylish-on-save nil)
- '(haskell-tags-on-save t)
+ '(haskell-tags-on-save nil)
  '(haskell-process-suggest-remove-import-lines t)
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
@@ -253,6 +259,7 @@ the cursor position happened."
 (define-key haskell-interactive-mode-map (kbd "C-c c") 'haskell-process-cabal)
 
 (define-key shm-map (kbd "C-c C-p") 'shm/expand-pattern)
+(define-key shm-map (kbd ",") 'shm-comma-god)
 (define-key shm-map (kbd "C-c C-s") 'shm/case-split)
 (define-key shm-map (kbd "SPC") 'shm-contextual-space)
 (define-key shm-map (kbd "C-\\") 'shm/goto-last-point)

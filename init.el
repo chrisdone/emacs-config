@@ -1,4 +1,9 @@
 
+;; Start-up mode
+
+(defvar fast-startup nil)
+
+
 ;; Standard libraries needed
 
 (require 'cl)
@@ -33,7 +38,8 @@
     hide-region
     ats-mode
     multiple-cursors
-    projects-mode)
+    projects-mode
+    resmacro)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -81,6 +87,8 @@
 (require 'shm-case-split)
 (require 'shm-reformat)
 (require 'w3m-haddock)
+
+(setq haskell-process-generate-tags nil)
 
 
 ;; Emacs configurations
