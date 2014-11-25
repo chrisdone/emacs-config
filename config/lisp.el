@@ -164,6 +164,8 @@ if the symbol is -foo, then expand to module-name-foo."
 (define-key paredit-mode-map (kbd "C-M-k") 'paredit-kill-sexp)
 (define-key paredit-mode-map (kbd "M-k") 'paredit-kill-sexp)
 (define-key paredit-mode-map (kbd "DEL") 'paredit-backward-delete.)
+(define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
+(define-key paredit-mode-map (kbd "M-a") 'paredit-backward-up)
 
 
 ;; Hooks

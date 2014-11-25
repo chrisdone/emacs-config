@@ -394,14 +394,12 @@ prefix argument."
 (define-key org-mode-map (kbd "C-,") nil)
 
 (define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
-(define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
-(define-key paredit-mode-map (kbd "M-a") 'paredit-backward-up)
-(define-key markdown-mode-map (kbd "M-;") 'markdown-blockquote-region)
 (define-key sgml-mode-map (kbd "/") nil)
 (define-key c-mode-map (kbd "/") nil)
 
-(define-key ag-mode-map (kbd "p") 'previous-error-no-select)
-(define-key ag-mode-map (kbd "n") 'next-error-no-select)
+(when (fboundp 'ag)
+  (define-key ag-mode-map (kbd "p") 'previous-error-no-select)
+  (define-key ag-mode-map (kbd "n") 'next-error-no-select))
 
 
 ;; Disable default settings

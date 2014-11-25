@@ -18,3 +18,4 @@
     (insert "```")))
 
 (define-key markdown-mode-map (kbd "C-c C-f") 'markdown-code-fence)
+(define-key markdown-mode-map (kbd "M-;") 'markdown-blockquote-region)
