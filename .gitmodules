@@ -48,7 +48,7 @@
 	url = git@github.com:magnars/multiple-cursors.el.git
 [submodule "packages/ace-jump-mode"]
 	path = packages/ace-jump-mode
-	url = git@github.com:winterTTr/ace-jump-mode.git
+	url = git@github.com:chrisdone/ace-jump-mode.git
 [submodule "git-modes"]
 	path = git-modes
 	url = git@github.com:magit/git-modes.git
