@@ -1,12 +1,11 @@
 
 ;; Requirements
 
-(unless (bound-and-true-p fast-startup)
-  (require 'uniquify)
-  (require 'sgml-mode)
-  (require 'js)
-  (require 'org-agenda)
-  (require 'ielm))
+(require 'uniquify)
+(require 'sgml-mode)
+(require 'js)
+(require 'org-agenda)
+(require 'ielm)
 
 
 ;; Fundamental functions
@@ -390,22 +389,19 @@ prefix argument."
 
 ;; Mode-specific keybindings
 
-(unless (bound-and-true-p fast-startup)
-  (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-k") 'ielm-clear)
-  (define-key org-mode-map (kbd "C-,") nil)
-  (define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
-  (define-key sgml-mode-map (kbd "/") nil)
-  (define-key c-mode-map (kbd "/") nil))
+(define-key inferior-emacs-lisp-mode-map (kbd "C-c C-k") 'ielm-clear)
+(define-key org-mode-map (kbd "C-,") nil)
+(define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
+(define-key sgml-mode-map (kbd "/") nil)
+(define-key c-mode-map (kbd "/") nil)
 
-(when (fboundp 'ag)
-  (define-key ag-mode-map (kbd "p") 'previous-error-no-select)
-  (define-key ag-mode-map (kbd "n") 'next-error-no-select))
+(define-key ag-mode-map (kbd "p") 'previous-error-no-select)
+(define-key ag-mode-map (kbd "n") 'next-error-no-select)
 
 
 ;; Disable default settings
 
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
+(scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 
@@ -463,8 +459,7 @@ prefix argument."
       espresso-basiespresso-offset 2
       espresso-indent-level 2)
 
-(unless (bound-and-true-p fast-startup)
-  (setq org-log-done t
+(setq org-log-done t
       org-todo-keywords '((sequence "BLOCKED" "TODO" "DONE")
                           (sequence "PASS")
                           (sequence "DEFERRED"))
@@ -475,7 +470,7 @@ prefix argument."
 (setq org-priority-faces (quote ((49 . sunburn-red)
                                  (50 . sunburn-yellow)
                                  (51 . sunburn-green))))
-(setq org-use-fast-todo-selection t))
+(setq org-use-fast-todo-selection t)
 
 (setq js-indent-level 2)
 
