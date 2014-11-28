@@ -194,6 +194,8 @@ the cursor position happened."
 (setq haskell-process-args-cabal-repl
       '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
 
+(setq haskell-process-generate-tags nil)
+
 
 ;; Add hook
 

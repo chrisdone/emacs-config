@@ -1,9 +1,4 @@
 
-;; Start-up mode
-
-(defvar fast-startup nil)
-
-
 ;; Standard libraries needed
 
 (require 'cl)
@@ -39,7 +34,8 @@
     ats-mode
     multiple-cursors
     projects-mode
-    resmacro)
+    resmacro
+    flycheck)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -55,7 +51,6 @@
     "god"
     "haskell"
     "erc"
-    ;; "magit"
     "email"
     "lisp"
     "w3m"
@@ -87,8 +82,6 @@
 (require 'shm-case-split)
 (require 'shm-reformat)
 (require 'w3m-haddock)
-
-(setq haskell-process-generate-tags nil)
 
 
 ;; Emacs configurations
