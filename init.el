@@ -64,7 +64,8 @@
 
 (loop for location in custom-load-paths
       do (add-to-list 'load-path
-             (concat (file-name-directory load-file-name)
+             (concat (file-name-directory (or load-file-name
+                                              (buffer-file-name)))
                      "packages/"
                      location)))
 
