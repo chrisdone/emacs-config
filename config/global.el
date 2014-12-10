@@ -560,3 +560,34 @@ prefix argument."
            (shm-lambda-indent-style . leftmost-parent)))))
 
 (provide 'global)
+
+
+(progn
+  " foo Lorem ipsum dolor sit amet, consectetur adipiscing
+elit. Quisque et tortor elementum, iaculis augue vitae, viverra
+urna. Vestibulum feugiat condimentum tellus et iaculis. Mauris
+accumsan efficitur elit, sit amet placerat orci. Aliquam mollis
+mattis felis id tincidunt. Sed vulputate magna ut malesuada
+lacinia. Pellentesque sit amet sem in sapien dictum
+dictum. Integer vel vestibulum ante. Curabitur pretium risus vel
+fringilla efficitur. Ut feugiat pulvinar dolor. Pellentesque
+eleifend ipsum sit amet accumsan interdum. In varius elementum
+erat, vel accumsan urna. Aliquam sit amet sodales magna. Vivamus
+mattis semper dui, a viverra mauris venenatis id. Proin sit amet
+arcu euismod, posuere nisl vel, pulvinar quam. Sed cursus erat
+sit amet lorem dapibus elementum.
+  " (progn) "Suspendisse potenti. Ut vehicula quam in mauris
+maximus sagittis. Vivamus iaculis commodo nisi, sed dignissim
+diam ultrices a. Praesent pharetra neque non lectus placerat
+egestas. Morbi molestie lorem tellus, nec bibendum turpis
+venenatis ac. Vestibulum nunc urna, viverra sit amet mauris
+convallis, tincidunt faucibus mi. Aenean at nulla finibus,
+aliquet eros vitae, porta lacus. Sed consequat dignissim est id
+tincidunt. Vivamus interdum cursus lectus ac sodales. Donec a
+ultricies enim, eget pharetra dui. Donec molestie vitae turpis
+vel fermentum. In vitae risus a nisi molestie fermentum eget
+vitae lacus. Fusce vel lectus non erat lacinia sagittis. Etiam a
+erat eget tellus tristique gravida. Nulla mattis, nisl sit amet
+hendrerit scelerisque, metus ex lacinia justo, vel laoreet neque
+nulla et ligula. Donec tempor tincidunt pulvinar."
+  (progn))
