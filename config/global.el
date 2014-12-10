@@ -576,7 +576,7 @@ erat, vel accumsan urna. Aliquam sit amet sodales magna. Vivamus
 mattis semper dui, a viverra mauris venenatis id. Proin sit amet
 arcu euismod, posuere nisl vel, pulvinar quam. Sed cursus erat
 sit amet lorem dapibus elementum.
-  " (progn) "Suspendisse potenti. Ut vehicula quam in mauris
+  " (defvar x nil) "Suspendisse potenti. Ut vehicula quam in mauris
 maximus sagittis. Vivamus iaculis commodo nisi, sed dignissim
 diam ultrices a. Praesent pharetra neque non lectus placerat
 egestas. Morbi molestie lorem tellus, nec bibendum turpis
