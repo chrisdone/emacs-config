@@ -1,3 +1,10 @@
+Note: For a basic Haskell + Emacs setup with no other specific config, see
+my other
+[emacs-haskell-config](https://github.com/chrisdone/emacs-haskell-config)
+repository.
+
+--
+
 # Emacs configuration
 
 To use
@@ -6,17 +13,8 @@ To use
     $ git submodule update
     $ cd packages/haskell-mode; make
     $ cd packages/structured-haskell-mode; cabal install; cd elisp; make
-    $ cabal install hasktags hoogle
-    $ hoogle data
-
-Optionally, for [`:present <exp>` support in the REPL](https://github.com/haskell/haskell-mode/wiki/Haskell-Interactive-Mode-REPL#presentations):
-
+    $ cabal install hasktags haskell-docs
     $ cabal install present
-
-Optionally, for experimental type of subexpression (so you can use
-`M-x shm/type-of-node`):
-
-    $ git clone https://github.com/bennofs/hdevtools.git && cd hdevtools && cabal install
 
 Optionally, for browsing haddocks inside Emacs:
 
