@@ -553,6 +553,7 @@ prefix argument."
 ;; Safe local variables
 
 (custom-set-variables
+ '(magit-status-buffer-switch-function 'switch-to-buffer)
  '(safe-local-variable-values
    (quote ((haskell-indent-spaces . 4)
            (haskell-indent-spaces . 2)
