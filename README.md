@@ -12,7 +12,7 @@ To use
     $ git submodule init
     $ git submodule update
     $ cd packages/haskell-mode; make
-    $ cd packages/structured-haskell-mode; cabal install; cd elisp; make
+    $ cd packages/structured-haskell-mode; cabal update; cabal install; cd elisp; make
     $ cabal install hasktags haskell-docs
     $ cabal install present
 
