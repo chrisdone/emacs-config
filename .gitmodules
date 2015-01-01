@@ -45,16 +45,16 @@
 	url = http://github.com/chrisdone/hindent.git
 [submodule "packages/multiple-cursors"]
 	path = packages/multiple-cursors
-	url = git@github.com:magnars/multiple-cursors.el.git
+	url = https://github.com/magnars/multiple-cursors.el.git
 [submodule "packages/ace-jump-mode"]
 	path = packages/ace-jump-mode
-	url = git@github.com:chrisdone/ace-jump-mode.git
+	url = https://github.com/chrisdone/ace-jump-mode.git
 [submodule "packages/flycheck"]
 	path = packages/flycheck
-	url = git@github.com:flycheck/flycheck.git
+	url = https://github.com/flycheck/flycheck.git
 [submodule "packages/number"]
 	path = packages/number
-	url = git@github.com:chrisdone/number.git
+	url = https://github.com/chrisdone/number.git
 [submodule "packages/git-modes"]
 	path = packages/git-modes
-	url = git@github.com:magit/git-modes.git
+	url = https://github.com/magit/git-modes.git
