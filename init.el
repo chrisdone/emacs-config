@@ -35,7 +35,9 @@
     multiple-cursors
     projects-mode
     resmacro
-    flycheck)
+    flycheck
+    json-reformat
+    restclient)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -83,6 +85,7 @@
 (require 'shm-case-split)
 (require 'shm-reformat)
 (require 'w3m-haddock)
+(require 'magit-blame)
 
 
 ;; Emacs configurations
