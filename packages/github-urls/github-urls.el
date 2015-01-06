@@ -72,6 +72,18 @@
   (format "https://github.com/%s/%s/blob/%s/%s%s"
           user repo branch file marker))
 
+(defun github-urls-issues-url (user repo)
+  "Make a URL for the issue tracker."
+  (format "https://github.com/%s/%s/issues"
+          user repo))
+
+(defun github-issues-open ()
+  "Open the URL for the issue tracker."
+  (interactive)
+  (let ((remote-url (github-urls-remote-url)))
+    (browse-url (github-urls-issues-url (github-urls-user remote-url)
+                                        (github-urls-repo remote-url)))))
+
 (defun github-urls-user (remote-url)
   "Return the user of the URL."
   (progn (string-match github-urls-remote-regex remote-url)
@@ -96,5 +108,26 @@
     (if (not root)
         (error "Error: not in a Git repository!")
       (file-name-as-directory root))))
+
+(defun github-ticket-open (&optional ticket)
+  "Open the ticket number at point."
+  (interactive)
+  (let ((number (or ticket
+                    (github-get-ticket))))
+    (unless (string= number "")
+      (browse-url (concat github-ticket-prefix number)))))
+
+(defun github-get-ticket ()
+  "Get the ticket number at point."
+  (save-excursion
+    (when (looking-at "#")
+      (forward-char))
+    (search-backward-regexp "[^0-9]" (line-beginning-position) t 1)
+    (forward-char)
+    (let* ((start (point))
+           (number (progn (search-forward-regexp "[0-9]+" (line-end-position) t)
+                          (buffer-substring-no-properties start
+                                                          (point)))))
+      number)))
 
 (provide 'github-urls)

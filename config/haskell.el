@@ -6,6 +6,7 @@
 (require 'haskell-process)
 (require 'haskell-simple-indent)
 (require 'haskell-interactive-mode)
+(require 'haskell)
 (require 'haskell-font-lock)
 (require 'haskell-debug)
 (require 'sgml-mode)
@@ -187,7 +188,8 @@ the cursor position happened."
 
 (setq haskell-interactive-mode-eval-mode 'haskell-mode)
 
-(setq haskell-process-path-ghci "ghci-ng")
+(setq haskell-process-path-ghci
+      "ghci-ng")
 
 (setq haskell-process-args-ghci '("-ferror-spans"))
 
@@ -207,6 +209,8 @@ the cursor position happened."
 
 
 ;; Keybindings
+
+(define-key highlight-uses-mode-map (kbd "C-t") 'highlight-uses-mode-replace)
 
 (define-key interactive-haskell-mode-map [f5] 'haskell-process-load-or-reload)
 (define-key interactive-haskell-mode-map [f12] 'turbo-devel-reload)
