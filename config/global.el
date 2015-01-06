@@ -10,6 +10,14 @@
 
 ;; Fundamental functions
 
+(defun delete-blank-lines-in (start end)
+  "Delete blank lines at point or in the region."
+  (interactive "r")
+  (replace-regexp "[\n]+" "\n" nil start end))
+
+(defun json-pretty-print-buffer ()
+  (json-reformat-region (point-min) (point-max)))
+
 (defun eval-replacing-region (read)
   "Eval an expression on the region and replace the region with the
   result."
