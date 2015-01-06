@@ -10,6 +10,14 @@
 
 ;; Fundamental functions
 
+(defun delete-blank-lines-in (start end)
+  "Delete blank lines at point or in the region."
+  (interactive "r")
+  (replace-regexp "[\n]+" "\n" nil start end))
+
+(defun json-pretty-print-buffer ()
+  (json-reformat-region (point-min) (point-max)))
+
 (defun eval-replacing-region (read)
   "Eval an expression on the region and replace the region with the
   result."
@@ -122,27 +130,6 @@
   (interactive)
   (delete-indentation)
   (paredit-reindent-defun))
-
-(defun github-ticket-open (&optional ticket)
-  "Open the ticket number at point."
-  (interactive)
-  (let ((number (or ticket
-                    (github-get-ticket))))
-    (unless (string= number "")
-      (browse-url (concat github-ticket-prefix number)))))
-
-(defun github-get-ticket ()
-  "Get the ticket number at point."
-  (save-excursion
-    (when (looking-at "#")
-      (forward-char))
-    (search-backward-regexp "[^0-9]" (line-beginning-position) t 1)
-    (forward-char)
-    (let* ((start (point))
-           (number (progn (search-forward-regexp "[0-9]+" (line-end-position) t)
-                          (buffer-substring-no-properties start
-                                                          (point)))))
-      number)))
 
 (defun project-todo ()
   "Generate a TODO.org file from the project's files."
@@ -342,6 +329,8 @@ prefix argument."
 (global-set-key (kbd "s-g") 'exit-recursive-edit)
 (global-set-key (kbd "s-u") 'winner-mode-undo)
 
+(global-set-key (kbd "C-x C-k C-o") 'delete-blank-lines-in)
+
 (global-set-key (kbd "C-\\") 'goto-last-point)
 (global-set-key (kbd "C-v") 'magit-switch-buffer)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
@@ -390,6 +379,7 @@ prefix argument."
 ;; Mode-specific keybindings
 
 (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-k") 'ielm-clear)
+(define-key shell-mode-map (kbd "C-c C-k") 'erase-buffer)
 (define-key org-mode-map (kbd "C-,") nil)
 (define-key js-mode-map (kbd "C-c C-l") 'javascript-console-log)
 (define-key sgml-mode-map (kbd "/") nil)
