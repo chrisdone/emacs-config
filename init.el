@@ -36,7 +36,7 @@
     projects-mode
     resmacro
     flycheck
-    json-reformat
+    ;; json-reformat
     restclient)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
