@@ -11,6 +11,7 @@
 (require 'haskell-debug)
 (require 'sgml-mode)
 (require 'css-mode)
+(require 'ghci-script-mode)
 
 
 ;; Functions
@@ -211,6 +212,12 @@ the cursor position happened."
 ;; Keybindings
 
 (define-key highlight-uses-mode-map (kbd "C-t") 'highlight-uses-mode-replace)
+
+(define-key ghci-script-mode-map (kbd "C-`") 'haskell-interactive-bring)
+(define-key ghci-script-mode-map (kbd "C-c C-l") 'ghci-script-mode-load)
+(define-key ghci-script-mode-map [f5] 'ghci-script-mode-load)
+(define-key ghci-script-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+(define-key ghci-script-mode-map (kbd "C-c c") 'haskell-process-cabal)
 
 (define-key interactive-haskell-mode-map [f5] 'haskell-process-load-or-reload)
 (define-key interactive-haskell-mode-map [f12] 'turbo-devel-reload)
