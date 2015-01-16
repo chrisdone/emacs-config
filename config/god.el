@@ -25,7 +25,6 @@
 (global-set-key (kbd "C-x C-0") 'delete-window)
 
 (define-key god-local-mode-map (kbd ".") 'repeat)
-(define-key god-local-mode-map (kbd "DEL") nil)
 
 (global-set-key (kbd "<escape>") 'god-mode-all)
 
