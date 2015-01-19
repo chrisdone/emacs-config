@@ -67,3 +67,6 @@
 [submodule "packages/json-reformat"]
 	path = packages/json-reformat
 	url = https://github.com/gongo/json-reformat.git
+[submodule "packages/yaml-mode"]
+	path = packages/yaml-mode
+	url = git@github.com:yoshiki/yaml-mode.git
