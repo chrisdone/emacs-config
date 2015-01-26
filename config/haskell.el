@@ -16,6 +16,12 @@
 
 ;; Functions
 
+(defun shm-repl-tab ()
+  "TAB completion or jumping."
+  (interactive)
+  (unless (shm/jump-to-slot)
+    (call-interactively 'haskell-interactive-mode-tab)))
+
 (defun haskell-interactive-toggle-print-mode ()
   (interactive)
   (setq haskell-interactive-mode-eval-mode
@@ -30,6 +36,12 @@
 (defun haskell-insert-doc ()
   "Insert the documentation syntax."
   (interactive)
+  (unless (= (line-beginning-position)
+             (line-end-position))
+    (shm/backward-paragraph))
+  (unless (= (line-beginning-position)
+             (line-end-position))
+    (save-excursion (insert "\n")))
   (insert "-- | "))
 
 (defun haskell-insert-undefined ()
@@ -185,6 +197,7 @@ the cursor position happened."
         "Data.Map"
         "Data.Maybe"
         "Data.Monoid"
+        "Data.Text"
         "Data.Ord"))
 
 (setq haskell-interactive-mode-eval-mode 'haskell-mode)
@@ -198,6 +211,32 @@ the cursor position happened."
       '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
 
 (setq haskell-process-generate-tags nil)
+
+(setq haskell-import-mapping
+      '(("Data.Text" . "import qualified Data.Text as T
+import Data.Text (Text)
+")
+        ("Data.Text.Lazy" . "import qualified Data.Text.Lazy as LT
+")
+        ("Data.ByteString" . "import qualified Data.ByteString as S
+import Data.ByteString (ByteString)
+")
+        ("Data.ByteString.Lazy" . "import qualified Data.ByteString.Lazy as L
+")
+        ("Data.Map" . "import qualified Data.Map.Strict as M
+import Data.Map.Strict (Map)
+")
+        ("Data.Map.Strict" . "import qualified Data.Map.Strict as M
+import Data.Map.Strict (Map)
+")
+        ("Data.Set" . "import qualified Data.Set as S
+import Data.Set (Set)
+")
+        ("Data.Vector" . "import qualified Data.Vector as V
+import Data.Vector (Vector)
+")))
+
+(setq haskell-language-extensions '())
 
 
 ;; Add hook
@@ -272,6 +311,7 @@ the cursor position happened."
 (define-key haskell-interactive-mode-map (kbd "C-<right>") 'haskell-interactive-mode-error-forward)
 (define-key haskell-interactive-mode-map (kbd "C-c c") 'haskell-process-cabal)
 
+(define-key shm-repl-map (kbd "TAB") 'shm-repl-tab)
 (define-key shm-map (kbd "C-c C-p") 'shm/expand-pattern)
 (define-key shm-map (kbd ",") 'shm-comma-god)
 (define-key shm-map (kbd "C-c C-s") 'shm/case-split)
