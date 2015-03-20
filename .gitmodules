@@ -70,3 +70,6 @@
 [submodule "packages/yaml-mode"]
 	path = packages/yaml-mode
 	url = git@github.com:yoshiki/yaml-mode.git
+[submodule "packages/ide-backend-mode"]
+	path = packages/ide-backend-mode
+	url = git@github.com:chrisdone/ide-backend-mode.git
