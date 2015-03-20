@@ -166,7 +166,7 @@ the cursor position happened."
 ;; Mode settings
 
 (custom-set-variables
- '(haskell-process-type 'ghci)
+ '(haskell-process-type 'cabal-repl)
  '(haskell-process-args-ghci '())
  '(haskell-notify-p t)
  '(haskell-stylish-on-save nil)
