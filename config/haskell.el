@@ -320,6 +320,9 @@ import Data.Vector (Vector)
 (define-key shm-map (kbd "C-c C-f") 'shm-fold-toggle-decl)
 (define-key shm-map (kbd "C-c i") 'shm-reformat-decl)
 
+(define-key ide-backend-mode-map [f5] 'ide-backend-mode-load)
+(setq ide-backend-mode-cmd "cabal")
+
 (defun haskell-process-all-types ()
   "List all types in a grep-mode buffer."
   (interactive)
