@@ -1,5 +1,7 @@
 (require 'magit-blame)
 
+(setq magit-blame-detect-copies-moves t)
+
 
 ;; Functions
 

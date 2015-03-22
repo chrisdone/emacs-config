@@ -3,7 +3,7 @@
 	url = https://github.com/chrisdone/zenburn.git
 [submodule "packages/magit"]
 	path = packages/magit
-	url = https://github.com/magit/magit.git
+	url = https://github.com/chrisdone/magit.git
 [submodule "packages/smex"]
 	path = packages/smex
 	url = https://github.com/nonsequitur/smex.git
