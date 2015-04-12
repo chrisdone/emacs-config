@@ -247,6 +247,10 @@ Goes backward if ARG is negative; error if CHAR not found."
                                     (shell-command-to-string "date +'%Y-%m-%d'"))
           "): "))
 
+(defun insert-date ()
+  (interactive)
+  (insert (shell-command-to-string "date +'%Y-%m-%d'")))
+
 (defun reorder-buffer-list (pre-sort-list)
   "Re-order the buffer list."
   (let* ((sort-list (remove-if-not #'buffer-live-p pre-sort-list))
@@ -374,6 +378,8 @@ prefix argument."
 (global-set-key (kbd "C->") 'end-of-buffer)
 (global-set-key (kbd "C-<") 'beginning-of-buffer)
 (global-set-key (kbd "C-!") 'eval-defun)
+
+(global-set-key (kbd "C-x C-c") nil)
 
 
 ;; Mode-specific keybindings
@@ -546,6 +552,7 @@ prefix argument."
  '(magit-status-buffer-switch-function 'switch-to-buffer)
  '(safe-local-variable-values
    (quote ((haskell-indent-spaces . 4)
+           (haskell-process-use-ghci . 4)
            (haskell-indent-spaces . 2)
            (haskell-process-type . cabal-repl)
            (shm-lambda-indent-style . leftmost-parent)))))
