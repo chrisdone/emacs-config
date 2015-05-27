@@ -36,7 +36,7 @@
     projects-mode
     resmacro
     flycheck
-    ;; json-reformat
+    json-reformat
     restclient
     yaml-mode)
   "Packages whose location follows the
