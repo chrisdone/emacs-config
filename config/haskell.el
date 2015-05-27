@@ -320,8 +320,8 @@ import Data.Vector (Vector)
 (define-key shm-map (kbd "C-c C-f") 'shm-fold-toggle-decl)
 (define-key shm-map (kbd "C-c i") 'shm-reformat-decl)
 
-(define-key ide-backend-mode-map [f5] 'ide-backend-mode-load)
-(setq ide-backend-mode-cmd "cabal")
+;; (define-key ide-backend-mode-map [f5] 'ide-backend-mode-load)
+;; (setq ide-backend-mode-cmd "cabal")
 
 (defun haskell-process-all-types ()
   "List all types in a grep-mode buffer."
@@ -361,3 +361,10 @@ import Data.Vector (Vector)
      nil
      (current-buffer)))
   (define-key interactive-haskell-mode-map (kbd "C-c C-c") 'haskell-process-compile-ghcjs))
+
+(defun haskell-process-toggle-import-suggestions ()
+  (interactive)
+  (setq haskell-process-suggest-remove-import-lines (not haskell-process-suggest-remove-import-lines))
+  (message "Import suggestions are now %s." (if haskell-process-suggest-remove-import-lines
+                                               "enabled"
+                                             "disabled")))
