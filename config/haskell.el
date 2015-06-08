@@ -368,3 +368,101 @@ import Data.Vector (Vector)
   (message "Import suggestions are now %s." (if haskell-process-suggest-remove-import-lines
                                                "enabled"
                                              "disabled")))
+
+(defvar haskell-stack-commands
+  '("build"
+    "update"
+    "test"
+    "bench")
+  "Stack commands.")
+
+;;;###autoload
+(defun haskell-process-stack-build ()
+  "Build the Stack project."
+  (interactive)
+  (haskell-process-do-stack "build")
+  (haskell-process-add-cabal-autogen))
+
+;;;###autoload
+(defun haskell-process-stack (p)
+  "Prompts for a Stack command to run."
+  (interactive "P")
+  (if p
+      (haskell-process-do-stack
+       (read-from-minibuffer "Stack command (e.g. install): "))
+    (haskell-process-do-stack
+     (funcall haskell-completing-read-function "Stack command: "
+              (append haskell-stack-commands
+                      (list "build --ghc-options=-fforce-recomp")
+                      (list "build --ghc-options=-O0"))))))
+
+(defun haskell-process-do-stack (command)
+  "Run a Cabal command."
+  (let ((process (haskell-interactive-process)))
+    (cond
+     ((let ((child (haskell-process-process process)))
+        (not (equal 'run (process-status child))))
+      (message "Process is not running, so running directly.")
+      (shell-command (concat "stack " command)
+                     (get-buffer-create "*haskell-process-log*")
+                     (get-buffer-create "*haskell-process-log*"))
+      (switch-to-buffer-other-window (get-buffer "*haskell-process-log*")))
+     (t (haskell-process-queue-command
+         process
+         (make-haskell-command
+          :state (list (haskell-interactive-session) process command 0)
+
+          :go
+          (lambda (state)
+            (haskell-process-send-string
+             (cadr state)
+             (format ":!stack %s"
+                     (cl-caddr state))))
+
+          :live
+          (lambda (state buffer)
+            (let ((cmd (replace-regexp-in-string "^\\([a-z]+\\).*"
+                                                 "\\1"
+                                                 (cl-caddr state))))
+              (cond ((or (string= cmd "build")
+                         (string= cmd "install"))
+                     (haskell-process-live-build (cadr state) buffer t))
+                    (t
+                     (haskell-process-cabal-live state buffer)))))
+
+          :complete
+          (lambda (state response)
+            (let* ((process (cadr state))
+                   (session (haskell-process-session process))
+                   (message-count 0)
+                   (cursor (haskell-process-response-cursor process)))
+              (haskell-process-set-response-cursor process 0)
+              (while (haskell-process-errors-warnings session process response)
+                (setq message-count (1+ message-count)))
+              (haskell-process-set-response-cursor process cursor)
+              (let ((msg (format "Complete: cabal %s (%s compiler messages)"
+                                 (cl-caddr state)
+                                 message-count)))
+                (haskell-interactive-mode-echo session msg)
+                (when (= message-count 0)
+                  (haskell-interactive-mode-echo
+                   session
+                   "No compiler messages, dumping complete output:")
+                  (haskell-interactive-mode-echo session response))
+                (haskell-mode-message-line msg)
+                (when (and haskell-notify-p
+                           (fboundp 'notifications-notify))
+                  (notifications-notify
+                   :title (format "*%s*" (haskell-session-name (car state)))
+                   :body msg
+                   :app-name (cl-ecase (haskell-process-type)
+                               ('ghci haskell-process-path-cabal)
+                               ('cabal-repl haskell-process-path-cabal)
+                               ('cabal-ghci haskell-process-path-cabal))
+                   :app-icon haskell-process-logo)))))))))))
+
+(defun haskell-setup-stack-commands ()
+  "Setup stack keybindings."
+  (interactive)
+  (define-key interactive-haskell-mode-map (kbd "C-c C-c") 'haskell-process-stack-build)
+  (define-key interactive-haskell-mode-map (kbd "C-c c") 'haskell-process-stack))
