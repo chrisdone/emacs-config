@@ -18,7 +18,29 @@
 ;;; Code:
 
 (define-derived-mode track-mode fundamental-mode "Track"
-  "Major mode to track your habits and activities.")
+  "Major mode to track your habits and activities."
+  (setq font-lock-defaults '(track-mode-keywords)))
+
+(defgroup track nil
+  "Tracking mode group."
+  :group nil
+  :prefix "track-")
+
+(defvar track-mode-keywords
+  '(("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T" . 'track-mode-date-face)
+    ("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]" . 'track-mode-time-face)
+    ("Z " . 'track-mode-date-face))
+  "Keywords for tracking log.")
+
+(defface track-mode-date-face
+  '((((class color)) :foreground "#8191a2"))
+  "Date face."
+  :group 'track-mode)
+
+(defface track-mode-time-face
+  '((((class color)) :foreground "#333333" :bold t))
+  "Time face."
+  :group 'track-mode)
 
 (define-key track-mode-map (kbd "RET") 'track-mode-new-entry)
 
