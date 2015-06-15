@@ -211,6 +211,12 @@ Goes backward if ARG is negative; error if CHAR not found."
 (defun timeclock-dwim (in)
   "Either clock in or clockout."
   (interactive "P")
+  (with-current-buffer (find-file-noselect "~/Org/me.track")
+    (track-mode-new-entry
+     (if (string-match "Currently clocked IN"
+                       (shell-command-to-string "clockin status"))
+         "clockout"
+       "clockin")))
   (shell-command-to-string "clockin toggle"))
 
 (defun javascript-console-log ()
@@ -505,6 +511,8 @@ prefix argument."
 
 (add-to-list 'auto-mode-alist (cons "\\.md\\'" 'markdown-mode))
 (add-to-list 'auto-mode-alist (cons "\\.markdown\\'" 'markdown-mode))
+
+(add-to-list 'auto-mode-alist (cons "\\.track\\'" 'track-mode))
 
 
 ;; Environment settings
