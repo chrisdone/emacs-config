@@ -211,13 +211,21 @@ Goes backward if ARG is negative; error if CHAR not found."
 (defun timeclock-dwim (in)
   "Either clock in or clockout."
   (interactive "P")
-  (with-current-buffer (find-file-noselect "~/Org/me.track")
-    (track-mode-new-entry
-     (if (string-match "Currently clocked IN"
-                       (shell-command-to-string "clockin status"))
-         "clockout"
-       "clockin")))
-  (shell-command-to-string "clockin toggle"))
+  (let* ((default (if (string-match "Currently clocked IN"
+                                    (shell-command-to-string "clockin status"))
+                      "clockout"
+                    "clockin"))
+         (input
+          (read-from-minibuffer (format "Track [default: %s]: " default)))
+         (msg (if (string= "" input)
+                  default
+                input)))
+    (with-current-buffer (find-file-noselect "~/Org/me.track")
+      (track-mode-new-entry msg)
+      (save-buffer))
+    (when (or (string= msg "clockin")
+              (string= msg "clockout"))
+      (shell-command-to-string "clockin toggle"))))
 
 (defun javascript-console-log ()
   "Insert console.log('%o',|)."
