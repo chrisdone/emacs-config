@@ -200,6 +200,11 @@ the cursor position happened."
         "Data.Text"
         "Data.Ord"))
 
+(setq haskell-session-default-modules
+      '("Control.Monad.Reader"
+        "Data.Text"
+        "Control.Monad.Logger"))
+
 (setq haskell-interactive-mode-eval-mode 'haskell-mode)
 
 (setq haskell-process-path-ghci
@@ -373,7 +378,8 @@ import Data.Vector (Vector)
   '("build"
     "update"
     "test"
-    "bench")
+    "bench"
+    "install")
   "Stack commands.")
 
 ;;;###autoload
