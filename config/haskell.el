@@ -248,6 +248,7 @@ import Data.Vector (Vector)
 
 (add-hook 'haskell-mode-hook 'structured-haskell-mode)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+(remove-hook 'haskell-mode-hook 'stack-mode)
 (add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
@@ -472,3 +473,13 @@ import Data.Vector (Vector)
   (interactive)
   (define-key interactive-haskell-mode-map (kbd "C-c C-c") 'haskell-process-stack-build)
   (define-key interactive-haskell-mode-map (kbd "C-c c") 'haskell-process-stack))
+
+(define-key stack-mode-map [f5] 'stack-mode-save-flycheck)
+
+(defun stack-mode-save-flycheck ()
+  "Save the buffer and flycheck it."
+  (interactive)
+  (save-buffer)
+  (flycheck-buffer))
+
+(setq flycheck-check-syntax-automatically nil)
