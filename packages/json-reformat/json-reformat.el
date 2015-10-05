@@ -139,6 +139,11 @@ Else t:
           (json-reformat:indent level)
           "}"))
 
+(defun json-reformat-buffer ()
+  (interactive)
+  (json-reformat-region (point-min)
+                        (point-max)))
+
 ;;;###autoload
 (defun json-reformat-region (begin end)
   "Reformat the JSON in the region from BEGIN to END."
