@@ -9,7 +9,7 @@
 	url = https://github.com/nonsequitur/smex.git
 [submodule "packages/haskell-mode"]
 	path = packages/haskell-mode
-	url = https://github.com/haskell/haskell-mode.git
+	url = git@github.com:haskell/haskell-mode.git
 [submodule "packages/paredit"]
 	path = packages/paredit
 	url = https://github.com/emacsmirror/paredit.git
