@@ -10,6 +10,26 @@
 
 ;; Fundamental functions
 
+(defun replace-not-regexp (beg end)
+  "Replace the content before and after every occurence of the
+prompted regexp with the prompted text."
+  (interactive "r")
+  (let* ((r (read-from-minibuffer "Replace not this regexp: "))
+         (with (read-from-minibuffer "Replace with: "))
+         (with-length (length with))
+         (base beg))
+    (save-excursion
+      (goto-char beg)
+      (while (search-forward-regexp r end t 1)
+        (let ((new-base (point))
+              (end (match-beginning 0)))
+          (delete-region base end)
+          (insert with)
+          (setq base (+ new-base (- base end) with-length))))
+      (when (< base end)
+        (delete-region base end)
+        (insert with)))))
+
 (defun delete-blank-lines-in (start end)
   "Delete blank lines at point or in the region."
   (interactive "r")
