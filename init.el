@@ -24,7 +24,6 @@
     echo-keys
     align-by-current-symbol
     ag
-    w3m
     goto-last-point
     github-urls
     s
