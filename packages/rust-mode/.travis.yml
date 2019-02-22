@@ -1,0 +1,27 @@
+language: generic
+
+env:
+  matrix:
+    - EMACS=emacs24
+    - EMACS=emacs-snapshot
+
+install:
+  - if [ "$EMACS" = 'emacs24' ]; then
+       sudo add-apt-repository -y ppa:cassou/emacs &&
+       sudo apt-get -qq update &&
+       sudo apt-get -qq -f install &&
+       sudo apt-get -qq install emacs24 emacs24-el;
+    fi
+  - if [ "$EMACS" = 'emacs-snapshot' ]; then
+       sudo add-apt-repository -y ppa:ubuntu-elisp/ppa &&
+       sudo apt-get -qq update &&
+       sudo apt-get -qq -f install &&
+       sudo apt-get -qq install emacs-snapshot &&
+       sudo apt-get -qq install emacs-snapshot-el;
+    fi
+
+script:
+  - ./run_rust_emacs_tests.sh
+
+notifications:
+  email: false

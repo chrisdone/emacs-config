@@ -1,0 +1,4 @@
+resolver: lts-10.0
+
+nix:
+  packages: [ ncurses clang ]
