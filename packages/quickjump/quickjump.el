@@ -44,7 +44,8 @@
         (points nil)
         (doing t)
         (prefix "")
-        (origin (point)))
+        (origin (point))
+        (toggle t))
     (remove-overlays start end 'quickjump t)
     (setq quickjump-count 0)
     (save-excursion
@@ -54,11 +55,13 @@
           (let ((last nil))
             (while (and (< (point) end) (not (eq (point) last)))
               (setq last (point))
-              (setq points (quickjump-point hash points t origin)))))
+              (setq toggle (not toggle))
+              (setq points (quickjump-point hash points t origin toggle)))))
         (let ((last nil))
           (while (and (> (point) start) (not (eq (point) last)))
             (setq last (point))
-            (setq points (quickjump-point hash points nil origin))))))
+            (setq toggle (not toggle))
+            (setq points (quickjump-point hash points nil origin toggle))))))
     (while doing
       (let ((key (key-description
                   (vector
@@ -108,7 +111,7 @@
                 (overlays-in start end)))
       (goto-char origin))))
 
-(defun quickjump-point (hash points forward ignore-this-point)
+(defun quickjump-point (hash points forward ignore-this-point toggle)
   (let* ((origin (point))
          (start
           (if forward
@@ -131,17 +134,21 @@
         (overlay-put o 'quickjump t)
         (let* ((postfix (buffer-substring start end))
                (key (downcase (quickjump-take 2 postfix)))
-               (prefix (quickjump-guid hash key nil)))
+               (prefix (quickjump-guid hash key nil))
+               (face-background 'quickjump-face-background)
+               (face-highlight (if toggle
+                                   'quickjump-highlight-1
+                                 'quickjump-highlight-2)))
           (if (and (>= (length postfix) (- (length prefix) 1))
                    (not (string-match "[ \n]" postfix))
                    (not (= start ignore-this-point)))
               (let ((display-lazy
-                     (concat (propertize prefix 'face 'lazy-highlight)
+                     (concat (propertize prefix 'face face-highlight)
                              (propertize
                               (substring
                                postfix
                                (min (length postfix) (length prefix)))
-                              'face 'quickjump-face-background))))
+                              'face face-background))))
                 (quickjump-guid hash key t)
                 (overlay-put o 'display-lazy display-lazy)
                 (overlay-put o 'display display-lazy)
@@ -151,10 +158,10 @@
                  (concat (propertize prefix 'face 'isearch)
                          (propertize (substring postfix
                                                 (min (length postfix) (length prefix)))
-                                     'face 'quickjump-face-background)))
+                                     'face face-background)))
                 (setq quickjump-count (+ 1 quickjump-count))
                 (cons (cons prefix start) points))
-            (progn (overlay-put o 'display (propertize postfix 'face 'quickjump-face-background))
+            (progn (overlay-put o 'display (propertize postfix 'face face-background))
                    points)))))))
 
 (defun quickjump-guid (hash string write)
@@ -178,6 +185,20 @@
   '((((background dark)) (:foreground "#888888"))
     (((background light)) (:foreground "#999999")))
   "Background face."
+  :group 'quickjump)
+
+(defface quickjump-highlight-1
+  '((((class color) (background dark))
+     (:background "#224422" :foreground "#ffffff" :bold nil))
+    (t (:underline t)))
+  "Face for lazy highlighting of matches other than the current one."
+  :group 'quickjump)
+
+(defface quickjump-highlight-2
+  '((((class color) (min-colors 88) (background dark))
+     (:background "#222244" :foreground "#ffffff" :bold nil))
+    (t (:underline t)))
+  "Face for lazy highlighting of matches other than the current one."
   :group 'quickjump)
 
 (defun quickjump-mode-next ()
