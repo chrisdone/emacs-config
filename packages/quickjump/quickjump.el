@@ -133,13 +133,13 @@
         (overlay-put o 'priority 999)
         (overlay-put o 'quickjump t)
         (let* ((postfix (buffer-substring start end))
-               (key (downcase (quickjump-take 2 postfix)))
+               (key (downcase (quickjump-take 1 postfix)))
                (prefix (quickjump-guid hash key nil))
                (face-background 'quickjump-face-background)
                (face-highlight (if toggle
                                    'quickjump-highlight-1
                                  'quickjump-highlight-2)))
-          (if (and (>= (length postfix) (- (length prefix) 1))
+          (if (and (>= (length postfix) (length prefix))
                    (not (string-match "[ \n]" postfix))
                    (not (= start ignore-this-point)))
               (let ((display-lazy
@@ -147,7 +147,8 @@
                              (propertize
                               (substring
                                postfix
-                               (min (length postfix) (length prefix)))
+                               (min (length postfix)
+                                    (length prefix)))
                               'face face-background))))
                 (quickjump-guid hash key t)
                 (overlay-put o 'display-lazy display-lazy)
