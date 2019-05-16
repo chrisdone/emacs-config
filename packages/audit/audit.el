@@ -27,22 +27,53 @@
   :group 'audit)
 
 (defface audit-ok-face
-  '((t :foreground "#a9b290"
-       :background "#f8ffe5"
-       :strike-through t
-       :weight normal
-       :underline nil))
+  '((((class color) (background dark))
+     :foreground "#a9b290"
+     :background "#333333"
+     :strike-through t
+     :weight normal
+     :underline nil)
+    (((class color) (background light))
+     :foreground "#a9b290"
+     :background "#f8ffe5"
+     :strike-through t
+     :weight normal
+     :underline nil)
+    (t (:bold t)))
   "Face for code that is OK."
   :group 'audit)
 
 (defface audit-comment-face
-  '((t :background "#fffae5"))
+  '((((class color) (background dark))
+     :foreground "#a9b290"
+     :background "#333333"
+     :strike-through t
+     :weight normal
+     :underline nil)
+    (((class color) (background light))
+     :foreground "#a9b290"
+     :background "#333333"
+     :strike-through t
+     :weight normal
+     :underline nil)
+    (t (:bold t)))
   "Face for code that has a comment."
   :group 'audit)
 
 (defface audit-heading-face
-  '((t :background "#fcf0bf"
-       :weight bold))
+  '((((class color) (background dark))
+     :foreground "#ffffff"
+     :background "#464646"
+     :strike-through nil
+     :weight bold
+     :underline nil)
+    (((class color) (background light))
+     :foreground "#a9b290"
+     :background "#fcf0bf"
+     :strike-through nil
+     :weight bold
+     :underline nil)
+    (t (:bold t)))
   "Face for code that has a comment."
   :group 'audit)
 
@@ -128,33 +159,34 @@
   "Refresh the overlays in the current buffer."
   (interactive)
   (remove-overlays (point-min) (point-max) 'audit-overlay t)
-  (mapc (lambda (note)
-          (when (string= (plist-get note :file) (buffer-file-name))
-            (let ((o (make-overlay
-                      (save-excursion
-                        (goto-char (plist-get note :start))
-                        (line-beginning-position))
-                      (save-excursion
-                        (goto-char (plist-get note :end))
-                        (1+ (line-end-position))))))
-              (overlay-put o 'audit-overlay t)
-              (overlay-put o 'audit-item note)
-              (overlay-put o 'priority 999999)
-              (overlay-put o 'face
-                           (cl-case (plist-get note :type)
-                             (comment 'audit-comment-face)
-                             (ok 'audit-ok-face)))
-              (when (plist-get note :comment)
-                (overlay-put o 'before-string
-                             (propertize
-                              (with-temp-buffer
-                                (insert (plist-get note :comment))
-                                (fill-paragraph)
-                                (insert "\n")
-                                (buffer-string))
-                              'face
-                              'audit-heading-face))))))
-        (audit-cache)))
+  (when audit-mode
+    (mapc (lambda (note)
+            (when (string= (plist-get note :file) (buffer-file-name))
+              (let ((o (make-overlay
+                        (save-excursion
+                          (goto-char (plist-get note :start))
+                          (line-beginning-position))
+                        (save-excursion
+                          (goto-char (plist-get note :end))
+                          (1+ (line-end-position))))))
+                (overlay-put o 'audit-overlay t)
+                (overlay-put o 'audit-item note)
+                (overlay-put o 'priority 999999)
+                (overlay-put o 'face
+                             (cl-case (plist-get note :type)
+                               (comment 'audit-comment-face)
+                               (ok 'audit-ok-face)))
+                (when (plist-get note :comment)
+                  (overlay-put o 'before-string
+                               (propertize
+                                (with-temp-buffer
+                                  (insert (plist-get note :comment))
+                                  (fill-paragraph)
+                                  (insert "\n")
+                                  (buffer-string))
+                                'face
+                                'audit-heading-face))))))
+          (audit-cache))))
 
 (defun audit-git-commit ()
   "Get the current commit."
@@ -192,9 +224,9 @@
               "SHA256: " (replace-regexp-in-string
                           "[ ]+-" ""
                           (shell-command-to-string "find . -type f | xargs sha256sum | sha256sum")) "\n"
-              "Date-Completed: " (format-time-string "%Y-%m-%d") "\n\n"
-              "Comments: " (number-to-string (length items)) "\n\n"
-      )
+                          "Date-Completed: " (format-time-string "%Y-%m-%d") "\n\n"
+                          "Comments: " (number-to-string (length items)) "\n\n"
+                          )
       (insert (format "## Verify this audit
 
 Verify the document:
@@ -209,7 +241,7 @@ Verify the SHA256 of the package contents:
     $ cd %s-%s
     $ find . -type f | xargs sha256sum | sha256sum
 "
-              pkg ver pkg ver pkg ver pkg ver))
+                      pkg ver pkg ver pkg ver pkg ver))
       (insert "\n##Summary\n\n")
       (insert "## Files\n\n")
       (audit-status-list-files files)
