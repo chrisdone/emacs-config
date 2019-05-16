@@ -265,9 +265,13 @@ import Data.List.NonEmpty (NonEmpty(..))
         ("Data.Conduit.List" . "import qualified Data.Conduit.List as CL
 ")
         ("Data.Conduit.Binary" . "import qualified Data.Conduit.Binary as CB
+")
+        ("Data.Sequence" . "import qualified Data.Sequence as Seq
+import Data.Sequence (Seq)
 ")))
 
-(setq haskell-language-extensions '())
+(setq haskell-language-extensions '("-XMagicHash" "-XUnboxedTuples"))
+(setq shm-language-extensions '("-XMagicHash" "-XUnboxedTuples"))
 
 
 ;; Add hook
