@@ -72,9 +72,9 @@
 (defcustom intero-package-version
   (cl-case system-type
     ;; Until <https://github.com/haskell/network/issues/313> is fixed:
-    (windows-nt "0.1.38")
-    (cygwin "0.1.38")
-    (t "0.1.38"))
+    (windows-nt "0.1.40")
+    (cygwin "0.1.40")
+    (t "0.1.40"))
   "Package version to auto-install.
 
 This version does not necessarily have to be the latest version
@@ -2241,6 +2241,7 @@ Installing intero-%s for GHC %s ...
            (concat "intero-" intero-package-version)
            "--flag" "haskeline:-terminfo"
            "--resolver" (concat "ghc-" ghc-version)
+           "haskeline-0.7.5.0"
            "ghc-paths-0.1.0.9" "mtl-2.2.2" "network-2.7.0.0" "random-1.1" "syb-0.7"))
       (0
        (message "Installed successfully! Starting Intero in a moment ...")
