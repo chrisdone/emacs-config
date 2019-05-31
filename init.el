@@ -92,6 +92,7 @@
 (require 'haskell-mode)
 (require 'haskell)
 (require 'haskell-simple-indent)
+(require 'haskell-move-nested)
 (require 'psc-ide)
 
 
