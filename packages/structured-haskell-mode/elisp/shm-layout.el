@@ -57,29 +57,30 @@ after 'zoo' are *really* dependent."
 (defun shm-adjust-dependents (end-point n)
   "Adjust dependent lines by N characters that depend on this
 line after END-POINT."
-  (unless (= (line-beginning-position)
-             (1- (point)))
-    (let ((line (line-number-at-pos))
-          (column (current-column)))
-      (when (and (not (< column (shm-indent-spaces)))
-                 ;; I don't remember what this is for. I'm removing
-                 ;; it. If it causes problems, I'll deal with it then.
-                 ;;
-                 ;; (not (and (looking-back "^[ ]+")
-                 ;;           (looking-at "[ ]*")))
-                 (save-excursion (goto-char end-point)
-                                 (forward-word)
-                                 (= (line-number-at-pos) line)))
-        (unless (save-excursion
-                  (goto-char (line-end-position))
-                  (let ((current-pair (shm-node-backwards)))
-                    (when current-pair
-                      (or (string= (shm-node-type-name (cdr current-pair))
-                                   "Rhs")
-                          (eq (shm-node-cons (cdr current-pair))
-                              'Lambda)))))
-          (shm-move-dependents n
-                               end-point))))))
+  (when nil
+    (unless (= (line-beginning-position)
+               (1- (point)))
+      (let ((line (line-number-at-pos))
+            (column (current-column)))
+        (when (and (not (< column (shm-indent-spaces)))
+                   ;; I don't remember what this is for. I'm removing
+                   ;; it. If it causes problems, I'll deal with it then.
+                   ;;
+                   ;; (not (and (looking-back "^[ ]+")
+                   ;;           (looking-at "[ ]*")))
+                   (save-excursion (goto-char end-point)
+                                   (forward-word)
+                                   (= (line-number-at-pos) line)))
+          (unless (save-excursion
+                    (goto-char (line-end-position))
+                    (let ((current-pair (shm-node-backwards)))
+                      (when current-pair
+                        (or (string= (shm-node-type-name (cdr current-pair))
+                                     "Rhs")
+                            (eq (shm-node-cons (cdr current-pair))
+                                'Lambda)))))
+            (shm-move-dependents n
+                                 end-point)))))))
 
 (defun shm-move-dependents (n point)
   "Move dependent-with-respect-to POINT lines N characters forwards or backwards.
