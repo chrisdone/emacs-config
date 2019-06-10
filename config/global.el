@@ -853,4 +853,16 @@ prefix argument."
       (insert (string-inflection-pascal-function string)))
     (goto-char point)))
 
+(defun kebab-case ()
+  "Make the symbol at point kebab-case."
+  (interactive)
+  (let* ((point (point))
+         (points (bounds-of-thing-at-point 'symbol))
+         (string (buffer-substring (car points) (cdr points))))
+    (save-excursion
+      (goto-char (car points))
+      (delete-region (car points) (cdr points))
+      (insert (string-inflection-kebab-function string)))
+    (goto-char point)))
+
 (provide 'global)
