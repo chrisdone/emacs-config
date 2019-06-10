@@ -1,0 +1,55 @@
+* HISTORY
+
+** Version 1.0.10
+
+   Merged [[https://github.com/akicho8/string-inflection/pull/26][PR #26]] Add `Capital_Underscore_Form`
+
+   add string-inflection-capital-underscore function
+
+   The behavior of =string-inflection-all-cycle= has changed
+
+#+BEGIN_SRC
+before: foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar
+after:  foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar
+#+END_SRC
+
+** Version 1.0.9
+
+   Bugfix [[https://github.com/akicho8/string-inflection/issues/27][issue #25]] When executing kebab-case etc., point advances to the next word, and the previous word can not be converted continuously
+
+** Version 1.0.8
+
+   [[https://github.com/akicho8/string-inflection/issues/25][issue #25]]
+
+   When it is simply =camelcase=, it means the name with the leading letters in lowercase.
+
+   The name with the initial capital letter is called the =pascal-case=.
+
+*** Behavior of the camelcase function has changed
+
+    | Before | After  |
+    |--------+--------|
+    | FooBar | fooBar |
+
+*** Function name changed as well
+
+    | Before          | After       |
+    |-----------------+-------------|
+    | camelcase       | pascal-case |
+    | lower-camelcase | camelcase   |
+
+*** Add alias
+
+    #+BEGIN_SRC elisp
+(fset 'string-inflection-upper-camelcase-function 'string-inflection-pascal-case-function)
+(fset 'string-inflection-lower-camelcase-function 'string-inflection-camelcase-function)
+
+(fset 'string-inflection-upper-camelcase-p 'string-inflection-pascal-case-p)
+(fset 'string-inflection-lower-camelcase-p 'string-inflection-camelcase-p)
+    #+END_SRC
+
+*** Remove camelize function
+
+    Originally we had defined functions of both =camelcase= and =camelize= names.
+
+    I deleted the function containing =camelize= to make it simple.

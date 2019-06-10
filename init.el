@@ -39,7 +39,8 @@
     quickjump
     slow-keys
     psc-ide
-    elscreen)
+    elscreen
+    string-inflection)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 

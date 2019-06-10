@@ -707,15 +707,14 @@ prefix argument."
            (haskell-process-type . cabal-repl)
            (shm-lambda-indent-style . leftmost-parent)))))
 
-(defmacro measure-time (body)
+(defmacro measure-time (label body)
   "Measure the time it takes to evaluate BODY."
   (let ((sym (gensym "time"))
         (result (gensym "result")))
     `(let ((,sym (current-time))
            (,result ,body))
        (message "%s: %.0fms"
-                ,(let ((string (format "%-50s" (format "%S" body))))
-                   (substring string 0 (min (length string) 50)))
+                ,label
                 (* 1000 (float-time (time-since ,sym))))
        ,result)))
 
@@ -816,29 +815,42 @@ prefix argument."
 (setq rust-format-on-save t)
 (setq rust-rustfmt-bin "/home/chris/.cargo/bin/rustfmt")
 
-(defun camelize (s)
-  "Convert under_score string S to CamelCase string."
-  (mapconcat 'identity (mapcar
-                        '(lambda (word) (capitalize (downcase word)))
-                        (split-string s "_")) ""))
-
-(defun toggle-camelcase-underscores ()
-  "Toggle between camelcase and underscore notation for the symbol at point."
-  (interactive)
-  (save-excursion
-    (let* ((bounds (bounds-of-thing-at-point 'symbol))
-           (start (car bounds))
-           (end (cdr bounds))
-           (currently-using-underscores-p (progn (goto-char start)
-                                                 (re-search-forward "_" end t))))
-      (if currently-using-underscores-p
-          (progn
-            (upcase-initials-region start end)
-            (replace-string "_" "" nil start end)
-            (downcase-region start (1+ start)))
-        (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
-        (downcase-region start (cdr (bounds-of-thing-at-point 'symbol)))))))
-
 (custom-set-variables '(git-link-use-commit t))
+
+(defun snake-case ()
+  "Make the symbol at point snake_case."
+  (interactive)
+  (let* ((point (point))
+         (points (bounds-of-thing-at-point 'symbol))
+         (string (buffer-substring (car points) (cdr points))))
+    (save-excursion
+      (goto-char (car points))
+      (delete-region (car points) (cdr points))
+      (insert (string-inflection-underscore-function string)))
+    (goto-char point)))
+
+(defun camel-case ()
+  "Make the symbol at point camelCase."
+  (interactive)
+  (let* ((point (point))
+         (points (bounds-of-thing-at-point 'symbol))
+         (string (buffer-substring (car points) (cdr points))))
+    (save-excursion
+      (goto-char (car points))
+      (delete-region (car points) (cdr points))
+      (insert (string-inflection-camelcase-function string)))
+    (goto-char point)))
+
+(defun pascal-case ()
+  "Make the symbol at point PascalCase."
+  (interactive)
+  (let* ((point (point))
+         (points (bounds-of-thing-at-point 'symbol))
+         (string (buffer-substring (car points) (cdr points))))
+    (save-excursion
+      (goto-char (car points))
+      (delete-region (car points) (cdr points))
+      (insert (string-inflection-pascal-function string)))
+    (goto-char point)))
 
 (provide 'global)
