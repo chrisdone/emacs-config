@@ -28,6 +28,7 @@
 
 (global-set-key (kbd "<escape>") 'god-mode-all)
 (define-key god-local-mode-map (kbd "DEL") 'delete-backward-char)
+(define-key god-local-mode-map (kbd "m") 'quickjump-back)
 
 (define-key isearch-mode-map (kbd "<escape>") 'god-mode-isearch-activate)
 (define-key god-mode-isearch-map (kbd "<escape>") 'god-mode-isearch-disable)
