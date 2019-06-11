@@ -862,7 +862,7 @@ prefix argument."
     (save-excursion
       (goto-char (car points))
       (delete-region (car points) (cdr points))
-      (insert (string-inflection-kebab-function string)))
+      (insert (string-inflection-kebab-case-function string)))
     (goto-char point)))
 
 (provide 'global)
