@@ -368,7 +368,10 @@ prefix argument."
 (global-set-key (kbd "C-p") 'avoid-this-key)
 (global-set-key (kbd "C-h") 'previous-line)
 
-(global-set-key (kbd "C-,") 'quickjump)
+(global-set-key (kbd "C-,") 'quickjump-forward)
+(global-set-key (kbd "C-m") 'quickjump-back)
+(global-set-key (kbd "RET") 'newline)
+(define-key input-decode-map "\C-m" [C-m])
 
 (defun avoid-this-key ()
   (interactive)

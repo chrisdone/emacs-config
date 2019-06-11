@@ -33,8 +33,15 @@
 (defvar quickjump-origin nil)
 (defvar quickjump-buffer-access nil)
 
-(defun quickjump ()
+(defun quickjump-back ()
   (interactive)
+  (quickjump 'backward))
+
+(defun quickjump-forward ()
+  (interactive)
+  (quickjump 'forward))
+
+(defun quickjump (direction)
   (setq quickjump-buffer-access buffer-read-only)
   (setq buffer-read-only t)
   (setq quickjump-origin (point))
@@ -51,17 +58,21 @@
     (save-excursion
       (save-restriction
         (narrow-to-region start end)
-        (save-excursion
-          (let ((last nil))
-            (while (and (< (point) end) (not (eq (point) last)))
-              (setq last (point))
-              (setq toggle (not toggle))
-              (setq points (quickjump-point hash points t origin toggle)))))
-        (let ((last nil))
-          (while (and (> (point) start) (not (eq (point) last)))
-            (setq last (point))
-            (setq toggle (not toggle))
-            (setq points (quickjump-point hash points nil origin toggle))))))
+        (cl-ecase direction
+          (backward
+           (let ((last nil))
+             (while (and (> (point) start) (not (eq (point) last)))
+               (setq last (point))
+               (setq toggle (not toggle))
+               (setq points (quickjump-point hash points nil origin toggle)))))
+          (forward
+           (save-excursion
+             (let ((last nil))
+               (while (and (< (point) end) (not (eq (point) last)))
+                 (setq last (point))
+                 (setq toggle (not toggle))
+                 (setq points (quickjump-point hash points t origin toggle))))))
+          )))
     (while doing
       (let ((key (key-description
                   (vector
