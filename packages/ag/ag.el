@@ -190,7 +190,7 @@ roots."
       file-path)))
 
 ;;;###autoload
-(defun ag (string directory)
+(defun ag-dir (string directory)
   "Search using ag in a given DIRECTORY for a given search STRING,
 with STRING defaulting to the symbol under point."
    (interactive (list (read-from-minibuffer "Search string: " (ag/dwim-at-point))
@@ -213,7 +213,7 @@ for a given search STRING, with STRING defaulting to the symbol under point."
   (ag/search string directory :regexp t))
 
 ;;;###autoload
-(defun ag-project (string)
+(defun ag (string)
   "Guess the root of the current project and search it with ag
 for the given string."
   (interactive (list (read-from-minibuffer "Search string: " (ag/dwim-at-point))))
