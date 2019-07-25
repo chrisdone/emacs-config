@@ -2056,7 +2056,7 @@ INFILE, DESTINATION, DISPLAY and ARGS are as for
 `call-process'/`process-file'.  STACK-YAML specifies which stack
 yaml config to use, or stack's default when nil."
   (let ((stack-yaml-args (when stack-yaml
-                           (list "--stack-yaml" stack-yaml))))
+                           (list "--verbosity" "silent" "--stack-yaml" stack-yaml))))
     (apply #'intero-call-process intero-stack-executable
            infile destination display
            (append stack-yaml-args args))))
