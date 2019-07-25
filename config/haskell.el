@@ -229,9 +229,9 @@ import Data.ByteString (ByteString)
 ")
         ("Data.ByteString.Lazy" . "import qualified Data.ByteString.Lazy as L
 ")
-        ("Data.ByteString.Lazy.Builder" . "import qualified Data.ByteString.Lazy.Builder as L
+        ("Data.ByteString.Lazy.Builder" . "import qualified Data.ByteString.Builder as SB
 ")
-        ("Data.ByteString.Builder" . "import qualified Data.ByteString.Lazy.Builder as L
+        ("Data.ByteString.Builder" . "import qualified Data.ByteString.Builder as SB
 ")
         ("Data.ByteString.Lazy.Char8" . "import qualified Data.ByteString.Lazy.Char8 as L8
 ")
