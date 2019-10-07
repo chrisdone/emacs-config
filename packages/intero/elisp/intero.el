@@ -2408,6 +2408,7 @@ Uses the default stack config file, or STACK-YAML file if given."
             (when intero-debug
               (message "Intero arguments: %s" (combine-and-quote-strings arguments)))
             (message "Booting up intero ...")
+            (setenv "INTERO" "1")
             (apply #'start-file-process intero-stack-executable buffer intero-stack-executable
                    arguments))))
     (list :arguments arguments
