@@ -33,6 +33,8 @@
 (defun tail-on-change (&rest _)
   (let ((window (get-buffer-window (current-buffer))))
     (when window
-      (set-window-point window (point-max)))))
+      (with-selected-window window
+        (set-window-point window (point-max))
+        (recenter -1)))))
 
 (provide 'tail-on-change)
