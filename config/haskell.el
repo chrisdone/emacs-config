@@ -270,8 +270,8 @@ import Data.List.NonEmpty (NonEmpty(..))
 import Data.Sequence (Seq)
 ")))
 
-(setq haskell-language-extensions '("-XMagicHash" "-XUnboxedTuples"))
-(setq shm-language-extensions '("-XMagicHash" "-XUnboxedTuples"))
+(setq haskell-language-extensions '("-XMagicHash" "-XUnboxedTuples" "-XRecursiveDo" "-XTypeApplications"))
+(setq shm-language-extensions '("-XMagicHash" "-XUnboxedTuples" "-XRecursiveDo" "-XTypeApplications"))
 
 
 ;; Add hook

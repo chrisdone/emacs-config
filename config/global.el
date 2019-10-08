@@ -449,6 +449,9 @@ prefix argument."
 (global-set-key (kbd "M-a") 'backward-up-list)
 (global-set-key (kbd "M-a") 'up-list)
 
+(add-hook 'compilation-mode-hook 'tail-on-change-mode)
+
+(define-key global-map [?\M-0] '(lambda () (interactive) (elscreen-goto 0)))
 (define-key global-map [?\M-1] '(lambda () (interactive) (elscreen-goto 1)))
 (define-key global-map [?\M-2] '(lambda () (interactive) (elscreen-goto 2)))
 (define-key global-map [?\M-3 ] '(lambda () (interactive) (elscreen-goto 3)))
@@ -459,6 +462,7 @@ prefix argument."
 (define-key global-map [?\M-8] '(lambda () (interactive) (elscreen-goto 8)))
 (define-key global-map [?\M-9] '(lambda () (interactive) (elscreen-goto 9)))
 
+(define-key magit-mode-map [?\M-0] '(lambda () (interactive) (elscreen-goto 0)))
 (define-key magit-mode-map [?\M-1] '(lambda () (interactive) (elscreen-goto 1)))
 (define-key magit-mode-map [?\M-2] '(lambda () (interactive) (elscreen-goto 2)))
 (define-key magit-mode-map [?\M-3 ] '(lambda () (interactive) (elscreen-goto 3)))

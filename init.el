@@ -20,6 +20,7 @@
     magit
     goto-last-change
     markdown-mode
+    dockerfile-mode
     dash
     elisp-slime-nav
     echo-keys
@@ -40,7 +41,8 @@
     slow-keys
     psc-ide
     elscreen
-    string-inflection)
+    string-inflection
+    tail-on-change)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
