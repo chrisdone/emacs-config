@@ -172,9 +172,15 @@
 
 (defun duta-threads-previous ()
   (interactive)
-  (when (duta-threads-begin)
-    (goto-char (1- (duta-threads-begin)))
-    (when (duta-threads-begin)
-      (goto-char (duta-threads-begin)))))
+  (if (duta-threads-begin)
+      (progn (goto-char (1- (duta-threads-begin)))
+             (when (duta-threads-begin)
+               (goto-char (duta-threads-begin))))
+    (let ((pos (previous-single-property-change (point) 'duta-thread-begin)))
+      (when (save-excursion
+              (goto-char pos)
+              (duta-threads-begin))
+        (goto-char pos)
+        (goto-char (duta-threads-begin))))))
 
 (provide 'duta-threads-mode)
