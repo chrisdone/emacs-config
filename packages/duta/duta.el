@@ -21,6 +21,30 @@
 (defvar duta-username nil)
 (defvar duta-password-file nil)
 
+;; TODO: Can't seem to get this request to send properly.
+;;
+;; (defun duta-curl (method path)
+;;   "Make a GET request to PATH."
+;;   (unless duta-server-url (error "Need duta-server-url"))
+;;   (unless duta-username (error "Need duta-username"))
+;;   (unless duta-password-file (error "Need duta-password-file"))
+;;   (unless (or (string= method "GET") (string= method "POST"))
+;;     (error "method is invalid %s" method))
+;;   (let ((url-request-method method)
+;;         (url-request-extra-header
+;;          `(("Accept" . "application/json")
+;;            ("user" . ,duta-username)
+;;            ("pass" . ,(with-temp-buffer (insert-file-contents duta-password-file)
+;;                              (replace-regexp-in-string "^pass: " "" (buffer-string)))))))
+;;     (let ((buffer (url-retrieve-synchronously (concat duta-server-url path) t)))
+;;       (with-current-buffer buffer
+;;         (goto-char (point-min))
+;;         (search-forward-regexp "\r?\n\r?\n" nil nil 1)
+;;         (json-read-from-string
+;;          (decode-coding-string
+;;           (buffer-substring-no-properties (point) (point-max))
+;;           'utf-8))))))
+
 (defun duta-curl (method path)
   (unless duta-server-url (error "Need duta-server-url"))
   (unless duta-username (error "Need duta-username"))
