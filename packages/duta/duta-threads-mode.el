@@ -103,7 +103,7 @@
                                      (list 'duta-thread-begin start
                                            'duta-thread-end (point)
                                            'duta-thread-id (cdr (assoc 'id thread))))))
-            threads)
+            (reverse threads))
       (goto-char (point-min))
       (forward-line (1- original-line)))))
 

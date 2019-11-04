@@ -29,6 +29,7 @@
 (define-key duta-thread-mode-map (kbd "g") 'duta-thread-refresh)
 (define-key duta-thread-mode-map (kbd "d") 'duta-thread-delete)
 (define-key duta-thread-mode-map (kbd "s") 'duta-thread-spam)
+(define-key duta-thread-mode-map (kbd "a") 'duta-thread-archive)
 (define-key duta-thread-mode-map (kbd "q") 'duta-thread-quit)
 
 (defface duta-thread-mode-subject-face
@@ -92,8 +93,16 @@
         "\n\n"
         (duta-thread-render-message-parts id parts)
         )))
-   forest
+   (duta-thread-flatten-forest forest)
    "\n\n"))
+
+(defun duta-thread-flatten-forest (forest)
+  (apply #'append
+         (mapcar (lambda (tree)
+                   (cons tree
+                         (duta-thread-flatten-forest
+                          (cdr (assoc 'children tree)))))
+                 forest)))
 
 (defun duta-thread-render-message-parts (id parts)
   (mapconcat
@@ -120,6 +129,14 @@
 (defun duta-thread-spam ()
   (interactive)
   (duta-get-async (format "apply-label/%d/spam" duta-thread-mode-id))
+  (kill-buffer)
+  (when (string= (buffer-name (current-buffer))
+                 (buffer-name (get-buffer-create "*duta*")))
+    (duta-threads-refresh)))
+
+(defun duta-thread-archive ()
+  (interactive)
+  (duta-get-async (format "remove-label/%d/inbox" duta-thread-mode-id))
   (kill-buffer)
   (when (string= (buffer-name (current-buffer))
                  (buffer-name (get-buffer-create "*duta*")))
