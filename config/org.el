@@ -68,6 +68,8 @@
 
 (define-key org-mode-map (kbd "C-c C-e") 'org-focus-estimate)
 (define-key org-mode-map (kbd "C-c C-s") 'org-focus-schedule)
-(define-key org-mode-map (kbd "C-c C-x C-i") 'org-clock-in)
-(define-key org-mode-map (kbd "C-c C-x C-b") 'org-focus-bump)
+
+(define-key org-mode-map (kbd "C-c C-x C-i") 'org-multiclock-in)
+(define-key org-mode-map (kbd "C-c C-x C-o") 'org-multiclock-out)
+
 (setq org-clock-clocked-in-display nil)
