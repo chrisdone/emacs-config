@@ -491,6 +491,9 @@ prefix argument."
 (global-set-key [f10] 'org-fast-task-reclock)
 (global-set-key [f11] 'goto-notmuch-inbox)
 
+(global-set-key [f12] 'dabbrev-expand)
+
+
 (global-set-key [f3] 'resmacro-start-macro)
 (global-set-key (kbd "C-x (") 'resmacro-start-macro)
 
@@ -871,5 +874,11 @@ prefix argument."
       (delete-region (car points) (cdr points))
       (insert (string-inflection-kebab-case-function string)))
     (goto-char point)))
+
+(setq suggest-key-bindings nil)
+(put 'narrow-to-region 'disabled nil)
+(setq ido-auto-merge-delay-time 99999)
+(setq org-time-stamp-rounding-minutes '(0 15))
+(setq-default ediff-forward-word-function 'forward-char)
 
 (provide 'global)

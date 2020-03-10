@@ -155,6 +155,7 @@ our own keybindings."
   (let* ((initial-key (aref (this-command-keys-vector)
                             (- (length (this-command-keys-vector)) 1)))
          (binding (god-mode-lookup-key-sequence initial-key)))
+    ;;(kp-save-command binding)
     (when (god-mode-upper-p initial-key)
       (setq this-command-keys-shift-translated t))
     (setq this-original-command binding)
