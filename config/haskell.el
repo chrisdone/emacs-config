@@ -683,8 +683,11 @@ preserved, although placement may be funky."
                (out (with-temp-buffer
                       (insert
                        (replace-regexp-in-string
-                        "instance \\([a-zA-Z0-9]+\\) :: " "instance \\1 => "
-                        (replace-regexp-in-string "\\([a-zA-Z0-9]+\\): *\\([\n]*\\)" "\\1_=\\2" string)))
+                        "^instance \\([a-zA-Z0-9_']+\\) :: " "instance \\1 => "
+                        (replace-regexp-in-string
+                         "\\([a-zA-Z0-9_']+\\): *\\([\n]*\\)"
+                         "\\1PSCHINDENTHACK =\\2"
+                         string)))
                       (hindent-reformat-region (point-min) (point-max) t)
                       (replace-regexp-in-string "\n$" "" (buffer-string)))))
           (delete-region beg end)
@@ -692,8 +695,9 @@ preserved, although placement may be funky."
                    "instance \\([a-zA-Z0-9]+\\) => "
                    "instance \\1 :: "
                    (replace-regexp-in-string
-                    "_ ="
-                    ":" out)))
+                    "PSCHINDENTHACK ="
+                    ":"
+                    out)))
           (goto-char origin))))))
 
 (define-key purescript-mode-map (kbd "C-c i") 'psc-reformat-decl)

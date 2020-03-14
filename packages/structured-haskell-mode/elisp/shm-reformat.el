@@ -30,7 +30,9 @@ and then jump back to the right node."
          (index (car current-pair))
          (offset (- (point) (shm-node-start (cdr current-pair)))))
     (structured-haskell-mode -1)
-    (hindent/reformat-decl)
+    (if (eq major-mode 'purescript-mode)
+        (psc-reformat-decl)
+      (hindent/reformat-decl))
     (structured-haskell-mode 1)
     (shm/reparse)
     (let ((new-current (elt (shm-decl-ast) index)))
@@ -41,16 +43,17 @@ and then jump back to the right node."
   same text and \"evaporating slot\" slot property. Hindent seems
   to remove certain text properties."
   (interactive)
-  (let ((bounds (bounds-of-thing-at-point 'defun)))
-    (save-excursion
-      (save-restriction
-       (narrow-to-region (car bounds) (cdr bounds))
-       (goto-char (point-min))
-       (while (search-forward-regexp "\\bundefined\\b" nil t)
-         (progn
-           (delete-region (point) (save-excursion (backward-word 1) (point)))
-           (shm/insert-undefined)
-           (forward-word)))))))
+  ;; (let ((bounds (bounds-of-thing-at-point 'defun)))
+  ;;   (save-excursion
+  ;;     (save-restriction
+  ;;      (narrow-to-region (car bounds) (cdr bounds))
+  ;;      (goto-char (point-min))
+  ;;      (while (search-forward-regexp "\\bundefined\\b" nil t)
+  ;;        (progn
+  ;;          (delete-region (point) (save-excursion (backward-word 1) (point)))
+  ;;          (shm/insert-undefined)
+  ;;          (forward-word))))))
+  )
 
 (defadvice shm-reformat-decl (after reinsert-undefined activate)
   (shm-reinsert-undefined-slots-after-fill))
