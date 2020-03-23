@@ -197,6 +197,8 @@ the sequence."
     (next "<next>")
     (backspace "DEL")
     (return "RET")
+    (up "<up>")
+    (down "<down>")
     (t (char-to-string key))))
 
 (defun key-string-after-consuming-key (key key-string-so-far)
