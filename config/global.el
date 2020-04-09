@@ -607,9 +607,6 @@ prefix argument."
       espresso-indent-level 2)
 
 (setq org-log-done t
-      org-todo-keywords '((sequence "BLOCKED" "TODO" "DONE")
-                          (sequence "PASS")
-                          (sequence "DEFERRED"))
       org-priority-faces (quote ((49 . zenburn-red)
                                  (50 . zenburn-yellow)
                                  (51 . zenburn-green))))
@@ -618,7 +615,8 @@ prefix argument."
       '((sequence
          "TODO(t)"
          "STARTED(s)"
-         "BLOCKED(w@/!)"
+         "BLOCKED(b@/!)"
+         "CONFIRM(w!)"
          "|"
          "DONE(d!)"
          "CANCELED(c@)"
@@ -781,7 +779,7 @@ prefix argument."
           (funcall (get-text-property (point) 'action)
                    (point)))))))
 
-(setq audit-file-pattern "^src/.*?\\.hs$")
+(setq audit-file-pattern "^src/.*?\\.java$")
 
 (defun changelog-new ()
   (interactive)
