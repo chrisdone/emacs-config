@@ -1428,11 +1428,13 @@ stack's default)."
               ;; https://github.com/chrisdone/intero/issues/569
               ;; GHC 8.4.3 has some bug causing a panic on GHCi.
               ;; :set -fdefer-type-errors
-              (insert ":set prompt \"\"
+              (insert (format ":set prompt \"\"
 :set -fbyte-code
 :set -fdiagnostics-color=never
 :set prompt \"\\4 \"
-")
+:set -DDEBUG=true\n
+:set -DSTACK_ROOT=%s\n
+" (intero-project-root)))
               (basic-save-buffer)
               (current-buffer)))
            (script
@@ -2329,6 +2331,7 @@ Uses the default stack config file, or STACK-YAML file if given."
            (process (plist-get process-info :process)))
       (set-process-query-on-exit-flag process nil)
       (process-send-string process ":set -fobject-code\n")
+      (process-send-string process (format ":set -DSTACK_ROOT=%s\n" (intero-project-root)))
       (process-send-string process ":set -fdefer-type-errors\n")
       (process-send-string process ":set -fdiagnostics-color=never\n")
       (process-send-string process ":set prompt \"\\4\"\n")
@@ -2953,7 +2956,8 @@ automatically."
 This may update in-place the MSGS objects to hint that
 suggestions are available."
   (setq intero-suggestions nil)
-  (let ((extension-regex (concat "-?X?" (regexp-opt (intero-extensions) t)))
+  (let ((extension-regex (concat "-?X?" (regexp-opt (remove-if (lambda (e) (string= e "Strict"))
+                                                               (intero-extensions)) t)))
         (quoted-symbol-regex "[‘`‛]\\([^ ]+\\)['’]"))
     (cl-loop
      for msg in msgs
