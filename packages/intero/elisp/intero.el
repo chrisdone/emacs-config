@@ -527,7 +527,7 @@ Returns nil when unable to find definition."
   (let ((result (apply #'intero-get-loc-at (intero-thing-at-point))))
 
     (if (not (string-match "\\(.*?\\):(\\([0-9]+\\),\\([0-9]+\\))-(\\([0-9]+\\),\\([0-9]+\\))$"
-                       result))
+                           result))
         (message "%s" result)
       (if (fboundp 'xref-push-marker-stack) ;; Emacs 25
           (xref-push-marker-stack)
@@ -727,7 +727,7 @@ running context across :load/:reloads in Intero."
       ;; file, which also updates its modified time.
       (intero-async-call
        'backend
-       (format ":move %s %s" staging-file temp-file))
+       (format ":!mv %s %s" staging-file temp-file))
       ;; We load up the target temp file, which has only been updated
       ;; by the copy above.
       (intero-async-call
@@ -762,7 +762,7 @@ running context across :load/:reloads in Intero."
       ;; changed, if the timestamp is less than 1 second.
       (intero-async-call
        'backend
-       ":sleep 1"))))
+       ":!sleep 1"))))
 
 (flycheck-define-generic-checker 'intero
   "A syntax and type checker for Haskell using an Intero worker
@@ -1278,24 +1278,24 @@ If PROMPT-OPTIONS is non-nil, prompt with an options list."
   (let ((file (intero-path-for-ghci (intero-buffer-file-name))))
     (intero-with-repl-buffer prompt-options
       (comint-simple-send
+       (get-buffer-process (current-buffer))
+       ":set prompt \"\\n\"")
+      (if (or (not intero-repl-last-loaded)
+              (not (equal file intero-repl-last-loaded)))
+          (progn
+            (comint-simple-send
+             (get-buffer-process (current-buffer))
+             (concat ":load " file))
+            (setq intero-repl-last-loaded file))
+        (comint-simple-send
          (get-buffer-process (current-buffer))
-         ":set prompt \"\\n\"")
-        (if (or (not intero-repl-last-loaded)
-                (not (equal file intero-repl-last-loaded)))
-            (progn
-              (comint-simple-send
-               (get-buffer-process (current-buffer))
-               (concat ":load " file))
-              (setq intero-repl-last-loaded file))
-          (comint-simple-send
-           (get-buffer-process (current-buffer))
-           ":reload"))
-        (when intero-repl-send-after-load
-          (comint-simple-send
-           (get-buffer-process (current-buffer))
-           intero-repl-send-after-load))
-        (comint-simple-send (get-buffer-process (current-buffer))
-                            ":set prompt \"\\4 \""))))
+         ":reload"))
+      (when intero-repl-send-after-load
+        (comint-simple-send
+         (get-buffer-process (current-buffer))
+         intero-repl-send-after-load))
+      (comint-simple-send (get-buffer-process (current-buffer))
+                          ":set prompt \"\\4 \""))))
 
 (defun intero-repl-eval-region (begin end &optional prompt-options)
   "Evaluate the code in region from BEGIN to END in the REPL.
@@ -2106,29 +2106,29 @@ The result, along with the given STATE, is passed to CALLBACK
 as (CALLBACK STATE REPLY)."
   (if (file-remote-p default-directory)
       (intero-async-call worker cmd state callback)
-      (let ((buffer (intero-buffer worker)))
-        (if (and buffer (process-live-p (get-buffer-process buffer)))
-            (with-current-buffer buffer
-              (if intero-service-port
-                  (let* ((buffer (generate-new-buffer (format " intero-network:%S" worker)))
-                         (process
-                          (make-network-process
-                           :name (format "%S" worker)
-                           :buffer buffer
-                           :host 'local
-                           :service intero-service-port
-                           :family 'ipv4
-                           :nowait t
-                           :noquery t
-                           :sentinel 'intero-network-call-sentinel)))
-                    (with-current-buffer buffer
-                      (setq intero-async-network-cmd cmd)
-                      (setq intero-async-network-state state)
-                      (setq intero-async-network-worker worker)
-                      (setq intero-async-network-callback callback)))
-                (progn (when intero-debug (message "No `intero-service-port', falling back ..."))
-                       (intero-async-call worker cmd state callback))))
-          (error "Intero process is not running: run M-x intero-restart to start it")))))
+    (let ((buffer (intero-buffer worker)))
+      (if (and buffer (process-live-p (get-buffer-process buffer)))
+          (with-current-buffer buffer
+            (if intero-service-port
+                (let* ((buffer (generate-new-buffer (format " intero-network:%S" worker)))
+                       (process
+                        (make-network-process
+                         :name (format "%S" worker)
+                         :buffer buffer
+                         :host 'local
+                         :service intero-service-port
+                         :family 'ipv4
+                         :nowait t
+                         :noquery t
+                         :sentinel 'intero-network-call-sentinel)))
+                  (with-current-buffer buffer
+                    (setq intero-async-network-cmd cmd)
+                    (setq intero-async-network-state state)
+                    (setq intero-async-network-worker worker)
+                    (setq intero-async-network-callback callback)))
+              (progn (when intero-debug (message "No `intero-service-port', falling back ..."))
+                     (intero-async-call worker cmd state callback))))
+        (error "Intero process is not running: run M-x intero-restart to start it")))))
 
 (defun intero-network-call-sentinel (process event)
   (pcase event
@@ -2474,35 +2474,39 @@ This is a standard process sentinel function."
 
 (defun intero-executable-path (stack-yaml)
   "The path for the intero executable."
-  (intero-with-temp-buffer
-    (cl-case (save-excursion
-               (intero-call-stack
-                nil (current-buffer) t intero-stack-yaml "path" "--compiler-tools-bin"))
-      (0 (replace-regexp-in-string "[\r\n]+$" "/intero" (buffer-string)))
-      (1 "intero"))))
+  "ghci"
+  ;; (intero-with-temp-buffer
+  ;;   (cl-case (save-excursion
+  ;;              (intero-call-stack
+  ;;               nil (current-buffer) t intero-stack-yaml "path" "--compiler-tools-bin"))
+  ;;     (0 (replace-regexp-in-string "[\r\n]+$" "/intero" (buffer-string)))
+  ;;     (1 "intero")))
+  )
 
 (defun intero-installed-p ()
   "Return non-nil if intero (of the right version) is installed in the stack environment."
   (redisplay)
-  (intero-with-temp-buffer
-    (if (= 0 (intero-call-stack
-              nil t nil intero-stack-yaml
-              "exec"
-              "--verbosity" "silent"
-              "--"
-              (intero-executable-path intero-stack-yaml)
-              "--version"))
-        (progn
-          (goto-char (point-min))
-          ;; This skipping comes due to https://github.com/commercialhaskell/intero/pull/216/files
-          (when (looking-at "Intero ")
-            (goto-char (match-end 0)))
-          ;;
-          (if (string= (buffer-substring (point) (line-end-position))
-                       intero-package-version)
-              'installed
-            'wrong-version))
-      'not-installed)))
+  'installed
+  ;; (intero-with-temp-buffer
+  ;;   (if (= 0 (intero-call-stack
+  ;;             nil t nil intero-stack-yaml
+  ;;             "exec"
+  ;;             "--verbosity" "silent"
+  ;;             "--"
+  ;;             (intero-executable-path intero-stack-yaml)
+  ;;             "--version"))
+  ;;       (progn
+  ;;         (goto-char (point-min))
+  ;;         ;; This skipping comes due to https://github.com/commercialhaskell/intero/pull/216/files
+  ;;         (when (looking-at "Intero ")
+  ;;           (goto-char (match-end 0)))
+  ;;         ;;
+  ;;         (if (string= (buffer-substring (point) (line-end-position))
+  ;;                      intero-package-version)
+  ;;             'installed
+  ;;           'wrong-version))
+  ;;     'not-installed))
+  )
 
 (defun intero-show-process-problem (process change)
   "Report to the user that PROCESS reported CHANGE, causing it to end."
