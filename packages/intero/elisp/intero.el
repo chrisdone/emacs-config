@@ -620,12 +620,13 @@ If the problem persists, please report this as a bug!")))
                     " "
                     t))))
 
-(defun intero-targets (targets save-dir-local)
+(defun intero-targets (targets &optional save-dir-local)
   "Set the TARGETS to use for stack ghci.
 When SAVE-DIR-LOCAL is non-nil, save TARGETS as the
 directory-local value for `intero-targets'."
   (interactive (list (intero-read-targets)
-                     (y-or-n-p "Save selected target(s) in directory local variables for future sessions? ")))
+                     (y-or-n-p "Save selected target(s) in directory local variables for future sessions? "))
+               )
   (intero-destroy)
   (intero-get-worker-create 'backend targets (current-buffer))
   (intero-repl-restart)
@@ -635,15 +636,15 @@ directory-local value for `intero-targets'."
         (add-dir-local-variable 'haskell-mode 'intero-targets targets)
         (save-buffer)))))
 
-(defun intero-stack-yaml (file save-dir-local)
+(defun intero-stack-yaml (file &optional save-dir-local)
   "Change the yaml FILE that intero should tell stack to use.
 Intero will be restarted with the new configuration.  When
 SAVE-DIR-LOCAL is non-nil, save FILE as the directory-local value
 for `intero-stack-yaml'."
-  (interactive (list (read-file-name
-                      "Select YAML config: "
-                      (file-name-as-directory (intero-project-root)))
-                     (y-or-n-p "Save selected stack yaml config in directory local variable for future sessions? ")))
+  ;; (interactive (list (read-file-name
+  ;;                     "Select YAML config: "
+  ;;                     (file-name-as-directory (intero-project-root)))
+  ;;                    (y-or-n-p "Save selected stack yaml config in directory local variable for future sessions? ")))
   (let ((stack-yaml (expand-file-name file)))
     (setq intero-stack-yaml stack-yaml)
     (with-current-buffer (intero-buffer 'backend)
@@ -1148,11 +1149,13 @@ pragma is supported also."
 (defun intero-grab-hole ()
   "When user is at a hole _ or _foo, return the starting point of
 that hole."
-  (let ((beg-end (intero-ident-pos-at-point)))
-    (when beg-end
-      (let ((string (buffer-substring-no-properties (car beg-end) (cdr beg-end))))
-        (when (string-match-p "^_" string)
-          beg-end)))))
+  nil
+  ;; (let ((beg-end (intero-ident-pos-at-point)))
+  ;;   (when beg-end
+  ;;     (let ((string (buffer-substring-no-properties (car beg-end) (cdr beg-end))))
+  ;;       (when (string-match-p "^_" string)
+  ;;         beg-end))))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ELDoc integration
@@ -2474,14 +2477,15 @@ This is a standard process sentinel function."
 
 (defun intero-executable-path (stack-yaml)
   "The path for the intero executable."
-  "ghci"
-  ;; (intero-with-temp-buffer
-  ;;   (cl-case (save-excursion
-  ;;              (intero-call-stack
-  ;;               nil (current-buffer) t intero-stack-yaml "path" "--compiler-tools-bin"))
-  ;;     (0 (replace-regexp-in-string "[\r\n]+$" "/intero" (buffer-string)))
-  ;;     (1 "intero")))
-  )
+  (let ((v (shell-command-to-string "stack ghc -- --version")))
+    (if (string-match-p (regexp-quote "version 8.10") v)
+        "ghci"
+      (intero-with-temp-buffer
+        (cl-case (save-excursion
+                   (intero-call-stack
+                    nil (current-buffer) t intero-stack-yaml "path" "--compiler-tools-bin"))
+          (0 (replace-regexp-in-string "[\r\n]+$" "/intero" (buffer-string)))
+          (1 "intero"))))))
 
 (defun intero-installed-p ()
   "Return non-nil if intero (of the right version) is installed in the stack environment."
@@ -2960,7 +2964,8 @@ automatically."
 This may update in-place the MSGS objects to hint that
 suggestions are available."
   (setq intero-suggestions nil)
-  (let ((extension-regex (concat "-?X?" (regexp-opt (remove-if (lambda (e) (string= e "Strict"))
+  (let ((extension-regex (concat "-?X?" (regexp-opt (remove-if (lambda (e) (or (string= e "Strict")
+                                                                               (string= e "Unsafe")))
                                                                (intero-extensions)) t)))
         (quoted-symbol-regex "[‘`‛]\\([^ ]+\\)['’]"))
     (cl-loop
