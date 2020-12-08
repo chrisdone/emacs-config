@@ -779,7 +779,7 @@ prefix argument."
           (funcall (get-text-property (point) 'action)
                    (point)))))))
 
-(setq audit-file-pattern "^src/.*?\\.java$")
+(setq audit-file-pattern "^src/.*?\\.hs$")
 
 (defun changelog-new ()
   (interactive)
@@ -878,5 +878,21 @@ prefix argument."
 (setq ido-auto-merge-delay-time 99999)
 (setq org-time-stamp-rounding-minutes '(0 15))
 (setq-default ediff-forward-word-function 'forward-char)
+
+(global-set-key (kbd "C-x C-\\") 'winner-undo)
+
+(defun neo-window-position 'right)
+
+(defun neo-update-elscreen ()
+  (save-window-excursion
+    (neo-global--open-dir (magit-get-top-dir))))
+
+(defun neotree ()
+  (interactive)
+  (neotree-dir (magit-get-top-dir)))
+
+(add-hook 'elscreen-goto-hook 'neo-update-elscreen)
+
+(setq neo-theme 'arrow)
 
 (provide 'global)

@@ -40,10 +40,11 @@
     quickjump
     slow-keys
     psc-ide
+    neotree
     elscreen
     string-inflection
     tail-on-change
-    duta
+    graphql-mode
     markdown-toc)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
@@ -99,9 +100,6 @@
 (require 'haskell-simple-indent)
 (require 'haskell-move-nested)
 (require 'psc-ide)
-(require 'duta)
-(require 'duta-threads-mode)
-(require 'duta-thread-mode)
 
 
 ;; Emacs configurations
@@ -121,3 +119,4 @@
 (turn-on-haskell-simple-indent)
 (elscreen-start)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
+(winner-mode)
