@@ -540,7 +540,10 @@ import Data.Sequence (Seq)
 
 (defun haskell-fast-get-import (custom)
   (if custom
-      (haskell-capitalize-module (read-from-minibuffer "Module: " ""))
+      (let ((chosen (read-from-minibuffer "Module: " "")))
+        (if (string-match "^import" chosen)
+            chosen
+          (haskell-capitalize-module chosen)))
     (let ((module (haskell-capitalize-module
                    (haskell-complete-module-read
                     "Module: "
@@ -560,7 +563,9 @@ to stylish-haskell."
            (module (let ((mapping (assoc chosen haskell-import-mapping)))
                      (if mapping
                          (cdr mapping)
-                       (concat "import " chosen "\n")))))
+                       (if (string-match "^import" chosen)
+                           (concat chosen "\n")
+                         (concat "import " chosen "\n"))))))
       (insert module))
     (haskell-sort-imports)
     (haskell-align-imports)))
