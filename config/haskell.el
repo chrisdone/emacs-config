@@ -215,6 +215,8 @@ import Data.Text (Text)
 ")
         ("Data.Text.Lazy.Encoding" . "import qualified Data.Text.Lazy.Encoding as LT
 ")
+        ("Data.Text.Lazy.Builder" . "import qualified Data.Text.Lazy.Builder as LT
+")
         ("Data.Text.Lazy" . "import qualified Data.Text.Lazy as LT
 ")
         ("Data.Text.IO" . "import qualified Data.Text.IO as T
@@ -252,6 +254,8 @@ import Data.Map.Strict (Map)
 ")
         ("Data.Set" . "import qualified Data.Set as Set
 import Data.Set (Set)
+")
+        ("Data.List" . "import qualified Data.List as List
 ")
         ("Data.Vector" . "import qualified Data.Vector as V
 import Data.Vector (Vector)
