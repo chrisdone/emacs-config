@@ -205,6 +205,18 @@ the cursor position happened."
 
 (setq haskell-process-generate-tags nil)
 
+(defvar haskell-quals
+  '(("L" . "Data.ByteString.Lazy")
+    ("S" . "Data.ByteString")
+    ("Seq" . "Data.Sequence")
+    ("T" . "Data.Text")
+    ("V" . "Data.Vector")
+    ("LT" . "Data.Text.Lazy")
+    ("M" . "Data.Map")
+    ("HM" . "Data.HashMap")
+    ("Set" . "Data.Set")
+    ("List" . "Data.List")))
+
 (setq haskell-import-mapping
       '(("Data.Attoparsec.Char8" . "import qualified Data.Attoparsec.Char8 as Atto8
 ")

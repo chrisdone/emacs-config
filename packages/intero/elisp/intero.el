@@ -2972,6 +2972,21 @@ suggestions are available."
      for msg in msgs
      do (let ((text (flycheck-error-message msg))
               (note nil))
+          ;; Messages of this format
+          ;; No module named ‘L’ is imported.
+          (let ((start 0))
+            (while (let ((case-fold-search nil))
+                     (string-match "No module named [‘`‛]\\([^ ]+\\)['’] is imported" text start))
+              (let* ((qual (match-string 1 text))
+                     (mapped (assoc qual haskell-quals)))
+                (when mapped
+                  (let ((unmapped (assoc (cdr mapped) haskell-import-mapping)))
+                    (when unmapped
+                      (setq note t)
+                      (add-to-list 'intero-suggestions
+                                   (list :type 'add-mapped-import
+                                         :import-string (cdr unmapped)))))))
+              (setq start (min (length text) (1+ (match-end 0))))))
           ;; Messages of this format:
           ;;
           ;;     • Constructor ‘Assert’ does not have the required strict field(s): assertName,
@@ -3257,6 +3272,12 @@ suggestions are available."
                                         (plist-get suggestion :ident)
                                         (plist-get suggestion :module))
                          :default t))
+                  (add-mapped-import
+                   (list :key suggestion
+                         :default t
+                         :title
+                         (format "Add qualified import text:\n%s\n"
+                                 (plist-get suggestion :import-string))))
                   (add-missing-fields
                    (list :key suggestion
                          :default t
@@ -3332,7 +3353,8 @@ suggestions are available."
                                     (gt-column (or (plist-get gt :column) 0)))
                                 (or (> lt-line gt-line)
                                     (and (= lt-line gt-line)
-                                         (> lt-column gt-column))))))))
+                                         (> lt-column gt-column)))))))
+              (added-imports nil))
           ;; # Changes unrelated to the buffer
           (cl-loop
            for suggestion in sorted
@@ -3460,6 +3482,17 @@ suggestions are available."
                                   (or (when (search-forward-regexp "\n[^ \t]" nil t 1)
                                         (1- (point)))
                                       (line-end-position)))))))
+
+          ;; Adds imports to the import list
+          (cl-loop
+           for suggestion in sorted
+           do (cl-case (plist-get suggestion :type)
+                (add-mapped-import
+                 (save-excursion
+                   (haskell-navigate-imports)
+                   (insert (plist-get suggestion :import-string))
+                   (setq added-imports t)))))
+
           ;; Add extensions to the top of the file
           (cl-loop
            for suggestion in sorted
@@ -3477,7 +3510,13 @@ suggestions are available."
                    (intero-skip-shebangs)
                    (insert "{-# OPTIONS_GHC "
                            (plist-get suggestion :option)
-                           " #-}\n"))))))))))
+                           " #-}\n")))))
+
+          (when added-imports
+            (save-excursion
+              (haskell-navigate-imports)
+              (haskell-sort-imports)
+              (haskell-align-imports))))))))
 
 (defun intero-skip-shebangs ()
   "Skip #! and -- shebangs used in Haskell scripts."
