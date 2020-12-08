@@ -233,7 +233,7 @@ import Data.Text (Text)
 ")
         ("Data.Text.IO" . "import qualified Data.Text.IO as T
 ")
-        ("Data.Text.Lazy.IO" . "import qualified Data.Text.IO as LT
+        ("Data.Text.Lazy.IO" . "import qualified Data.Text.Lazy.IO as LT
 ")
         ("Data.ByteString" . "import qualified Data.ByteString as S
 import Data.ByteString (ByteString)
@@ -243,7 +243,7 @@ import Data.ByteString (ByteString)
 ")
         ("Data.ByteString.Lazy" . "import qualified Data.ByteString.Lazy as L
 ")
-        ("Data.ByteString.Lazy.Builder" . "import qualified Data.ByteString.Builder as SB
+        ("Data.ByteString.Lazy.Builder" . "import qualified Data.ByteString.Lazy.Builder as SB
 ")
         ("Data.ByteString.Builder" . "import qualified Data.ByteString.Builder as SB
 ")
