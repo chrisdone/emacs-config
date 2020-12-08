@@ -761,3 +761,11 @@ preserved, although placement may be funky."
   "Guess the current module name of the buffer."
   (interactive)
   (kill-new (haskell-guess-module-name)))
+
+(defun haskell-copy-imports ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-max))
+    (haskell-navigate-imports)
+    (let ((imports (haskell-sort-imports-collect-imports)))
+      (kill-new (mapconcat #'identity imports "\n")))))

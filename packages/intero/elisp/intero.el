@@ -3489,6 +3489,7 @@ suggestions are available."
            do (cl-case (plist-get suggestion :type)
                 (add-mapped-import
                  (save-excursion
+                   (goto-char (point-max))
                    (haskell-navigate-imports)
                    (insert (plist-get suggestion :import-string))
                    (setq added-imports t)))))
