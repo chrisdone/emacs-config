@@ -708,3 +708,25 @@ preserved, although placement may be funky."
 
 (define-key psc-ide-mode-map (kbd "C-c C-r")
   'psc-ide-flycheck-insert-suggestion)
+
+(defun haskell-sig ()
+  (interactive)
+  (save-window-excursion
+    (paredit-wrap-sexp)
+    (forward-char -1)
+    (forward-sexp)
+    (forward-char -1)
+    (insert " :: _")
+    (flycheck-buffer)
+    (flycheck-list-errors)
+    (read-event "Hit ENTER to finish.")
+    (undo)))
+
+(defun haskell-escape-region (beg end)
+  (interactive "r")
+  (replace-regexp "\"" "\\\\\"" nil beg end))
+
+(defun haskell-copy-module-name ()
+  "Guess the current module name of the buffer."
+  (interactive)
+  (kill-new (haskell-guess-module-name)))
