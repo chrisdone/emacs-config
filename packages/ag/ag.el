@@ -35,7 +35,8 @@
 (eval-when-compile (require 'cl)) ;; dolist, defun*, flet
 
 (defcustom ag-arguments
-  (list "--smart-case" "--nogroup" "--column" "--")
+  (list ;; "--smart-case" "--nogroup" "--column" "--"
+        "--no-heading")
   "Default arguments passed to ag."
   :type '(repeat (string))
   :group 'ag)
@@ -103,7 +104,7 @@ different window, according to `ag-open-in-other-window'."
         ;; handle weird file names (with colons in them) as well as possible.
         ;; E.g. we use [1-9][0-9]* rather than [0-9]+ so as to accept ":034:"
         ;; in file names.
-        (pttrn '("^\\([^:\n]+?\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\):" 1 2 3)))
+        (pttrn '("^\\([^:\n]+?\\):\\([1-9][0-9]*\\):" 1 2)))
     (set (make-local-variable 'compilation-error-regexp-alist) (list smbl))
     (set (make-local-variable 'compilation-error-regexp-alist-alist) (list (cons smbl pttrn))))
   (set (make-local-variable 'compilation-error-face) 'ag-hit-face)
@@ -124,20 +125,18 @@ different window, according to `ag-open-in-other-window'."
   "Run ag searching for the STRING given in DIRECTORY.
 If REGEXP is non-nil, treat STRING as a regular expression."
   (let ((default-directory (file-name-as-directory directory))
-        (arguments (if regexp
-                       ag-arguments
-                     (cons "--literal" ag-arguments)))
+        (arguments ag-arguments)
         (shell-command-switch "-c"))
-    (if ag-highlight-search
-        (setq arguments (append '("--color" "--color-match" "30;43") arguments))
-      (setq arguments (append '("--nocolor") arguments)))
-    (when (char-or-string-p file-regex)
-      (setq arguments (append `("--file-search-regex" ,file-regex) arguments)))
+    ;; (if ag-highlight-search
+    ;;     (setq arguments (append '("--color" "--color-match" "30;43") arguments))
+    ;;   (setq arguments (append '("--nocolor") arguments)))
+    ;; (when (char-or-string-p file-regex)
+    ;;   (setq arguments (append `("--file-search-regex" ,file-regex) arguments)))
     (unless (file-exists-p default-directory)
       (error "No such directory %s" default-directory))
     (compilation-start
      (mapconcat 'shell-quote-argument
-                (append '("ag") arguments (list string "."))
+                (append '("rg") arguments (list string "."))
                 " ")
      'ag-mode
      `(lambda (mode-name) ,(ag/buffer-name string directory regexp)))))
