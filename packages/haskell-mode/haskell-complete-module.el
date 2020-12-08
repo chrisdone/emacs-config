@@ -36,19 +36,19 @@
   (let ((stack (list))
         (pattern "")
         (result nil))
-    (delete-dups candidates)
-    (setq candidates
-          (sort candidates
-                (lambda (a b)
-                  (let ((a-mem (member a haskell-complete-module-preferred))
-                        (b-mem (member b haskell-complete-module-preferred)))
-                    (cond
-                     ((and a-mem (not b-mem))
-                      t)
-                     ((and b-mem (not a-mem))
-                      nil)
-                     (t
-                      (string< a b)))))))
+    ;; (delete-dups candidates)
+    ;; (setq candidates
+    ;;       (sort candidates
+    ;;             (lambda (a b)
+    ;;               (let ((a-mem (member a haskell-complete-module-preferred))
+    ;;                     (b-mem (member b haskell-complete-module-preferred)))
+    ;;                 (cond
+    ;;                  ((and a-mem (not b-mem))
+    ;;                   t)
+    ;;                  ((and b-mem (not a-mem))
+    ;;                   nil)
+    ;;                  (t
+    ;;                   (string< a b)))))))
     (while (not result)
       (let ((key
              (key-description
