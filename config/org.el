@@ -73,3 +73,8 @@
 (define-key org-mode-map (kbd "C-c C-x C-o") 'org-multiclock-out)
 
 (setq org-clock-clocked-in-display nil)
+
+(defun org-link ()
+  (interactive)
+  (execute-kbd-macro
+   [?  ?s ?/ ?b ?l ?o ?b ?/ return ?g ?f ?f backspace escape ?\[ ?f ?i ?l ?e ?: escape ?s ?# return escape backspace ?: ?: escape ?d ?g ?f escape ?\] escape ?r ?\[ return]))
