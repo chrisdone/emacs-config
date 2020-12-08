@@ -1088,6 +1088,8 @@ to values."
         `(magit-diff-hunk-header ((t (:inherit magit-header) (:foreground ,zenburn-hunk-header-foreground))))
         `(magit-diff-none ((t (:foreground ,zenburn-none-foreground))))
         `(magit-log-sha1 ((t (:foreground ,zenburn-green))))
+
+        `(neo-dir-link-face ((t (:foreground ,zenburn-term-dark-gray-foreground))))
         )
 
       (zenburn-make-face-alias-clauses
