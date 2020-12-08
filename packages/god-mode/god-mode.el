@@ -181,16 +181,21 @@ recurses. `key-string-so-far' should be nil for the first call in
 the sequence."
   (interactive)
   (let ((sanitized-key
-         (if key-string-so-far (char-to-string (or key (read-event key-string-so-far)))
+         (if key-string-so-far
+             (if key
+                 (char-to-string (key))
+               (god-mode-sanitized-key-string (read-event key-string-so-far) t))
            (god-mode-sanitized-key-string (or key (read-event key-string-so-far))))))
     (god-mode-lookup-command
      (key-string-after-consuming-key sanitized-key key-string-so-far))))
 
-(defun god-mode-sanitized-key-string (key)
+(defun god-mode-sanitized-key-string (key &optional interpret-space-literally)
   "Convert any special events to textual."
   (cl-case key
     (tab "TAB")
-    (?\  "SPC")
+    (?\  (if interpret-space-literally
+             " "
+           "SPC"))
     (left "<left>")
     (right "<right>")
     (prior "<prior>")
