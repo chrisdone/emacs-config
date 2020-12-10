@@ -772,6 +772,5 @@ preserved, although placement may be funky."
                        (search-backward-regexp "^import")
                        (line-end-position)))
            (string (buffer-substring start end)))
-      (with-current-buffer "*scratch*"
-        (erase-buffer)
-        (insert string)))))
+      (kill-new string)
+      (message "Copied %d lines of imports." (length (split-string string "\n"))))))
