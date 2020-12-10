@@ -765,7 +765,13 @@ preserved, although placement may be funky."
 (defun haskell-copy-imports ()
   (interactive)
   (save-excursion
-    (goto-char (point-max))
-    (haskell-navigate-imports)
-    (let ((imports (haskell-sort-imports-collect-imports)))
-      (kill-new (mapconcat #'identity imports "\n")))))
+    (let* ((start (progn (goto-char (point-min))
+                         (search-forward-regexp "^import")
+                         (line-beginning-position)))
+           (end (progn (goto-char (point-max))
+                       (search-backward-regexp "^import")
+                       (line-end-position)))
+           (string (buffer-substring start end)))
+      (with-current-buffer "*scratch*"
+        (erase-buffer)
+        (insert string)))))

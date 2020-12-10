@@ -895,4 +895,20 @@ prefix argument."
 
 (setq neo-theme 'arrow)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Smerge
+
+(defun my-enable-smerge-maybe ()
+  (when buffer-file-name
+    (save-excursion
+      (goto-char (point-min))
+      (if (re-search-forward "^<<<<<<< " nil t)
+          (unless smerge-mode
+            (smerge-mode +1))
+        (when smerge-mode
+          (smerge-mode -1))))))
+
+;; Enable when needed
+;; (add-hook 'buffer-list-update-hook 'my-enable-smerge-maybe)
+
 (provide 'global)
