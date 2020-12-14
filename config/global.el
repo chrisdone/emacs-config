@@ -391,8 +391,8 @@ prefix argument."
 (defun my-window-configuration-to-register (register &optional _arg)
   ""
   (interactive (list (register-read-with-preview
-		      "Window configuration to register: ")
-		     current-prefix-arg))
+                      "Window configuration to register: ")
+                     current-prefix-arg))
   ;; current-window-configuration does not include the value
   ;; of point in the current buffer, so record that separately.
   (setq my-current-window-register register)
@@ -910,5 +910,25 @@ prefix argument."
 
 ;; Enable when needed
 ;; (add-hook 'buffer-list-update-hook 'my-enable-smerge-maybe)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Duplicate
+
+(defun yank-replacing ()
+  (interactive)
+  (let* ((rep (read-from-minibuffer "Replace: "))
+         (with (read-from-minibuffer "With: "))
+         (original (current-kill 0))
+         (replacement (replace-in-string original rep with)))
+    (insert replacement)))
+
+(defun duplicate (beg end)
+  (interactive "r")
+  (let* ((rep (read-from-minibuffer "Replace: "))
+         (with (read-from-minibuffer "With: "))
+         (original (buffer-substring beg end))
+         (replacement (replace-in-string original rep with)))
+    (kill-new replacement)))
+(global-set-key (kbd "M-W") 'duplicate)
 
 (provide 'global)
