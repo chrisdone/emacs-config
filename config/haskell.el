@@ -549,7 +549,7 @@ import Data.Sequence (Seq)
   (let* ((stack-root (intero-project-root))
          (modules
           (split-string
-           (concat (shell-command-to-string (format "find %s -name '*.cabal' | for i in $(cat /dev/stdin); do cabal-info --cabal-file $i exposed-modules; done" stack-root))
+           (concat (shell-command-to-string (format "for i in $(fd '.*.cabal' %s); do cabal-info --cabal-file $i exposed-modules; done" stack-root))
                    (shell-command-to-string "sqlite3 -noheader ~/.haskell-modules.sqlite3 'select module from mod order by uses desc, length(module) asc, module asc;' | tail -n +2"))
            "\n" t)))
     modules))
