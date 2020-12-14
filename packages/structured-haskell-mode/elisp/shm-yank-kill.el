@@ -27,6 +27,12 @@
     (goto-char (shm-node-start current))
     (set-mark (shm-node-end current))))
 
+(defun shm/mark-decl ()
+  (interactive)
+  (let ((points (shm-decl-points)))
+    (goto-char (car points))
+    (set-mark (cdr points))))
+
 (defun shm/kill-region (beg end)
   "Kill the region, and save it in the clipboard."
   (interactive "r")

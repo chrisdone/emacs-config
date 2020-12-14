@@ -71,6 +71,8 @@
     (define-key map (kbd "DEL") 'shm/del)
     (define-key map (kbd "<deletechar>") 'shm/delete)
     (define-key map (kbd "M-^") 'shm/delete-indentation)
+    (define-key map (kbd "M-h") 'shm/mark-decl)
+
     (define-key map (kbd "M-DEL") 'shm/backward-kill-word)
     (define-key map (kbd "C-<backspace>") 'shm/backward-kill-word)
     ;; Killing & yanking
