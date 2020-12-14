@@ -499,7 +499,10 @@ line as a type signature."
 (defun intero-info (ident)
   "Get the info of the thing with IDENT at point."
   (interactive (list (intero-ident-at-point)))
-  (let ((origin-buffer (current-buffer))
+  (let ((v (shell-command-to-string "stack ghc -- --version")))
+    (if (string-match-p (regexp-quote "version 8.10") v)
+        (intero-repl-eval-string (format ":i %s" ident) t)
+      (let ((origin-buffer (current-buffer))
         (package (intero-package-name))
         (info (intero-get-info-of ident))
         (origin (buffer-name)))
@@ -518,7 +521,8 @@ line as a type signature."
         (intero-help-push-history origin-buffer help-string)
         (intero-help-pagination)
         (insert help-string)
-        (goto-char (point-min))))))
+        (goto-char (point-min)))))))
+  )
 
 (defun intero-goto-definition ()
   "Jump to the definition of the thing at point.
@@ -1313,6 +1317,15 @@ PROMPT-OPTIONS are passed to `intero-repl-buffer' if supplied."
       (comint-simple-send
        (get-buffer-process (current-buffer))
        text))))
+
+(defun intero-repl-eval-string (text &optional prompt-options)
+  "Evaluate the code in region from BEGIN to END in the REPL.
+If the region is unset, the current line will be used.
+PROMPT-OPTIONS are passed to `intero-repl-buffer' if supplied."
+  (intero-with-repl-buffer prompt-options
+    (comint-simple-send
+     (get-buffer-process (current-buffer))
+     text)))
 
 (defun intero-repl (&optional prompt-options)
   "Start up the REPL for this stack project.
