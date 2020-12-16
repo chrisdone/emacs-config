@@ -931,4 +931,17 @@ prefix argument."
     (kill-new replacement)))
 (global-set-key (kbd "M-W") 'duplicate)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flycheck
+
+;; (flycheck-define-generic-checker 'todo
+;;   "todos"
+;;   :start 'todo-checker
+;;   :modes '(haskell-mode literate-haskell-mode javascript-mode yaml-mode))
+
+;; (defun todo-checker (checker cont)
+;;   )
+
+;; (add-to-list 'flycheck-checkers 'intero)
+
 (provide 'global)
