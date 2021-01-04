@@ -180,7 +180,7 @@ and instate this one."
                 "instance \\([a-zA-Z0-9]+\\) :: " "instance \\1 => "
                 (replace-regexp-in-string
                  "\\([a-zA-Z0-9]+\\): *\\([\n]*\\)" "\\1_\\2=" source-code))
-             source-code))
+             (replace-regexp-in-string "\\?$" "" source-code)))
           (goto-char (point-min))
           (while (search-forward-regexp "^#.*$" nil t)
             (replace-match ""))
