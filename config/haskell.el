@@ -208,6 +208,7 @@ the cursor position happened."
 (defvar haskell-quals
   '(("L" . "Data.ByteString.Lazy")
     ("S" . "Data.ByteString")
+    ("Csv" . "Data.Csv")
     ("Seq" . "Data.Sequence")
     ("T" . "Data.Text")
     ("V" . "Data.Vector")
@@ -215,7 +216,8 @@ the cursor position happened."
     ("M" . "Data.Map")
     ("HM" . "Data.HashMap")
     ("Set" . "Data.Set")
-    ("List" . "Data.List")))
+    ("List" . "Data.List")
+    ("RIO" . "RIO")))
 
 (setq haskell-import-mapping
       '(("Data.Attoparsec.Char8" . "import qualified Data.Attoparsec.Char8 as Atto8
@@ -264,6 +266,9 @@ import Data.StrMap (StrMap)
         ("Data.Map.Strict" . "import qualified Data.Map.Strict as M
 import Data.Map.Strict (Map)
 ")
+        ("RIO" . "import qualified RIO
+import RIO (RIO, glog, GLogFunc, HasGLogFunc(..))
+")
         ("Data.Set" . "import qualified Data.Set as Set
 import Data.Set (Set)
 ")
@@ -284,6 +289,8 @@ import Data.List.NonEmpty (NonEmpty(..))
 ")
         ("Data.Sequence" . "import qualified Data.Sequence as Seq
 import Data.Sequence (Seq)
+")
+        ("Data.Csv" . "import qualified Data.Csv as Csv
 ")))
 
 (setq haskell-language-extensions '("-XMagicHash" "-XUnboxedTuples" "-XRecursiveDo" "-XTypeApplications"))
@@ -774,3 +781,6 @@ preserved, although placement may be funky."
            (string (buffer-substring start end)))
       (kill-new string)
       (message "Copied %d lines of imports." (length (split-string string "\n"))))))
+
+(defun haskell-rename ()
+  )
