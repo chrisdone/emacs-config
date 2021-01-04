@@ -500,7 +500,8 @@ line as a type signature."
   "Get the info of the thing with IDENT at point."
   (interactive (list (intero-ident-at-point)))
   (let ((v (shell-command-to-string "stack ghc -- --version")))
-    (if (string-match-p (regexp-quote "version 8.10") v)
+    (if (or (string-match-p (regexp-quote "version 8.10") v)
+            (string-match-p (regexp-quote "version 8.8.3") v))
         (intero-repl-eval-string (format ":i %s" ident) t)
       (let ((origin-buffer (current-buffer))
         (package (intero-package-name))
@@ -2491,7 +2492,8 @@ This is a standard process sentinel function."
 (defun intero-executable-path (stack-yaml)
   "The path for the intero executable."
   (let ((v (shell-command-to-string "stack ghc -- --version")))
-    (if (string-match-p (regexp-quote "version 8.10") v)
+    (if (or (string-match-p (regexp-quote "version 8.10") v)
+            (string-match-p (regexp-quote "version 8.8.3") v))
         "ghci"
       (intero-with-temp-buffer
         (cl-case (save-excursion
