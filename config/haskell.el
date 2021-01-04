@@ -811,3 +811,9 @@ preserved, although placement may be funky."
 
 (defun haskell-rename ()
   )
+
+(defun haskell-add-early ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (insert "{-# OPTIONS -F -pgmF=early #-}\n")))
