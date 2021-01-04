@@ -738,6 +738,33 @@ preserved, although placement may be funky."
                     out)))
           (goto-char origin))))))
 
+(defun haskell-early-reformat-decl ()
+  "Re-format the current declaration.
+
+The declaration is parsed and pretty printed.  Comments are
+preserved, although placement may be funky."
+  (interactive)
+  (let ((start-end (hindent-decl-points))
+        (origin (point)))
+    (when start-end
+      (let ((beg (car start-end))
+            (end (cdr start-end)))
+        (let* ((string (buffer-substring-no-properties beg end))
+               (out (with-temp-buffer
+                      (insert
+                       (replace-regexp-in-string
+                        "\\?$"
+                        "EARLY_QMARK"
+                        string))
+                      (hindent-reformat-region (point-min) (point-max) t)
+                      (replace-regexp-in-string "\n$" "" (buffer-string)))))
+          (delete-region beg end)
+          (insert (replace-regexp-in-string
+                   "[\n ]*EARLY_QMARK$"
+                   "?"
+                   out))
+          (goto-char origin))))))
+
 (define-key purescript-mode-map (kbd "C-c i") 'psc-reformat-decl)
 (define-key psc-ide-mode-map (kbd "C-c i") 'psc-reformat-decl)
 
