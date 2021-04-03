@@ -49,7 +49,8 @@
     string-inflection
     tail-on-change
     graphql-mode
-    markdown-toc)
+    markdown-toc
+    swiper)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -69,7 +70,8 @@
     "haskell"
     "lisp"
     "markdown"
-    "org")
+    "org"
+    "ivy")
   "Configuration files that follow the config/foo.el file path
   format.")
 
@@ -104,6 +106,7 @@
 (require 'haskell-simple-indent)
 (require 'haskell-move-nested)
 (require 'psc-ide)
+(require 'counsel)
 
 
 ;; Emacs configurations
