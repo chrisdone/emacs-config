@@ -50,7 +50,9 @@
     tail-on-change
     graphql-mode
     markdown-toc
-    swiper)
+    swiper
+    find-file-in-project
+    )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -107,6 +109,7 @@
 (require 'haskell-move-nested)
 (require 'psc-ide)
 (require 'counsel)
+(require 'ivy)
 
 
 ;; Emacs configurations
@@ -127,3 +130,4 @@
 (elscreen-start)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 (winner-mode)
+(ivy-mode)
