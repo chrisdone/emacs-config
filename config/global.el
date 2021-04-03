@@ -944,4 +944,10 @@ prefix argument."
 
 ;; (add-to-list 'flycheck-checkers 'intero)
 
+(defun copy-file-name ()
+  "Copy the buffer's file name."
+  (interactive)
+  (kill-new (buffer-file-name))
+  (message "Copied %s" (buffer-file-name)))
+
 (provide 'global)
