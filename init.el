@@ -109,7 +109,6 @@
 (require 'haskell-move-nested)
 (require 'psc-ide)
 (require 'counsel)
-(require 'ivy)
 
 
 ;; Emacs configurations
