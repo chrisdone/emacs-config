@@ -8,4 +8,5 @@ GNU Emacs 25.2.1 (x86_64-pc-linux-gnu, X toolkit, Xaw3d scroll bars)
 
 ## Recent additions
 
-- counsel-git - search checked-in git files with a liberal search.
+* counsel-git - search checked-in git files with a liberal search.
+* counsel-rg - grep the project with rg - very fast
