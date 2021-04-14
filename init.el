@@ -129,4 +129,4 @@
 (elscreen-start)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 (winner-mode)
-(ivy-mode)
+;;(ivy-mode)
