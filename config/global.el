@@ -950,7 +950,7 @@ prefix argument."
   (kill-new (buffer-file-name))
   (message "Copied %s" (buffer-file-name)))
 
-(defun elscreen-fork ()
+(defun fork-elscreen ()
   "Fork the current elscreen with a generated name of `NAME*', makes it easy to see nesting."
   (interactive)
   (let ((name (concat (elscreen-get-screen-nickname (elscreen-get-current-screen))
