@@ -2493,7 +2493,8 @@ This is a standard process sentinel function."
   "The path for the intero executable."
   (let ((v (shell-command-to-string "stack ghc -- --version")))
     (if (or (string-match-p (regexp-quote "version 8.10") v)
-            (string-match-p (regexp-quote "version 8.8.3") v))
+            (string-match-p (regexp-quote "version 8.8.3") v)
+            (string-match-p (regexp-quote "version 8.8.4") v))
         "ghci"
       (intero-with-temp-buffer
         (cl-case (save-excursion
