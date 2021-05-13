@@ -37,14 +37,16 @@
     (erase-buffer)
     (insert
      (replace-regexp-in-string
-      "\\\\\"" "\""
+      "\\\\\n[ ]+\\\\" ""
       (replace-regexp-in-string
-       "\\\\n" "\n"
+       "\\\\\"" "\""
        (replace-regexp-in-string
-        "^\"\\(.*\\)\"$" "\\1"
+        "\\\\n" "\n"
         (replace-regexp-in-string
-         "\\\\\n\\\\" ""
-         string)))))
+         "\"$" ""
+         (replace-regexp-in-string
+          "^\"" ""
+          string))))))
     (shm-edit-string-mode)
     (set (make-local-variable 'shm-string-node)
          current)

@@ -187,8 +187,10 @@ operation."
             (shm-find-furthest-parent-on-line current-node-pair))))
     (insert (if (shm-in-string)
                 (replace-regexp-in-string
-                 "\n" "\\\\n\\\\\n\\\\"
-                 string)
+                 "\"" "\\\\\""
+                 (replace-regexp-in-string
+                  "\n" "\\\\n\\\\\n\\\\"
+                  string))
               string))
     (when (and (= line (line-beginning-position))
                (not no-adjust-dependents))
