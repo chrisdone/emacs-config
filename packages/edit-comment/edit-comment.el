@@ -17,25 +17,25 @@
 
 ;;; Code:
 
-(defun edit-comment (beg end)
-  (interactive "r")
+(defun edit-comment ()
+  (interactive)
   (let* ((point (point))
          (start
-          (or beg (let ((pos (line-beginning-position)))
-             (save-excursion
-               (while (string-match "comment"
-                                    (symbol-name (get-text-property (line-beginning-position) 'face)))
-                 (setq pos (line-beginning-position))
-                 (forward-line -1)))
-             pos)))
+          (let ((pos (line-beginning-position)))
+            (save-excursion
+              (while (string-match "comment"
+                                   (symbol-name (get-text-property (line-beginning-position) 'face)))
+                (setq pos (line-beginning-position))
+                (forward-line -1)))
+            pos))
          (end
-          (or end (let ((pos (line-beginning-position)))
-             (save-excursion
-               (while (string-match "comment"
-                                    (symbol-name (get-text-property (line-end-position) 'face)))
-                 (setq pos (line-end-position))
-                 (forward-line 1)))
-             pos)))
+          (let ((pos (line-beginning-position)))
+            (save-excursion
+              (while (string-match "comment"
+                                   (symbol-name (get-text-property (line-end-position) 'face)))
+                (setq pos (line-end-position))
+                (forward-line 1)))
+            pos))
          (start-line (line-number-at-pos start))
          (end-line (line-number-at-pos end)))
     (uncomment-region start end)
