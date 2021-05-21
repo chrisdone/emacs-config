@@ -19,7 +19,8 @@
 
 (defun edit-comment (start end)
   (interactive "r")
-  (let* ((start
+  (let* ((orig (point))
+         (start
           (if (region-active-p)
               start
               (let ((pos (line-beginning-position)))
@@ -65,6 +66,7 @@
     (delete-region start end)
     (insert new-string)
     (let ((comment-empty-lines t))
-      (comment-region start (point)))))
+      (comment-region start (point))
+      (goto-char orig))))
 
 (provide 'edit-comment)
