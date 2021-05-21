@@ -17,57 +17,54 @@
 
 ;;; Code:
 
-(defun edit-comment ()
-  (interactive)
-  (let* ((point (point))
-         (start
-          (let ((pos (line-beginning-position)))
-            (save-excursion
-              (while (string-match "comment"
-                                   (symbol-name (get-text-property (line-beginning-position) 'face)))
-                (setq pos (line-beginning-position))
-                (forward-line -1)))
-            pos))
+(defun edit-comment (start end)
+  (interactive "r")
+  (let* ((start
+          (if (region-active-p)
+              start
+              (let ((pos (line-beginning-position)))
+                (save-excursion
+                  (while (string-match "comment"
+                                       (symbol-name (get-text-property (line-beginning-position) 'face)))
+                    (setq pos (line-beginning-position))
+                    (forward-line -1)))
+                pos)))
          (end
-          (let ((pos (line-beginning-position)))
-            (save-excursion
-              (while (string-match "comment"
-                                   (symbol-name (get-text-property (line-end-position) 'face)))
-                (setq pos (line-end-position))
-                (forward-line 1)))
-            pos))
-         (start-line (line-number-at-pos start))
-         (end-line (line-number-at-pos end)))
-    (uncomment-region start end)
-    (let* ((new-start (progn (goto-char (point-min))
-                             (forward-line (1- start-line))
-                             (line-beginning-position)))
-           (new-end (progn (goto-char (point-min))
-                           (forward-line (1- end-line))
-                           (line-end-position)))
-           (string (let ((s (buffer-substring new-start new-end)))
-                     (delete-region new-start new-end)
-                     s))
-           (new-string
-            (save-window-excursion
-              (with-temp-buffer
-                (rename-buffer (generate-new-buffer-name "edit-comment"))
-                (use-local-map
-                 (let ((map (copy-keymap widget-keymap)))
-                   (define-key map (kbd "C-c C-c") 'exit-recursive-edit)
-                   (define-key map (kbd "C-c C-k") 'abort-recursive-edit)
-                   (define-key map (kbd "C-g")     'abort-recursive-edit)
-                   map))
-                (switch-to-buffer-other-window (current-buffer))
-                (insert string)
-                (goto-char (point-min))
-                (recursive-edit)
-                (buffer-substring-no-properties (point-min) (point-max))))))
-      (when new-string
-        (goto-char start)
-        (insert new-string)
-        (let ((comment-empty-lines t))
-          (comment-region start (point)))
-        (goto-char point)))))
+          (if (region-active-p)
+              end
+              (let ((pos (line-beginning-position)))
+                (save-excursion
+                  (while (string-match "comment"
+                                       (symbol-name (get-text-property (line-end-position) 'face)))
+                    (setq pos (line-end-position))
+                    (forward-line 1)))
+                pos)))
+         (string (buffer-substring start end))
+         (mode major-mode)
+         (uncommented
+          (with-temp-buffer
+            (funcall mode)
+            (insert string)
+            (uncomment-region (point-min) (point-max))
+            (buffer-substring (point-min) (point-max))))
+         (new-string
+          (save-window-excursion
+            (with-temp-buffer
+              (rename-buffer (generate-new-buffer-name "edit-comment"))
+              (use-local-map
+               (let ((map (copy-keymap widget-keymap)))
+                 (define-key map (kbd "C-c C-c") 'exit-recursive-edit)
+                 (define-key map (kbd "C-c C-k") 'abort-recursive-edit)
+                 (define-key map (kbd "C-g")     'abort-recursive-edit)
+                 map))
+              (switch-to-buffer-other-window (current-buffer))
+              (insert uncommented)
+              (goto-char (point-min))
+              (recursive-edit)
+              (buffer-substring-no-properties (point-min) (point-max))))))
+    (delete-region start end)
+    (insert new-string)
+    (let ((comment-empty-lines t))
+      (comment-region start (point)))))
 
 (provide 'edit-comment)
