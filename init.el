@@ -52,6 +52,7 @@
     markdown-toc
     swiper
     find-file-in-project
+    edit-comment
     )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
