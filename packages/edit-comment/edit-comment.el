@@ -19,27 +19,8 @@
 
 (defun edit-comment (start end)
   (interactive "r")
+  (unless (region-active-p) (error "Select the region of the comment."))
   (let* ((orig (point))
-         (start
-          (if (region-active-p)
-              start
-              (let ((pos (line-beginning-position)))
-                (save-excursion
-                  (while (string-match "comment"
-                                       (symbol-name (get-text-property (line-beginning-position) 'face)))
-                    (setq pos (line-beginning-position))
-                    (forward-line -1)))
-                pos)))
-         (end
-          (if (region-active-p)
-              end
-              (let ((pos (line-beginning-position)))
-                (save-excursion
-                  (while (string-match "comment"
-                                       (symbol-name (get-text-property (line-end-position) 'face)))
-                    (setq pos (line-end-position))
-                    (forward-line 1)))
-                pos)))
          (string (buffer-substring start end))
          (mode major-mode)
          (uncommented
@@ -52,11 +33,11 @@
           (save-window-excursion
             (with-temp-buffer
               (rename-buffer (generate-new-buffer-name "edit-comment"))
+              (markdown-mode)
               (use-local-map
                (let ((map (copy-keymap widget-keymap)))
                  (define-key map (kbd "C-c C-c") 'exit-recursive-edit)
                  (define-key map (kbd "C-c C-k") 'abort-recursive-edit)
-                 (define-key map (kbd "C-g")     'abort-recursive-edit)
                  map))
               (switch-to-buffer-other-window (current-buffer))
               (insert uncommented)
