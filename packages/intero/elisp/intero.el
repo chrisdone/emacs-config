@@ -500,30 +500,26 @@ line as a type signature."
   "Get the info of the thing with IDENT at point."
   (interactive (list (intero-ident-at-point)))
   (let ((v (shell-command-to-string "stack ghc -- --version")))
-    (if (or (string-match-p (regexp-quote "version 8.10") v)
-            (string-match-p (regexp-quote "version 8.8.3") v)
-            (string-match-p (regexp-quote "version 8.8.4") v))
-        (intero-repl-eval-string (format ":i %s" ident) t)
-      (let ((origin-buffer (current-buffer))
-        (package (intero-package-name))
-        (info (intero-get-info-of ident))
-        (origin (buffer-name)))
-    (with-current-buffer (pop-to-buffer (intero-help-buffer))
-      (let ((buffer-read-only nil)
-            (help-string
-             (concat
-              (intero-fontify-expression ident)
-              " in `"
-              (propertize origin 'origin-buffer origin-buffer)
-              "'"
-              " (" package ")"
-              "\n\n"
-              (intero-fontify-expression info))))
-        (erase-buffer)
-        (intero-help-push-history origin-buffer help-string)
-        (intero-help-pagination)
-        (insert help-string)
-        (goto-char (point-min)))))))
+    (let ((origin-buffer (current-buffer))
+          (package (intero-package-name))
+          (info (intero-get-info-of ident))
+          (origin (buffer-name)))
+      (with-current-buffer (pop-to-buffer (intero-help-buffer))
+        (let ((buffer-read-only nil)
+              (help-string
+               (concat
+                (intero-fontify-expression ident)
+                " in `"
+                (propertize origin 'origin-buffer origin-buffer)
+                "'"
+                " (" package ")"
+                "\n\n"
+                (intero-fontify-expression info))))
+          (erase-buffer)
+          (intero-help-push-history origin-buffer help-string)
+          (intero-help-pagination)
+          (insert help-string)
+          (goto-char (point-min))))))
   )
 
 (defun intero-goto-definition ()
