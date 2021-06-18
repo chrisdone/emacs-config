@@ -2351,6 +2351,7 @@ Uses the default stack config file, or STACK-YAML file if given."
       (process-send-string process ":set -fobject-code\n")
       (process-send-string process (format ":set -DSTACK_ROOT=%s\n" (intero-project-root)))
       (process-send-string process ":set -fdefer-type-errors\n")
+      (process-send-string process ":set +c\n")
       (process-send-string process ":set -fdiagnostics-color=never\n")
       (process-send-string process ":set prompt \"\\4\"\n")
       (with-current-buffer buffer
