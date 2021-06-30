@@ -365,6 +365,9 @@ prefix argument."
 
 ;; Global keybindings
 
+(global-set-key (kbd "<prior>") 'backward-page)
+(global-set-key (kbd "<next>") 'forward-page)
+
 (global-set-key (kbd "C-p") 'avoid-this-key)
 (global-set-key (kbd "C-h") 'previous-line)
 
