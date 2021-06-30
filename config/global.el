@@ -406,34 +406,6 @@ prefix argument."
   (interactive)
   (error "Use `h'"))
 
-(global-set-key (kbd "C-c C-1") (lambda () (interactive) (my-jump-to-register ?1)))
-(global-set-key (kbd "C-c C-2") (lambda () (interactive) (my-jump-to-register ?2)))
-(global-set-key (kbd "C-c C-3") (lambda () (interactive) (my-jump-to-register ?3)))
-(global-set-key (kbd "C-c C-4") (lambda () (interactive) (my-jump-to-register ?4)))
-(global-set-key (kbd "C-c C-5") (lambda () (interactive) (my-jump-to-register ?5)))
-(global-set-key (kbd "C-c C-6") (lambda () (interactive) (my-jump-to-register ?6)))
-(global-set-key (kbd "C-c C-7") (lambda () (interactive) (my-jump-to-register ?7)))
-(global-set-key (kbd "C-c C-8") (lambda () (interactive) (my-jump-to-register ?8)))
-(global-set-key (kbd "C-c C-9") (lambda () (interactive) (my-jump-to-register ?9)))
-
-(defvar my-current-window-register 0)
-(defun my-window-configuration-to-register (register &optional _arg)
-  ""
-  (interactive (list (register-read-with-preview
-                      "Window configuration to register: ")
-                     current-prefix-arg))
-  ;; current-window-configuration does not include the value
-  ;; of point in the current buffer, so record that separately.
-  (setq my-current-window-register register)
-  (set-register register (list (current-window-configuration) (point-marker))))
-(defun my-jump-to-register (i)
-  "Save the current window register and jump to the provided one."
-  (interactive)
-  (window-configuration-to-register my-current-window-register)
-  (setq my-current-window-register i)
-  (jump-to-register i)
-  (message "Window config: %d" (- i 49)))
-
 (global-set-key [remap paredit-kill] (bol-with-prefix paredit-kill))
 (global-set-key [remap org-kill-line] (bol-with-prefix org-kill-line))
 (global-set-key [remap kill-line] (bol-with-prefix kill-line))
@@ -465,7 +437,6 @@ prefix argument."
 (global-set-key (kbd "C-x C-k C-o") 'delete-blank-lines-in)
 
 (global-set-key (kbd "C-\\") 'goto-last-point)
-(global-set-key (kbd "C-v") 'magit-switch-buffer)
 (global-set-key (kbd "M-z") 'zap-up-to-char-repeatable)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 (global-set-key (kbd "M-;") 'comment-dwim-line)
@@ -516,15 +487,13 @@ prefix argument."
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
 
-(global-set-key [f9] 'timeclock-dwim)
-(global-set-key [f10] 'org-fast-task-reclock)
-(global-set-key [f11] 'goto-notmuch-inbox)
-
-(global-set-key [f12] 'dabbrev-expand)
-
-
-(global-set-key [f3] 'resmacro-start-macro)
-(global-set-key (kbd "C-x (") 'resmacro-start-macro)
+(global-set-key [f9] nil)
+(global-set-key [f10] nil)
+(global-set-key [f11] nil)
+)global-set-key [f12] nil)
+(global-set-key [f3] nil)
+(global-set-key (kbd "C-x (") nil)
+(global-set-key (kbd "C-x C-c") nil)
 
 ;; Convenience bindings for god-mode
 
@@ -532,7 +501,7 @@ prefix argument."
 (global-set-key (kbd "C-<") 'beginning-of-buffer)
 (global-set-key (kbd "C-!") 'eval-defun)
 
-(global-set-key (kbd "C-x C-c") nil)
+
 
 
 ;; Mode-specific keybindings
