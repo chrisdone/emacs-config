@@ -362,11 +362,37 @@ prefix argument."
       (call-interactively 'query-replace)
     (call-interactively 'replace-string)))
 
+(defun my-section-string ()
+  (cond
+   ((eq major-mode 'haskell-mode)
+    "^--------------------------------------------------------------------------------
+")))
+
+(defun my-forward-page ()
+  "Go to next page."
+  (interactive)
+  (unless (= (point) (point-max)) (forward-char 1))
+  (or (and (search-forward-regexp (my-section-string)
+                                  nil
+                                  t
+                                  1)
+           (my-backward-page))
+      (end-of-buffer)))
+
+(defun my-backward-page ()
+  "Go to next page."
+  (interactive)
+  (or (search-backward-regexp (my-section-string)
+                              nil
+                              t
+                              1)
+      (beginning-of-buffer)))
+
 
 ;; Global keybindings
 
-(global-set-key (kbd "<prior>") 'backward-page)
-(global-set-key (kbd "<next>") 'forward-page)
+(global-set-key (kbd "<prior>") 'my-backward-page)
+(global-set-key (kbd "<next>") 'my-forward-page)
 
 (global-set-key (kbd "C-p") 'avoid-this-key)
 (global-set-key (kbd "C-h") 'previous-line)
