@@ -574,15 +574,13 @@ If the problem persists, please report this as a bug!")))
                                default-directory string))))))
               (when (string-match "^\\(.*?\\):\\([0-9]+\\):"
                                   result)
-                (message "(used hag for that search)"
-                         (expand-file-name (match-string 1 result))
-                         (match-string 2 result))
+                (message "(used hag for that search)")
                 (list (expand-file-name (match-string 1 result))
                       (match-string 2 result)
                       "1")))
           (let ((result
                  (let ((default-directory (intero-project-root))
-                       (pattern (format "^%s\\b" string)))
+                       (pattern (format "(^%s\\b|\\b%s ::)" string string)))
                    (shell-command-to-string
                     (format "rg -g '*.hs' '%s' --vimgrep -m 1 --with-filename"
                             pattern)))))
