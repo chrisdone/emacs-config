@@ -582,7 +582,7 @@ If the problem persists, please report this as a bug!")))
                       "1")))
           (let ((result
                  (let ((default-directory (intero-project-root))
-                       (pattern (format "^%s" string)))
+                       (pattern (format "^%s\\b" string)))
                    (shell-command-to-string
                     (format "rg -g '*.hs' '%s' --vimgrep -m 1 --with-filename"
                             pattern)))))
