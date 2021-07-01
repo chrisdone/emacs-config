@@ -526,18 +526,17 @@ line as a type signature."
   "Jump to the definition of the thing at point.
 Returns nil when unable to find definition."
   (interactive)
-  (let ((result (apply #'intero-get-loc-at (intero-thing-at-point))))
-
-    (if (not (string-match "\\(.*?\\):(\\([0-9]+\\),\\([0-9]+\\))-(\\([0-9]+\\),\\([0-9]+\\))$"
-                           result))
-        (message "%s" result)
+  (let ((result (intero-get-viable-loc-at)))
+    (if (not result)
+        (progn (message "Couldn't find via ghci or ripgrep. Falling back to ag...")
+               (call-interactively #'ag))
       (if (fboundp 'xref-push-marker-stack) ;; Emacs 25
           (xref-push-marker-stack)
         (with-no-warnings
           (ring-insert find-tag-marker-ring (point-marker))))
-      (let* ((returned-file (match-string 1 result))
-             (line (string-to-number (match-string 2 result)))
-             (col (string-to-number (match-string 3 result)))
+      (let* ((returned-file (nth 0 result))
+             (line (string-to-number (nth 1 result)))
+             (col (string-to-number (nth 2 result)))
              (loaded-file (intero-extend-path-by-buffer-host returned-file)))
         (if (intero-temp-file-p loaded-file)
             (let ((original-buffer (intero-temp-file-origin-buffer loaded-file)))
@@ -554,6 +553,29 @@ If the problem persists, please report this as a bug!")))
         (forward-line (1- line))
         (forward-char (1- col))
         t))))
+
+(defun intero-get-viable-loc-at ()
+  (let ((result (apply #'intero-get-loc-at (intero-thing-at-point))))
+    (if (string-match "\\(.*?\\):(\\([0-9]+\\),\\([0-9]+\\))-(\\([0-9]+\\),\\([0-9]+\\))$"
+                      result)
+        (list (match-string 1 result)
+              (match-string 2 result)
+              (match-string 3 result))
+      (let ((result
+             (let ((default-directory (intero-project-root))
+                   (pattern
+                    (format
+                     "^%s\\b"
+                     (apply #'buffer-substring-no-properties (intero-thing-at-point)))))
+               (shell-command-to-string
+                (format "rg -g '*.hs' '%s' --vimgrep -m 1 --with-filename"
+                        pattern)))))
+        (when (string-match "^\\(.*?\\):\\([0-9]+\\):\\([0-9]+\\)"
+                            result)
+          (message "(used ripgrep for that search)")
+          (list (match-string 1 result)
+                (match-string 2 result)
+                (match-string 3 result)))))))
 
 (defmacro intero-with-dump-splices (exp)
   "Run EXP but with dump-splices enabled in the intero backend process."
