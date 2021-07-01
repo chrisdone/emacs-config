@@ -528,7 +528,7 @@ Returns nil when unable to find definition."
   (interactive)
   (let ((result (intero-get-viable-loc-at)))
     (if (not result)
-        (progn (message "Couldn't find via ghci or ripgrep. Falling back to ag...")
+        (progn (message "Couldn't find via ghci or hag or ripgrep. Falling back to ag...")
                (call-interactively #'ag))
       (if (fboundp 'xref-push-marker-stack) ;; Emacs 25
           (xref-push-marker-stack)
@@ -561,21 +561,37 @@ If the problem persists, please report this as a bug!")))
         (list (match-string 1 result)
               (match-string 2 result)
               (match-string 3 result))
-      (let ((result
-             (let ((default-directory (intero-project-root))
-                   (pattern
-                    (format
-                     "^%s\\b"
-                     (apply #'buffer-substring-no-properties (intero-thing-at-point)))))
-               (shell-command-to-string
-                (format "rg -g '*.hs' '%s' --vimgrep -m 1 --with-filename"
-                        pattern)))))
-        (when (string-match "^\\(.*?\\):\\([0-9]+\\):\\([0-9]+\\)"
-                            result)
-          (message "(used ripgrep for that search)")
-          (list (match-string 1 result)
-                (match-string 2 result)
-                (match-string 3 result)))))))
+      (let ((string (apply #'buffer-substring-no-properties (intero-thing-at-point))))
+        (if (let (case-fold-search) (string-match "^[A-Z]" string))
+            (let ((result
+                   (let ((default-directory (intero-project-root)))
+                     (concat
+                      (shell-command-to-string
+                       (format "hag %s '(data|newtype)' conid \"%s\""
+                               default-directory string))
+                      (shell-command-to-string
+                       (format "hag %s '(equal|vbar)' conid \"%s\""
+                               default-directory string))))))
+              (when (string-match "^\\(.*?\\):\\([0-9]+\\):"
+                                  result)
+                (message "(used hag for that search)"
+                         (expand-file-name (match-string 1 result))
+                         (match-string 2 result))
+                (list (expand-file-name (match-string 1 result))
+                      (match-string 2 result)
+                      "1")))
+          (let ((result
+                 (let ((default-directory (intero-project-root))
+                       (pattern (format "^%s" string)))
+                   (shell-command-to-string
+                    (format "rg -g '*.hs' '%s' --vimgrep -m 1 --with-filename"
+                            pattern)))))
+            (when (string-match "^\\(.*?\\):\\([0-9]+\\):\\([0-9]+\\)"
+                                result)
+              (message "(used ripgrep for that search)")
+              (list (match-string 1 result)
+                    (match-string 2 result)
+                    (match-string 3 result)))))))))
 
 (defmacro intero-with-dump-splices (exp)
   "Run EXP but with dump-splices enabled in the intero backend process."
