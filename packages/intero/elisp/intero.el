@@ -567,10 +567,10 @@ If the problem persists, please report this as a bug!")))
                    (let ((default-directory (intero-project-root)))
                      (concat
                       (shell-command-to-string
-                       (format "hag %s '(data|newtype)' conid \"%s\""
+                       (format "hag %s '(data|newtype|type)' conid '\"%s\"'"
                                default-directory string))
                       (shell-command-to-string
-                       (format "hag %s '(equal|vbar)' conid \"%s\""
+                       (format "hag %s '(equal|vbar)' conid '\"%s\"'"
                                default-directory string))))))
               (when (string-match "^\\(.*?\\):\\([0-9]+\\):"
                                   result)
@@ -1949,13 +1949,15 @@ type as arguments."
 
 (defun intero-get-loc-at (beg end)
   "Get the location of the identifier denoted by BEG and END."
-  (let ((result (intero-get-loc-at-helper beg end)))
-    (if (string-match (regexp-quote intero-unloaded-module-string)
-                      result)
-        (progn (flycheck-buffer)
-               (message "No location information yet, compiling module ...")
-               (intero-get-loc-at-helper-process beg end))
-      result)))
+  (intero-get-loc-at-helper-process beg end)
+  ;; (let ((result (intero-get-loc-at-helper beg end)))
+  ;;   (if (string-match (regexp-quote intero-unloaded-module-string)
+  ;;                     result)
+  ;;       (progn (flycheck-buffer)
+  ;;              (message "No location information yet, compiling module ...")
+  ;;              (intero-get-loc-at-helper-process beg end))
+  ;;     result))
+  )
 
 (defun intero-get-loc-at-helper (beg end)
   "Make the blocking call to the process."
