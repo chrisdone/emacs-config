@@ -53,6 +53,7 @@
     swiper
     find-file-in-project
     edit-comment
+    prodigy
     )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
