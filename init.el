@@ -54,6 +54,7 @@
     find-file-in-project
     edit-comment
     prodigy
+    docker
     )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
