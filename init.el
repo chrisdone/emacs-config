@@ -77,7 +77,8 @@
     "lisp"
     "markdown"
     "org"
-    "ivy")
+    "ivy"
+    "prodigy")
   "Configuration files that follow the config/foo.el file path
   format.")
 
