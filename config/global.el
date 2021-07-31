@@ -976,4 +976,6 @@ prefix argument."
   (interactive)
   (graphviz-ascii-on-region (point-min) (point-max)))
 
+(define-key graphviz-dot-mode-map (kbd "C-M-x") 'graphviz-ascii)
+
 (provide 'global)
