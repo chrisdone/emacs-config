@@ -26,3 +26,14 @@
                           (my-build-tunnel-args
                            (getf service :tunnel)))
   :ready-message "debug1: Entering interactive session.")
+
+;; Example:
+;;
+;; (prodigy-define-service
+;;   :name "my-forward"
+;;   :tags '(ssh-tunnel)
+;;   :tunnel (list
+;;            :localport  "38161"
+;;            :tunnel-ip  "127.0.0.1"
+;;            :tunnel-port  "38161"
+;;            :host  "some-host"))
