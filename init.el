@@ -55,6 +55,7 @@
     edit-comment
     prodigy
     docker
+    kubel
     )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
