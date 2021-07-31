@@ -961,8 +961,6 @@ prefix argument."
 (defun graphviz-ascii-on-region (beg end)
   (interactive "r")
   (let ((text (buffer-substring-no-properties beg end)))
-    (goto-char end)
-    (insert "\n\n")
     (with-current-buffer (get-buffer-create "*graphviz-ascii*")
       (delete-region (point-min) (point-max)))
     (call-process-region beg end "graph-easy" nil (get-buffer "*graphviz-ascii*") t
