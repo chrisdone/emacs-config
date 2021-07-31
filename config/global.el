@@ -966,8 +966,8 @@ prefix argument."
     (call-process-region beg end "graph-easy" nil (get-buffer "*graphviz-ascii*") t
                          "--from=dot"
                          "--as_ascii")
-    (switch-to-buffer-other-window
-     (get-buffer "*graphviz-ascii*") )))
+    (display-buffer
+     (get-buffer "*graphviz-ascii*"))))
 
 (defun graphviz-ascii ()
   "Generates ascii on the buffer."
