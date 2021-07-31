@@ -56,6 +56,7 @@
     prodigy
     docker
     kubel
+    graphviz-dot-mode
     )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
