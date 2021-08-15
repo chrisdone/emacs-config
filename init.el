@@ -57,7 +57,7 @@
     docker
     kubel
     graphviz-dot-mode
-    )
+    dogears)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -135,4 +135,4 @@
 (elscreen-start)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 (winner-mode)
-;;(ivy-mode)
+(dogears-mode)
