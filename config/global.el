@@ -473,6 +473,7 @@ prefix argument."
 (define-key magit-mode-map [?\M-8] '(lambda () (interactive) (elscreen-goto 8)))
 (define-key magit-mode-map [?\M-9] '(lambda () (interactive) (elscreen-goto 9)))
 
+(global-set-key (kbd "C-x C-z") 'dogears-list)
 
 (global-set-key (kbd "<left>") 'windmove-left)
 (global-set-key (kbd "<right>") 'windmove-right)
