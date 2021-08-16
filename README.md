@@ -3,10 +3,11 @@
 My entire Emacs configuration including copies of all library
 dependencies checked into this repo.
 
-GNU Emacs 25.2.1 (x86_64-pc-linux-gnu, X toolkit, Xaw3d scroll bars)
- of 2017-09-22, modified by Debian
+* Get Emacs 27.2: http://ftp.snt.utwente.nl/pub/software/gnu/emacs/emacs-27.2.tar.xz
 
-## Recent additions
+Build flags:
 
-* counsel-git - search checked-in git files with a liberal search.
-* counsel-rg - grep the project with rg - very fast
+./configure --without-compress-install --with-x --without-threads \
+  --without-modules --without-toolkit-scroll-bars --with-cairo \
+  --with-x-toolkit=no --with-xpm=ifavailable --with-jpeg=ifavailable \
+  --with-gif=ifavailable --with-tiff=ifavailable

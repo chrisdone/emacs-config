@@ -491,7 +491,7 @@ prefix argument."
 (global-set-key [f9] nil)
 (global-set-key [f10] nil)
 (global-set-key [f11] nil)
-)global-set-key [f12] nil)
+(global-set-key [f12] nil)
 (global-set-key [f3] nil)
 (global-set-key (kbd "C-x (") nil)
 (global-set-key (kbd "C-x C-c") nil)
