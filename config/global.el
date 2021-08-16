@@ -451,27 +451,25 @@ prefix argument."
 
 (add-hook 'compilation-mode-hook 'tail-on-change-mode)
 
-(define-key global-map [?\M-0] '(lambda () (interactive) (elscreen-goto 0)))
-(define-key global-map [?\M-1] '(lambda () (interactive) (elscreen-goto 1)))
-(define-key global-map [?\M-2] '(lambda () (interactive) (elscreen-goto 2)))
-(define-key global-map [?\M-3 ] '(lambda () (interactive) (elscreen-goto 3)))
-(define-key global-map [?\M-4] '(lambda () (interactive) (elscreen-goto 4)))
-(define-key global-map [?\M-5] '(lambda () (interactive) (elscreen-goto 5)))
-(define-key global-map [?\M-6] '(lambda () (interactive) (elscreen-goto 6)))
-(define-key global-map [?\M-7] '(lambda () (interactive) (elscreen-goto 7)))
-(define-key global-map [?\M-8] '(lambda () (interactive) (elscreen-goto 8)))
-(define-key global-map [?\M-9] '(lambda () (interactive) (elscreen-goto 9)))
+(define-key global-map [?\M-1] '(lambda () (interactive) (tab-bar-select-tab 1)))
+(define-key global-map [?\M-2] '(lambda () (interactive) (tab-bar-select-tab 2)))
+(define-key global-map [?\M-3 ] '(lambda () (interactive) (tab-bar-select-tab 3)))
+(define-key global-map [?\M-4] '(lambda () (interactive) (tab-bar-select-tab 4)))
+(define-key global-map [?\M-5] '(lambda () (interactive) (tab-bar-select-tab 5)))
+(define-key global-map [?\M-6] '(lambda () (interactive) (tab-bar-select-tab 6)))
+(define-key global-map [?\M-7] '(lambda () (interactive) (tab-bar-select-tab 7)))
+(define-key global-map [?\M-8] '(lambda () (interactive) (tab-bar-select-tab 8)))
+(define-key global-map [?\M-9] '(lambda () (interactive) (tab-bar-select-tab 9)))
 
-(define-key magit-mode-map [?\M-0] '(lambda () (interactive) (elscreen-goto 0)))
-(define-key magit-mode-map [?\M-1] '(lambda () (interactive) (elscreen-goto 1)))
-(define-key magit-mode-map [?\M-2] '(lambda () (interactive) (elscreen-goto 2)))
-(define-key magit-mode-map [?\M-3 ] '(lambda () (interactive) (elscreen-goto 3)))
-(define-key magit-mode-map [?\M-4] '(lambda () (interactive) (elscreen-goto 4)))
-(define-key magit-mode-map [?\M-5] '(lambda () (interactive) (elscreen-goto 5)))
-(define-key magit-mode-map [?\M-6] '(lambda () (interactive) (elscreen-goto 6)))
-(define-key magit-mode-map [?\M-7] '(lambda () (interactive) (elscreen-goto 7)))
-(define-key magit-mode-map [?\M-8] '(lambda () (interactive) (elscreen-goto 8)))
-(define-key magit-mode-map [?\M-9] '(lambda () (interactive) (elscreen-goto 9)))
+(define-key magit-mode-map [?\M-1] '(lambda () (interactive) (tab-bar-select-tab 1)))
+(define-key magit-mode-map [?\M-2] '(lambda () (interactive) (tab-bar-select-tab 2)))
+(define-key magit-mode-map [?\M-3 ] '(lambda () (interactive) (tab-bar-select-tab 3)))
+(define-key magit-mode-map [?\M-4] '(lambda () (interactive) (tab-bar-select-tab 4)))
+(define-key magit-mode-map [?\M-5] '(lambda () (interactive) (tab-bar-select-tab 5)))
+(define-key magit-mode-map [?\M-6] '(lambda () (interactive) (tab-bar-select-tab 6)))
+(define-key magit-mode-map [?\M-7] '(lambda () (interactive) (tab-bar-select-tab 7)))
+(define-key magit-mode-map [?\M-8] '(lambda () (interactive) (tab-bar-select-tab 8)))
+(define-key magit-mode-map [?\M-9] '(lambda () (interactive) (tab-bar-select-tab 9)))
 
 (global-set-key (kbd "C-x C-z") 'dogears-list)
 
@@ -880,20 +878,6 @@ prefix argument."
 
 (global-set-key (kbd "C-x C-\\") 'winner-undo)
 
-(defun neo-window-position 'right)
-
-(defun neo-update-elscreen ()
-  (save-window-excursion
-    (neo-global--open-dir (magit-get-top-dir))))
-
-(defun neotree ()
-  (interactive)
-  (neotree-dir (magit-get-top-dir)))
-
-(add-hook 'elscreen-goto-hook 'neo-update-elscreen)
-
-(setq neo-theme 'arrow)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Smerge
 
@@ -976,5 +960,8 @@ prefix argument."
   (graphviz-ascii-on-region (point-min) (point-max)))
 
 (define-key graphviz-dot-mode-map (kbd "C-M-x") 'graphviz-ascii)
+
+(setq tab-bar-close-button "")
+(setq tab-bar-new-button "")
 
 (provide 'global)

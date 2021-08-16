@@ -45,7 +45,6 @@
     slow-keys
     psc-ide
     neotree
-    elscreen
     string-inflection
     tail-on-change
     graphql-mode
@@ -128,11 +127,10 @@
 ;; Mode initializations
 
 (smex-initialize)
-(sunburn)
+(zenburn)
 (god-mode)
 (goto-last-point-mode)
 (turn-on-haskell-simple-indent)
-(elscreen-start)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 (winner-mode)
 (dogears-mode)
