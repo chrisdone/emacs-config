@@ -27,6 +27,40 @@
                            (getf service :tunnel)))
   :ready-message "debug1: Entering interactive session.")
 
+(prodigy-define-tag
+  :name 'inflex-client-ide
+  :command "stack"
+  :cwd "/home/chris/Work/skyabove/inflex/inflex-client"
+  :args '("build" "purescript" "--exec" "purs ide server")
+  :ready-message "")
+
+(prodigy-define-service
+  :name "inflex-client-ide"
+  :tags '(inflex-client-ide))
+
+(prodigy-define-tag
+  :name 'inflex-client-slow-bundler
+  :command "stack"
+  :cwd "/home/chris/Work/skyabove/inflex/inflex-client"
+  :args '("exec" "watchexec" "-w" "--exts" "purs" "-w" "src" "--" "bash" "./bundle-full.sh")
+  :ready-message "")
+
+(prodigy-define-service
+  :name "inflex-client-slow-bundler"
+  :tags '(inflex-client-slow-bundler))
+
+(prodigy-define-tag
+  :name 'inflex-client-fast-bundler
+  :command "watchexec"
+  :cwd "/home/chris/Work/skyabove/inflex/inflex-client"
+  :args '("watchexec" "-p" "-w" "--exts" "js" "-w" "output" "--" "bash" "bundle-fast.sh")
+  :ready-message "")
+
+(prodigy-define-service
+  :name "inflex-client-fast-bundler"
+  :tags '(inflex-client-fast-bundler))
+
+
 ;; Example:
 ;;
 ;; (prodigy-define-service
