@@ -933,6 +933,12 @@ prefix argument."
   (kill-new (buffer-file-name))
   (message "Copied %s" (buffer-file-name)))
 
+(defun copy-buffer-name ()
+  "Copy the buffer's buffer name."
+  (interactive)
+  (kill-new (buffer-name))
+  (message "Copied %s" (buffer-name)))
+
 (defun fork-elscreen ()
   "Fork the current elscreen with a generated name of `NAME*', makes it easy to see nesting."
   (interactive)

@@ -53,7 +53,7 @@
   :name 'inflex-client-fast-bundler
   :command "watchexec"
   :cwd "/home/chris/Work/skyabove/inflex/inflex-client"
-  :args '("watchexec" "-p" "-w" "--exts" "js" "-w" "output" "--" "bash" "bundle-fast.sh")
+  :args '("-p" "-w" "--exts" "js" "-w" "output" "--" "bash" "bundle-fast.sh")
   :ready-message "")
 
 (prodigy-define-service

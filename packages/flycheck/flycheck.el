@@ -3747,11 +3747,11 @@ the beginning of the buffer."
   "The keymap of `flycheck-error-list-mode'.")
 
 (defconst flycheck-error-list-format
-  [("File" 6)
-   ("Line" 5 flycheck-error-list-entry-< :right-align t)
-   ("Col" 3 nil :right-align t)
-   ("Level" 8 flycheck-error-list-entry-level-<)
-   ("ID" 6 t)
+  [("File" 8)
+   ("Line" 0 flycheck-error-list-entry-<)
+   ;; ("Col" 0 nil )
+   ("Level" 1 flycheck-error-list-entry-level-<)
+   ;; ("ID" 0 t);
    ("Message (Checker)" 0 t)]
   "Table format for the error list.")
 
@@ -3834,9 +3834,11 @@ MESSAGE and CHECKER are displayed in a single column to allow the
 message to stretch arbitrarily far."
   (let ((checker-name (propertize (symbol-name checker)
                                   'face 'flycheck-error-list-checker-name)))
-    (format (propertize "%s (%s)" 'face 'default)
-            (flycheck-flush-multiline-message message)
-            checker-name)))
+    (format (propertize "%s\n" 'face 'default)
+            (let ((lines (split-string(replace-regexp-in-string "^[ ]+" " " message) "\n")))
+              (mapconcat 'identity (cl-subseq lines 1 2) "\n"))
+            ;; (flycheck-flush-multiline-message message)
+            )))
 
 (defun flycheck-error-list-make-entry (error)
   "Make a table cell for the given ERROR.
@@ -3859,13 +3861,13 @@ Return a list with the contents of the table cell."
                    'flycheck-error-list-filename)
                   (flycheck-error-list-make-number-cell
                    line 'flycheck-error-list-line-number)
-                  (flycheck-error-list-make-number-cell
-                   column 'flycheck-error-list-column-number)
+                  ;; (flycheck-error-list-make-number-cell
+                  ;;  column 'flycheck-error-list-column-number)
                   (flycheck-error-list-make-cell
                    (symbol-name (flycheck-error-level error)) level-face)
-                  (flycheck-error-list-make-cell
-                   (if id (format "%s" id) "")
-                   'flycheck-error-list-id)
+                  ;; (flycheck-error-list-make-cell
+                  ;;  (if id (format "%s" id) "")
+                  ;;  'flycheck-error-list-id)
                   (flycheck-error-list-make-cell
                    (flycheck-error-list-make-last-column message checker))))))
 
