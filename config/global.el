@@ -970,4 +970,8 @@ prefix argument."
 (setq tab-bar-close-button "")
 (setq tab-bar-new-button "")
 
+(defun sql-pretty-print (beg end)
+  (interactive "r")
+  (call-process-region beg end "sqlformat" t t t "-r" "/dev/stdin"))
+
 (provide 'global)
