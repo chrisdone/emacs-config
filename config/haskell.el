@@ -318,7 +318,16 @@ import Data.Sequence (Seq)
 
 ;; Keybindings
 
-(define-key intero-mode-map (kbd "C-`") 'flycheck-list-errors)
+(define-key intero-mode-map (kbd "C-`") 'my-flycheck-list-errors)
+(defvar my-error-list-toggle nil)
+(defun my-flycheck-list-errors ()
+  (interactive)
+  (if my-error-list-toggle
+      (call-interactively 'flycheck-list-errors)
+    (if (get-buffer "*compilation*")
+        (display-buffer "*compilation*")
+      (call-interactively 'flycheck-list-errors)))
+  (setq my-error-list-toggle (not my-error-list-toggle)))
 
 (define-key highlight-uses-mode-map (kbd "C-t") 'highlight-uses-mode-replace)
 
@@ -696,13 +705,13 @@ to stylish-haskell."
 
 (setq intero--flycheck-multiple-files-support t)
 (define-key intero-mode-map (kbd "C-c C-c")
-  (lambda (prefix)
-    (interactive "P")
-    (when (intero-buffer-p 'backend)
-      (let ((targets (buffer-local-value 'intero-targets (intero-buffer 'backend))))
-        (if prefix
-            (call-interactively 'compile)
-          (compile (concat "stack build " (mapconcat 'identity targets " "))))))))
+  'my-intero-compile)
+
+(defun my-intero-compile ()
+  (interactive)
+  (when (intero-buffer-p 'backend)
+    (let ((targets (buffer-local-value 'intero-targets (intero-buffer 'backend))))
+      (call-interactively 'compile))))
 
 (define-key haskell-mode-map (kbd "C-c C-d") 'stack-doc)
 

@@ -974,4 +974,17 @@ prefix argument."
   (interactive "r")
   (call-process-region beg end "sqlformat" t t t "-r" "/dev/stdin"))
 
+(define-key compilation-mode-map (kbd "C-v C-n") 'my-compilation-next-error)
+(define-key compilation-mode-map (kbd "C-v C-h") 'my-compilation-previous-error)
+
+(defun my-compilation-next-error ()
+  (interactive)
+  (compilation-next-error 1)
+  (call-interactively 'compile-goto-error nil))
+
+(defun my-compilation-previous-error ()
+  (interactive)
+  (compilation-previous-error 1)
+  (call-interactively 'compile-goto-error nil))
+
 (provide 'global)
