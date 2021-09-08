@@ -36,6 +36,7 @@
 
 (defcustom ag-arguments
   (list ;; "--smart-case" "--nogroup" "--column" "--"
+   "-M=60"
         "--no-heading")
   "Default arguments passed to ag."
   :type '(repeat (string))
