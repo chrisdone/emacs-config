@@ -987,4 +987,24 @@ prefix argument."
   (compilation-previous-error 1)
   (call-interactively 'compile-goto-error nil))
 
+(defun ps-foreign-reload ()
+  (interactive)
+  (let ((name (buffer-name)))
+    (let ((match (string-match "\\(.*\\)\\.js" name)))
+      (when match
+        (let ((purs-name (concat (match-string 1 name) ".purs")))
+          (let ((buffer (get-buffer purs-name)))
+            (when buffer
+              (message "Re-type-checking %s" purs-name)
+              (with-current-buffer purs-name
+                (flycheck-buffer)))))))))
+
+(defun my-after-save-js-action ()
+  "Used in `after-save-hook'."
+  (when (memq this-command '(save-buffer save-some-buffers))
+    (when (eq  major-mode 'js-mode)
+      (ps-foreign-reload))))
+
+(add-hook 'after-save-hook 'my-after-save-js-action)
+
 (provide 'global)
