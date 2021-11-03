@@ -3843,7 +3843,7 @@ message to stretch arbitrarily far."
                              (buffer-string)))
                          (if (>= (length lines) flycheck-lines)
                              (cl-subseq lines 0 flycheck-lines)
-                           lines) "\n"))))))
+                           lines) "\n")))))
 (defvar flycheck-lines 2)
 (define-key flycheck-error-list-mode-map (kbd "C-+") 'flycheck-more)
 (define-key flycheck-error-list-mode-map (kbd "+") 'flycheck-more)
