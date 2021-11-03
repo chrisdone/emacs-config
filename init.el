@@ -134,3 +134,13 @@
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 (winner-mode)
 (dogears-mode)
+(global-linum-mode)
+
+(add-hook 'shell-mode-hook 'turn-off-linum-mode)
+(add-hook 'magit-status-mode-hook 'turn-off-linum-mode)
+(add-hook 'flycheck-error-list-mode-hook 'turn-off-linum-mode)
+(add-hook 'messages-buffer-mode-hook 'turn-off-linum-mode)
+(add-hook 'intero-help-mode-hook 'turn-off-linum-mode)
+(add-hook 'git-commit-mode-hook 'turn-off-linum-mode)
+(defun turn-off-linum-mode ()
+  (linum-mode -1))
