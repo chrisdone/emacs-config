@@ -109,7 +109,8 @@ This is the case if the \".\" is part of a \"forall <tvar> . <type>\"."
     ("jmacroE" . javascript-mode)
     ("r" . ess-mode)
     ("rChan" . ess-mode)
-    ("sql" . sql-mode))
+    ("sql" . sql-mode)
+    ("yaml" . yaml-mode))
   "Mapping from quasi quoter token to fontification mode.
 
 If a quasi quote is seen in Haskell code its contents will have
