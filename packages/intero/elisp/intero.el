@@ -784,6 +784,7 @@ running context across :load/:reloads in Intero."
                          (current-buffer)
                          string)))
              (intero-collect-compiler-messages msgs)
+             ;; (message "Intero: Done")
              (let ((results (cl-remove-if (lambda (msg)
                                             (eq 'splice (flycheck-error-level msg)))
                                           msgs)))
@@ -2438,6 +2439,12 @@ Uses the default stack config file, or STACK-YAML file if given."
                                                       "\n" t))
                                    "...")))
                    (message "Booting up intero ..."))))
+             (save-excursion
+               (goto-char (point-max))
+               (when (re-search-backward "\\[[0-9]+ of [0-9]+\\] Compiling [^ ]+"
+                                    nil t 1)
+                 ;; (message "Intero: %s" (match-string 0))
+                 ))
              (intero-read-buffer)))))
       (set-process-sentinel process 'intero-sentinel)
       buffer)))

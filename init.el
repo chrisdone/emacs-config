@@ -133,7 +133,6 @@
 (turn-on-haskell-simple-indent)
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 (winner-mode)
-(dogears-mode)
 (global-linum-mode)
 
 (add-hook 'shell-mode-hook 'turn-off-linum-mode)

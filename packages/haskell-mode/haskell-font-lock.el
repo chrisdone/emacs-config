@@ -107,6 +107,8 @@ This is the case if the \".\" is part of a \"forall <tvar> . <type>\"."
     ("sh_" . shell-mode)
     ("jmacro" . javascript-mode)
     ("jmacroE" . javascript-mode)
+    ("aesonQQ" . javascript-mode)
+    ("graphql" . graphql-mode)
     ("r" . ess-mode)
     ("rChan" . ess-mode)
     ("sql" . sql-mode)
