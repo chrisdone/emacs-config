@@ -34,6 +34,10 @@
   (interactive)
   (kill-process watchexec-ghci-process))
 
+(defun watchexec-set-command (ghci-commands-to-run)
+  (interactive "sGHCi command(s) to run: ")
+  (setq watchexec-ghci-commands ghci-commands-to-run))
+
 (defun watchexec-ghci (directory-to-watch ghci-commands-to-run)
   "Start a process watching DIRECTORY-TO-WATCH, when any file
 changes, insert GHCI-COMMANDS-TO-RUN (as a string) into the
