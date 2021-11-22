@@ -826,3 +826,22 @@ preserved, although placement may be funky."
   (save-excursion
     (goto-char (point-min))
     (insert "{-# OPTIONS -F -pgmF=early #-}\n")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun ormolu ()
+  "Autoformat the buffer with ormolu."
+  (interactive)
+  (save-excursion
+    (save-buffer)
+    (call-process-region
+     (point-min)
+     (point-max)
+     "ormolu"
+     t
+     t
+     t
+     "--cabal-default-extensions"
+     "--stdin-input-file"
+     (buffer-file-name))
+    (save-buffer)))
