@@ -56,7 +56,8 @@
     docker
     kubel
     graphviz-dot-mode
-    dogears)
+    dogears
+    go-mode)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
