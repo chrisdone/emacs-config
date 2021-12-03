@@ -19,12 +19,27 @@
     ,(getf args :host)))    ;; the remote host
 
 (prodigy-define-tag
+  :name 'dockerd
+  :command "/home/chris/.nix-profile/bin/dockerd"
+  :cwd (getenv "HOME")
+  :ready-message "Daemon has completed initialization")
+
+(prodigy-define-service
+  :name "dockerd"
+  :tags '(dockerd)
+  :sudo t)
+
+(defun docker-enable-socket ()
+  (interactive)
+  (shell-command-to-string "sudo setfacl --modify user:$USER:rw /var/run/docker.sock"))
+
+(prodigy-define-tag
   :name 'ssh-tunnel
   :command "ssh"
   :cwd (getenv "HOME")
   :args (prodigy-callback (service)
-                          (my-build-tunnel-args
-                           (getf service :tunnel)))
+          (my-build-tunnel-args
+           (getf service :tunnel)))
   :ready-message "debug1: Entering interactive session.")
 
 (prodigy-define-tag
