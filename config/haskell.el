@@ -307,13 +307,13 @@ import Data.Sequence (Seq)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
 
 (remove-hook 'haskell-mode-hook 'intero-mode-blacklist)
-;(add-hook 'haskell-mode-hook 'my-intero-mode)
+(add-hook 'haskell-mode-hook 'my-intero-mode)
 
 (defun my-intero-mode ()
   (interactive)
   (if (eq major-mode 'purescript-mode)
       (call-interactively 'psc-ide-mode)
-    (call-interactively 'intero-mode-blacklist)))
+    (call-interactively 'intero-mode-whitelist)))
 
 
 ;; Keybindings
