@@ -1007,4 +1007,7 @@ prefix argument."
 
 (add-hook 'after-save-hook 'my-after-save-js-action)
 
+(set-face-attribute 'comint-highlight-prompt nil
+                    :inherit nil)
+
 (provide 'global)
