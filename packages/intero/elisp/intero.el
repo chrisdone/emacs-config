@@ -1494,7 +1494,12 @@ stack's default)."
               (intero-localize-path (intero-buffer-file-name)))))
       (let ((process
              (get-buffer-process
-              (apply #'make-comint-in-buffer "intero" (current-buffer) intero-stack-executable nil "ghci"
+              (apply #'make-comint-in-buffer "intero" (current-buffer) "docker"  nil
+                     "exec"
+                     "-i"
+                     (intero-get-docker-container)
+                     intero-stack-executable
+                     "ghci"
                      (append arguments
                              (list "--verbosity" "silent")
                              (list "--ghci-options"
