@@ -299,7 +299,7 @@ import Data.Sequence (Seq)
 
 ;; Add hook
 
-(add-hook 'haskell-mode-hook 'structured-haskell-mode)
+;(add-hook 'haskell-mode-hook 'structured-haskell-mode)
 (remove-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (remove-hook 'haskell-mode-hook 'stack-mode)
 (add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
@@ -307,7 +307,7 @@ import Data.Sequence (Seq)
 (add-hook 'w3m-display-hook 'w3m-haddock-display)
 
 (remove-hook 'haskell-mode-hook 'intero-mode-blacklist)
-(add-hook 'haskell-mode-hook 'my-intero-mode)
+;(add-hook 'haskell-mode-hook 'my-intero-mode)
 
 (defun my-intero-mode ()
   (interactive)
@@ -616,30 +616,8 @@ to stylish-haskell."
 (define-key shm-map (kbd "C-i") 'haskell-fast-add-import)
 (define-key shm-map (kbd "<tab>") 'shm/tab)
 
-(setq haskell-process-type 'ghci)
-(setq haskell-process-path-ghci "stack")
-(setq haskell-process-use-ghci t)
-(setq haskell-process-args-ghci '("ghci" "--with-ghc" "intero" "--no-load" "--no-build"))
-
-;; (define-key intero-mode-map [f12] 'intero-devel-reload)
-(define-key intero-mode-map [f12] nil)
-
-(setq hindent-style "johan-tibell")
-
-(define-key haskell-mode-map [f6] (lambda () (interactive) (compile "stack test")))
-
-(define-key haskell-mode-map [f5]
-  (lambda ()
-    (interactive)
-    (compile (format "cd %s && sh build.sh" (intero-project-root)))))
-
-(define-key purescript-mode-map [f5]
-  (lambda ()
-    (interactive)
-    (compile "cd .. && stack exec purify")))
-
-
 (add-hook 'purescript-mode 'psc-ide-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Expression watching support for intero
 
