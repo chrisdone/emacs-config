@@ -360,6 +360,7 @@ This is slower, but will build required dependencies.")
                      intero-repl-no-build
                      intero-repl-no-load
                      intero-stack-yaml
+                     intero-docker-container
                      ;; TODO: shouldn’t more of the above be here?
                      )))
     (cl-loop for v in variables do
@@ -499,7 +500,7 @@ line as a type signature."
 (defun intero-info (ident)
   "Get the info of the thing with IDENT at point."
   (interactive (list (intero-ident-at-point)))
-  (let ((v (shell-command-to-string "stack ghc -- --version")))
+  (let ((v (intero-shell-command-to-string "stack ghc -- --version")))
     (let ((origin-buffer (current-buffer))
           (package (intero-package-name))
           (info (intero-get-info-of ident))
@@ -566,10 +567,10 @@ If the problem persists, please report this as a bug!")))
             (let ((result
                    (let ((default-directory (intero-project-root)))
                      (concat
-                      (shell-command-to-string
+                      (intero-shell-command-to-string
                        (format "hag %s '(data|newtype|type)' conid '\"%s\"'"
                                default-directory string))
-                      (shell-command-to-string
+                      (intero-shell-command-to-string
                        (format "hag %s '(equal|vbar)' conid '\"%s\"'"
                                default-directory string))))))
               (when (string-match "^\\(.*?\\):\\([0-9]+\\):"
@@ -581,7 +582,7 @@ If the problem persists, please report this as a bug!")))
           (let ((result
                  (let ((default-directory (intero-project-root))
                        (pattern (format "(^%s\\b|\\b%s ::)" string string)))
-                   (shell-command-to-string
+                   (intero-shell-command-to-string
                     (format "rg -g '*.hs' '%s' --vimgrep -m 1 --with-filename"
                             pattern)))))
             (when (string-match "^\\(.*?\\):\\([0-9]+\\):\\([0-9]+\\)"
@@ -2102,7 +2103,9 @@ INFILE, DESTINATION, DISPLAY and ARGS are as for
 'call-process'/'process-file'.  Provides TRAMP compatibility for
 'call-process'; when the 'default-directory' is on a remote
 machine, PROGRAM is launched on that machine."
-  (let ((process-args (append (list program infile destination display) args)))
+  (let ((process-args (append (list "docker" infile destination display)
+                              (append (list "exec" "-i" (intero-get-docker-container) program)
+                                      args))))
     (apply 'process-file process-args)))
 
 (defun intero-call-stack (&optional infile destination display stack-yaml &rest args)
@@ -2472,11 +2475,20 @@ Uses the default stack config file, or STACK-YAML file if given."
               (message "Intero arguments: %s" (combine-and-quote-strings arguments)))
             (message "Booting up intero ...")
             (setenv "INTERO" "1")
-            (apply #'start-file-process intero-stack-executable buffer intero-stack-executable
+            (apply #'intero-start-file-process intero-stack-executable buffer intero-stack-executable
                    arguments))))
     (list :arguments arguments
           :options options
           :process process)))
+
+(defun intero-start-file-process (name buffer program &rest program-args)
+  (apply #'start-file-process
+         name
+         buffer
+         "docker"
+         (append
+          (list "exec" "-i" (intero-get-docker-container) program)
+          program-args)))
 
 (defun intero-flycheck-buffer ()
   "Run flycheck in the buffer.
@@ -2534,7 +2546,7 @@ This is a standard process sentinel function."
 
 (defun intero-executable-path (stack-yaml)
   "The path for the intero executable."
-  (let ((v (shell-command-to-string "stack ghc -- --version")))
+  (let ((v (intero-shell-command-to-string "stack ghc -- --version")))
     (if (or (string-match-p (regexp-quote "version 8.10") v)
             (string-match-p (regexp-quote "version 8.8.3") v)
             (string-match-p (regexp-quote "version 8.8.4") v))
@@ -3286,7 +3298,7 @@ suggestions are available."
                (lambda (str) (let ((case-fold-search nil))
                                (string-match "^[A-Z][A-Za-z0-9]+$" str)))
                (split-string
-                (shell-command-to-string
+                (intero-shell-command-to-string
                  (concat intero-stack-executable
                          (if intero-stack-yaml
                              (concat "--stack-yaml " intero-stack-yaml)
@@ -3787,6 +3799,18 @@ If CURRENT, highlight the span uniquely."
     (overlay-put o 'intero-highlight-uses-mode-highlight t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun intero-shell-command-to-string (string)
+  (shell-command-to-string
+   (concat "docker exec "
+           (intero-get-docker-container)
+           string)))
+
+(defvar-local intero-docker-container nil)
+(defun intero-get-docker-container ()
+  (or intero-docker-container
+      (setq intero-docker-container
+            (completing-read "Container: " (list)))))
 
 (provide 'intero)
 
