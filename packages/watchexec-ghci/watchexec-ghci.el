@@ -76,9 +76,11 @@ sGHCi command(s) to run: ")
   (when (and (bufferp (process-buffer process))
              (buffer-live-p (process-buffer process)))
     (with-current-buffer (process-buffer process)
-      (with-current-buffer watchexec-ghci-repl-buffer
-        (goto-char (point-max))
-        (insert watchexec-ghci-commands)
-        (call-interactively (key-binding (kbd "RET")))))))
+      (when (and (bufferp watchexec-ghci-repl-buffer)
+             (buffer-live-p watchexec-ghci-repl-buffer))
+        (with-current-buffer watchexec-ghci-repl-buffer
+          (goto-char (point-max))
+          (insert watchexec-ghci-commands)
+          (call-interactively (key-binding (kbd "RET"))))))))
 
 (provide 'watchexec-ghci)
