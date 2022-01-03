@@ -78,3 +78,9 @@
   (interactive)
   (execute-kbd-macro
    [?  ?s ?/ ?b ?l ?o ?b ?/ return ?g ?f ?f backspace escape ?\[ ?f ?i ?l ?e ?: escape ?s ?# return escape backspace ?: ?: escape ?d ?g ?f escape ?\] escape ?r ?\[ return]))
+
+(defun note ()
+  (interactive)
+  (save-window-excursion
+    (with-current-buffer (find-file "~/Work/chrisdone/log/log.org")
+      (save-excursion (org-add-note)))))
