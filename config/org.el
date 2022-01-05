@@ -82,5 +82,5 @@
 (defun note ()
   (interactive)
   (save-window-excursion
-    (with-current-buffer (find-file "~/Work/chrisdone/log/log.org")
+    (with-current-buffer (get-buffer " log.org")
       (save-excursion (org-add-note)))))
