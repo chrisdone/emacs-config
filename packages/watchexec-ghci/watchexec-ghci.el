@@ -18,7 +18,7 @@
 ;;; Code:
 
 (defcustom watchexec-ghci-extensions
-  "hs"
+  "hs,js,purs"
   "Comma-separated list of extensions to watch.")
 
 (defvar-local watchexec-ghci-process nil
