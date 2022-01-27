@@ -664,6 +664,9 @@ prefix argument."
 
 (add-to-list 'auto-mode-alist (cons "\\.track\\'" 'track-mode))
 
+(add-to-list 'auto-mode-alist (cons "\\.tsx\\'" 'web-mode))
+(add-to-list 'auto-mode-alist (cons "\\.ts\\'" 'typescript-mode))
+
 
 ;; Environment settings
 
@@ -1009,5 +1012,7 @@ prefix argument."
 
 (set-face-attribute 'comint-highlight-prompt nil
                     :inherit nil)
+
+(setq web-mode-enable-auto-indentation nil)
 
 (provide 'global)

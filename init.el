@@ -20,6 +20,8 @@
     audit
     haskell-mode
     rust-mode
+    web-mode
+    typescript-mode
     smex
     magit
     goto-last-change
