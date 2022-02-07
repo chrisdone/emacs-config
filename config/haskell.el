@@ -849,3 +849,9 @@ preserved, although placement may be funky."
          (ido-completing-read "Formatter: "
                               (list "/opt/hindent-5.3.1" "/opt/hindent-ormolu"))))
     (call-interactively 'hindent-reformat-region)))
+
+(defun hindent/reformat-decl (u)
+  (interactive "P")
+  (if u
+      (call-interactively 'hindent-reformat-decl-via)
+    (call-interactively 'hindent-reformat-decl)))
