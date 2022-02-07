@@ -299,7 +299,7 @@ import Data.Sequence (Seq)
 
 ;; Add hook
 
-;(add-hook 'haskell-mode-hook 'structured-haskell-mode)
+                                        ;(add-hook 'haskell-mode-hook 'structured-haskell-mode)
 (remove-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (remove-hook 'haskell-mode-hook 'stack-mode)
 (add-hook 'haskell-interactive-mode-hook 'structured-haskell-repl-mode)
@@ -810,16 +810,28 @@ preserved, although placement may be funky."
 (defun ormolu ()
   "Autoformat the buffer with ormolu."
   (interactive)
-  (save-excursion
+  (let ((point (point)))
     (save-buffer)
     (call-process-region
      (point-min)
      (point-max)
-     "ormolu"
+     "/opt/ormolu-0.1.4.1"
      t
      t
      t
-     "--cabal-default-extensions"
-     "--stdin-input-file"
+
+     ;; copied from brossa/treefmt.toml#L6
+     "--ghc-opt" "-XBangPatterns"
+     "--ghc-opt" "-XNumericUnderscores"
+     "--ghc-opt" "-XOverloadedLabels"
+     "--ghc-opt" "-XPatternSynonyms"
+     "--ghc-opt" "-XTypeApplications"
+     "--mode" "stdout"
+     "--check-idempotence"
+     ;;
+
+     ;; Does not work on 0.1.4.1
+     ;; "--stdin-input-file"
      (buffer-file-name))
-    (save-buffer)))
+    (save-buffer)
+    (goto-char point)))
