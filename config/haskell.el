@@ -827,7 +827,7 @@ preserved, although placement may be funky."
      "--ghc-opt" "-XPatternSynonyms"
      "--ghc-opt" "-XTypeApplications"
      "--mode" "stdout"
-     "--check-idempotence"
+     ;; "--check-idempotence" aoyig
      ;;
 
      ;; Does not work on 0.1.4.1
@@ -835,3 +835,17 @@ preserved, although placement may be funky."
      (buffer-file-name))
     (save-buffer)
     (goto-char point)))
+
+(defun hindent-reformat-decl-via ()
+  (interactive)
+  (let ((hindent-process-path
+         (ido-completing-read "Formatter: "
+                              (list "/opt/hindent-5.3.1" "/opt/hindent-ormolu"))))
+    (call-interactively 'hindent-reformat-decl)))
+
+(defun hindent-reformat-region-via ()
+  (interactive)
+  (let ((hindent-process-path
+         (ido-completing-read "Formatter: "
+                              (list "/opt/hindent-5.3.1" "/opt/hindent-ormolu"))))
+    (call-interactively 'hindent-reformat-region)))
