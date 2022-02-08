@@ -361,13 +361,14 @@ return (FILENAME . REVISION) otherwise nil."
             (setq line-end nil)))
         (list line-start line-end)))))
 
-(defun git-link--new (link)
-  (kill-new link)
-  ;; prevent URL escapes from being interpreted as format strings
-  (message (replace-regexp-in-string "%" "%%" link t t))
-  (setq deactivate-mark t)
-  (when git-link-open-in-browser
-    (browse-url link)))
+(defun git-link--new (link_)
+  (let ((link (replace-regexp-in-string "github-.*?/" "github.com/" link_)))
+    (kill-new link)
+    ;; prevent URL escapes from being interpreted as format strings
+    (message (replace-regexp-in-string "%" "%%" link t t))
+    (setq deactivate-mark t)
+    (when git-link-open-in-browser
+      (browse-url link))))
 
 (defun git-link-gitlab (hostname dirname filename branch commit start end)
   (format "https://%s/%s/blob/%s/%s"
