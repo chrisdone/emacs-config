@@ -228,8 +228,8 @@ the file."
                           (when (looking-back "^[ ]+" (line-beginning-position))
                             (back-to-indentation))
                           (delete-trailing-whitespace new-start new-end)))
-                      (message "Formatted."))
-                  (message "Already formatted.")))))))))))
+                      (message "Formatted via: %s" hindent-process-path))
+                  (message "Already formatted via: %s" hindent-process-path)))))))))))
 
 (defun hindent-decl-points ()
   "Get the start and end position of the current declaration.
