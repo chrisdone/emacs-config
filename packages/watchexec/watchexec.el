@@ -1,4 +1,6 @@
 ;;; watchexec.el --- Watch dir, run commands a buffer when files change.
+;;
+;; Requires watchexec https://github.com/watchexec/watchexec
 
 ;; Copyright (c) 2021 Chris Done. All rights reserved.
 
