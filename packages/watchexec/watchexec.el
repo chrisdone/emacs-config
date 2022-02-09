@@ -1,4 +1,4 @@
-;;; watchexec-ghci.el --- Watch dir, re-run GHCi commands
+;;; watchexec.el --- Watch dir, re-run commands
 
 ;; Copyright (c) 2021 Chris Done. All rights reserved.
 
@@ -17,58 +17,58 @@
 
 ;;; Code:
 
-(defcustom watchexec-ghci-extensions
+(defcustom watchexec-extensions
   "hs,js,purs"
   "Comma-separated list of extensions to watch.")
 
-(defvar-local watchexec-ghci-process nil
+(defvar-local watchexec-process nil
   "Process that you can stop later.")
 
-(defvar-local watchexec-ghci-commands nil
+(defvar-local watchexec-commands nil
   "Commands that we're running.")
 
-(defvar-local watchexec-ghci-repl-buffer nil
+(defvar-local watchexec-repl-buffer nil
   "The REPL's buffer.")
 
-(defun watchexec-ghci-stop ()
+(defun watchexec-stop ()
   (interactive)
-  (kill-process watchexec-ghci-process))
+  (kill-process watchexec-process))
 
-(defun watchexec-set-command (ghci-commands-to-run)
-  (interactive "sGHCi command(s) to run: ")
-  (setq watchexec-ghci-commands ghci-commands-to-run))
+(defun watchexec-set-command (-commands-to-run)
+  (interactive "sCommand to run in buffer: ")
+  (setq watchexec-commands -commands-to-run))
 
-(defun watchexec-ghci (directory-to-watch ghci-commands-to-run)
+(defun watchexec (directory-to-watch -commands-to-run)
   "Start a process watching DIRECTORY-TO-WATCH, when any file
-changes, insert GHCI-COMMANDS-TO-RUN (as a string) into the
+changes, insert -COMMANDS-TO-RUN (as a string) into the
 buffer followed by hitting the RET key."
   (interactive "sDirectory to watch:
-sGHCi command(s) to run: ")
+sCommand(s) to run in buffer: ")
   (let ((repl-buffer (current-buffer))
         (buffer (get-buffer-create
-                 (generate-new-buffer-name "watchexec-ghci"))))
+                 (generate-new-buffer-name "watchexec"))))
     (with-current-buffer buffer
-      (setq watchexec-ghci-repl-buffer repl-buffer))
-    (setq watchexec-ghci-commands ghci-commands-to-run)
-    (setq watchexec-ghci-process
+      (setq watchexec-repl-buffer repl-buffer))
+    (setq watchexec-commands -commands-to-run)
+    (setq watchexec-process
           (start-process
-           "watchexec-ghci"
+           "watchexec"
            buffer
            "watchexec"
            "--no-shell"
            "--exts"
-           watchexec-ghci-extensions
+           watchexec-extensions
            "--watch"
            directory-to-watch
            "echo"))
     (set-process-buffer
-     watchexec-ghci-process
+     watchexec-process
      buffer)
     (set-process-query-on-exit-flag
-     watchexec-ghci-process
+     watchexec-process
      t)
     (set-process-filter
-     watchexec-ghci-process
+     watchexec-process
      'watchexec-filter)))
 
 (defun watchexec-filter (process string)
@@ -76,11 +76,11 @@ sGHCi command(s) to run: ")
   (when (and (bufferp (process-buffer process))
              (buffer-live-p (process-buffer process)))
     (with-current-buffer (process-buffer process)
-      (when (and (bufferp watchexec-ghci-repl-buffer)
-             (buffer-live-p watchexec-ghci-repl-buffer))
-        (with-current-buffer watchexec-ghci-repl-buffer
+      (when (and (bufferp watchexec-repl-buffer)
+             (buffer-live-p watchexec-repl-buffer))
+        (with-current-buffer watchexec-repl-buffer
           (goto-char (point-max))
-          (insert watchexec-ghci-commands)
+          (insert watchexec-commands)
           (call-interactively (key-binding (kbd "RET"))))))))
 
-(provide 'watchexec-ghci)
+(provide 'watchexec)
