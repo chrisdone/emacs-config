@@ -1,4 +1,4 @@
-;;; watchexec.el --- Watch dir, run commands a buffer when files change.
+;;; watchexec.el --- Watch dir, run commands in a buffer (shell-mode/comint) when files change.
 ;;
 ;; Requires watchexec https://github.com/watchexec/watchexec
 
