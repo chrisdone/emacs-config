@@ -1,4 +1,4 @@
-;;; watchexec.el --- Watch dir, re-run commands
+;;; watchexec.el --- Watch dir, run commands a buffer when files change.
 
 ;; Copyright (c) 2021 Chris Done. All rights reserved.
 
