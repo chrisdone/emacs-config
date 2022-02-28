@@ -6,10 +6,11 @@
 
 (defun ls-files ()
   (interactive)
-  (find-file
-   (ivy-completing-read
-    "Find File: "
-    (split-string (shell-command-to-string "git ls-files") "\n"))))
+  (let ((default-directory (car (split-string (shell-command-to-string "git rev-parse --show-toplevel")))))
+    (find-file
+     (ivy-completing-read
+      "Find File: "
+      (split-string (shell-command-to-string "git ls-files") "\n")))))
 
 (defun rg ()
   (interactive)
