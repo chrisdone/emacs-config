@@ -1015,4 +1015,25 @@ prefix argument."
 
 (setq web-mode-enable-auto-indentation nil)
 
+(defun unjson-string (beg end)
+  "The region containing a JSON string will be unJSON-ified."
+  (interactive "r")
+  (let* ((string (buffer-substring beg end))
+         (input (if (string-match "^\".*\"$" string)
+                    string
+                  (format "\"%s\"" string)))
+         (output (with-temp-buffer
+                   (insert input)
+                   (call-process-region
+                    (point-min)
+                    (point-max)
+                    "jq"
+                    t
+                    t
+                    nil
+                    "--raw-output")
+                   (buffer-string))))
+    (delete-region beg end)
+    (insert output)))
+
 (provide 'global)
