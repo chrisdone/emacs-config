@@ -14,6 +14,6 @@
 
 (defun rg ()
   (interactive)
-  (call-interactively 'counsel-rg))
+  (counsel-rg (ag/dwim-at-point)))
 
 (provide 'ivy)
