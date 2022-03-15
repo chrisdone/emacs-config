@@ -472,6 +472,7 @@ prefix argument."
 (define-key magit-mode-map [?\M-9] '(lambda () (interactive) (tab-bar-select-tab 9)))
 
 (global-set-key (kbd "C-x C-z") 'dogears-list)
+(global-set-key (kbd "C-z") 'ido-switch-buffer)
 
 (global-set-key (kbd "<left>") 'windmove-left)
 (global-set-key (kbd "<right>") 'windmove-right)
