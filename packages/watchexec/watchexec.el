@@ -44,8 +44,11 @@
   "Start a process watching DIRECTORY-TO-WATCH, when any file
 changes, insert -COMMANDS-TO-RUN (as a string) into the
 buffer followed by hitting the RET key."
-  (interactive "sDirectory to watch:
-sCommand(s) to run in buffer: ")
+  (interactive (list (read-file-name "Directory to watch: ")
+                     (read-from-minibuffer "Command to run: "
+                                           (if (eq major-mode 'shell-mode)
+                                               (ring-ref comint-input-ring 0)
+                                             nil))))
   (let ((repl-buffer (current-buffer))
         (buffer (get-buffer-create
                  (generate-new-buffer-name "watchexec"))))
