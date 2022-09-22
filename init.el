@@ -10,6 +10,7 @@
 
 ;; Packages and configs to load
 
+;; Commented out are candidates for removal
 (defvar packages
   '(color-theme
     s
@@ -19,7 +20,7 @@
     paredit
     audit
     haskell-mode
-    rust-mode
+    ;; rust-mode
     web-mode
     typescript-mode
     smex
@@ -42,24 +43,25 @@
     restclient
     purescript-mode
     yaml-mode
-    websocket
+    ;; websocket
     quickjump
-    slow-keys
+    ;; slow-keys
     psc-ide
-    neotree
+    ;; neotree
     string-inflection
     tail-on-change
-    graphql-mode
+    ;; graphql-mode
     markdown-toc
     swiper
     find-file-in-project
-    edit-comment
+    ;; edit-comment
     prodigy
-    docker
-    kubel
+    ;; docker
+    ;; kubel
     graphviz-dot-mode
-    dogears
-    go-mode)
+    ;; dogears
+    ;; go-mode
+    )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
