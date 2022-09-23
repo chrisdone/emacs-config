@@ -61,6 +61,7 @@
     graphviz-dot-mode
     ;; dogears
     ;; go-mode
+    slime
     )
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
@@ -132,7 +133,7 @@
 ;; Mode initializations
 
 (smex-initialize)
-(zenburn)
+(progn (load "zenburn") (zenburn))
 (god-mode)
 (goto-last-point-mode)
 (turn-on-haskell-simple-indent)
@@ -149,3 +150,11 @@
 (add-hook 'intero-repl-mode-hook 'turn-off-linum-mode)
 (defun turn-off-linum-mode ()
   (linum-mode -1))
+
+;; (define-key slime-autodoc-mode-map (kbd "SPC") 'my-slime-space)
+
+(defun my-slime-space ()
+  (interactive)
+  (if god-local-mode
+      (call-interactively 'god-mode-self-insert)
+    (call-interactively 'slime-autodoc-space)))
