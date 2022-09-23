@@ -46,14 +46,16 @@
 
 (defun vosk-filter (process string)
   "Handle partial transcription of words."
-  (with-current-buffer (vosk-buffer)
-    (save-excursion
-      (goto-char (point-max))
-      (insert (replace-regexp-in-string "\r\n" "" string))
-      (goto-char (point-min))
-      (let ((partial (vosk-read-partial)))
-        (when partial
-          (run-hook-with-args 'vosk-partial-hook partial))))))
+  (let ((buffer (current-buffer)))
+    (with-current-buffer (vosk-buffer)
+      (save-excursion
+        (goto-char (point-max))
+        (insert (replace-regexp-in-string "\r\n" "" string))
+        (goto-char (point-min))
+        (let ((partial (vosk-read-partial)))
+          (while partial
+            (run-hook-with-args 'vosk-partial-hook buffer partial)
+            (setq partial (vosk-read-partial))))))))
 
 (defun vosk-start ()
   "Start vosk."
@@ -118,14 +120,15 @@
     ("stop" . "C-g")
     ("space" . "<space>")
     ("escape" . "<escape>")
-    ("undo" . "C-/")
+    ("slash" . "/")
     ("back" . "DEL")
     ("left" . "<left>")
     ("right" . "<right>")
     ("up" . "<up>")
-    ("down" . "<down>")))
+    ("down" . "<down>")
+    ("comma" . ",")))
 
-(defun vosk-nato-handler (partial)
+(defun vosk-nato-handler (buffer partial)
   "Hook handler implementing NATO phonetic alphabet."
   (prog1
       (when (> (length partial) 0)
@@ -141,7 +144,7 @@
           (prog1 (when (not (string= word vosk-nato-prev-word))
                    (let ((key (cdr (assoc word vosk-nato-keys 'string=))))
                      (when key
-                       (execute-kbd-macro (read-kbd-macro key t)))))
+                       (message "key=%s" key))))
             (setq vosk-nato-prev-word word))))
     (setq vosk-nato-prev-fragment partial)))
 
