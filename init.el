@@ -59,7 +59,9 @@
     kubel
     graphviz-dot-mode
     dogears
-    go-mode)
+    go-mode
+    inheritenv
+    envrc)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -117,6 +119,7 @@
 (require 'haskell-move-nested)
 (require 'psc-ide)
 (require 'counsel)
+(require 'envrc)
 
 
 ;; Emacs configurations
@@ -137,6 +140,7 @@
 (global-set-key (kbd "C-z") 'ido-switch-buffer)
 (winner-mode)
 (global-linum-mode)
+(envrc-global-mode)
 
 (add-hook 'shell-mode-hook 'turn-off-linum-mode)
 (add-hook 'magit-status-mode-hook 'turn-off-linum-mode)
