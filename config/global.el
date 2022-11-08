@@ -1041,4 +1041,16 @@ prefix argument."
     (delete-region beg end)
     (insert output)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; macOS-specific
+
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+(setq ns-use-proxy-icon nil)
+(setq frame-title-format nil)
+
+(when (eq system-type 'darwin)
+  (setq insert-directory-program "/opt/homebrew/bin/gls" dired-use-ls-dired t)
+  (setq dired-listing-switches "-al --group-directories-first"))
+
 (provide 'global)
