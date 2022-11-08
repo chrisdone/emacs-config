@@ -413,6 +413,10 @@ prefix argument."
 
 (global-set-key (kbd "s-d") 'delete-this-line)
 
+;; you have to do it this way, if you just global-set-key then other
+;; modes rebind C-g. So s-g is much better.
+(define-key key-translation-map (kbd "s-g") (kbd "C-g"))
+
 (defun delete-this-line ()
   (interactive)
   (let ((col (current-column)))
@@ -472,6 +476,7 @@ prefix argument."
 (define-key magit-mode-map [?\M-9] '(lambda () (interactive) (tab-bar-select-tab 9)))
 
 (global-set-key (kbd "C-x C-z") 'dogears-list)
+(global-set-key (kbd "C-z") 'ido-switch-buffer)
 
 (global-set-key (kbd "<left>") 'windmove-left)
 (global-set-key (kbd "<right>") 'windmove-right)
@@ -726,7 +731,7 @@ prefix argument."
                 (* 1000 (float-time (time-since ,sym))))
        ,result)))
 
-(setq flycheck-check-syntax-automatically '(save idle-change new-line mode-enabled))
+(setq flycheck-check-syntax-automatically '(save mode-enabled))
                                         ;(setq flycheck-check-syntax-automatically '(save mode-enabled))
 
 (remove-hook 'post-command-hook 'slowdown)
