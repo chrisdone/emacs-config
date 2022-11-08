@@ -413,6 +413,10 @@ prefix argument."
 
 (global-set-key (kbd "s-d") 'delete-this-line)
 
+;; you have to do it this way, if you just global-set-key then other
+;; modes rebind C-g. So s-g is much better.
+(define-key key-translation-map (kbd "s-g") (kbd "C-g"))
+
 (defun delete-this-line ()
   (interactive)
   (let ((col (current-column)))
