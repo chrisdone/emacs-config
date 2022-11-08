@@ -731,7 +731,7 @@ prefix argument."
                 (* 1000 (float-time (time-since ,sym))))
        ,result)))
 
-(setq flycheck-check-syntax-automatically '(save idle-change new-line mode-enabled))
+(setq flycheck-check-syntax-automatically '(save mode-enabled))
                                         ;(setq flycheck-check-syntax-automatically '(save mode-enabled))
 
 (remove-hook 'post-command-hook 'slowdown)
