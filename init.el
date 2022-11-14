@@ -19,7 +19,8 @@
     inheritenv
     envrc
     ag
-    swiper)
+    swiper
+    quickjump)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
