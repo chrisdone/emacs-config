@@ -128,3 +128,9 @@
 (defun rg ()
   (interactive)
   (counsel-rg (ag/dwim-at-point)))
+
+(defun replace-string-or-query-replace (n)
+  (interactive "P")
+  (if n
+      (call-interactively 'query-replace)
+    (call-interactively 'replace-string)))

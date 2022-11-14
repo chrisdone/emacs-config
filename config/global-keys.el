@@ -8,15 +8,15 @@
 
 (global-set-key (kbd "C-p") 'avoid-this-key)
 (global-set-key (kbd "C-h") 'previous-line)
-(global-set-key (kbd "RET") 'newline)
 (global-set-key (kbd "C->") 'end-of-buffer)
 (global-set-key (kbd "C-<") 'beginning-of-buffer)
 (global-set-key (kbd "M-a") 'backward-up-list)
 (global-set-key (kbd "M-a") 'up-list)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-\\") 'goto-last-point)
-(global-set-key (kbd "C-m") 'quickjump-backward)
 (global-set-key (kbd "C-,") 'quickjump-forward)
+(global-set-key (kbd "C-m") 'quickjump-backward)
+(global-set-key (kbd "RET") 'newline) ;; Order is important after C-m above.
 
 
 ;; Mouse
@@ -62,3 +62,4 @@
 ;; Key translations
 
 (define-key key-translation-map (kbd "s-g") (kbd "C-g"))
+(define-key input-decode-map "\C-m" [C-m])
