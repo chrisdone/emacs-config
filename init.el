@@ -1,7 +1,3 @@
-;; Emacs version
-;; GNU Emacs 25.2.1 (x86_64-pc-linux-gnu, X toolkit, Xaw3d scroll bars)
-;;  of 2017-09-22, modified by Debian
-
 
 ;; Standard libraries needed
 
@@ -12,83 +8,35 @@
 
 ;; Commented out are candidates for removal
 (defvar packages
-  '(color-theme
-    s
+  '(god-mode
+    smex
+    string-inflection
+    git-link
+    magit
+    color-theme
     zenburn
     sunburn
-    god-mode
-    paredit
-    audit
-    haskell-mode
-    ;; rust-mode
-    web-mode
-    typescript-mode
-    smex
-    magit
-    goto-last-change
-    markdown-mode
-    dockerfile-mode
-    dash
-    elisp-slime-nav
-    echo-keys
-    align-by-current-symbol
-    ag
-    goto-last-point
-    git-link
-    number
-    hide-region
-    resmacro
-    flycheck
-    json-reformat
-    restclient
-    purescript-mode
-    yaml-mode
-    ;; websocket
-    quickjump
-    ;; slow-keys
-    psc-ide
-    ;; neotree
-    string-inflection
-    tail-on-change
-    ;; graphql-mode
-    markdown-toc
-    swiper
-    find-file-in-project
-    ;; edit-comment
-    prodigy
-    ;; docker
-    ;; kubel
-    graphviz-dot-mode
-    ;; dogears
-    go-mode
     inheritenv
-    envrc
-    ;; dogears
-    ;; go-mode
-    slime
-    )
+    envrc)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
 (defvar custom-load-paths
-  '("structured-haskell-mode/elisp"
-    "hindent/elisp"
-    "git-modes"
-    "company-mode"
-    "intero/elisp"
-    "psc-ide-emacs/")
+  '("git-modes")
   "Custom load paths that don't follow the normal
   package-name/module-name.el format.")
 
 (defvar configs
-  '("global"
+  '("global-functions"
+    "global-keys"
+    "global-config"
     "god"
-    "haskell"
-    "lisp"
-    "markdown"
-    "org"
-    "ivy"
-    "prodigy")
+    "dired"
+    "git"
+    "macos"
+    "envrc"
+    "shell"
+    "hooks")
   "Configuration files that follow the config/foo.el file path
   format.")
 
@@ -111,20 +59,10 @@
                                        (symbol-name name)))
                   (require name))))
 
-(require 'shm)
-(require 'hindent)
-(require 'shm-case-split)
-(require 'shm-reformat)
-(require 'company)
-(require 'magit-blame)
-(require 'intero)
-(require 'haskell-mode)
-(require 'haskell)
-(require 'haskell-simple-indent)
-(require 'haskell-move-nested)
-(require 'psc-ide)
-(require 'counsel)
-(require 'envrc)
+
+;; Custom require calls
+
+; None.
 
 
 ;; Emacs configurations
@@ -137,30 +75,24 @@
 
 ;; Mode initializations
 
-(smex-initialize)
 (progn (load "zenburn") (zenburn))
-(god-mode)
-(goto-last-point-mode)
-(turn-on-haskell-simple-indent)
-(global-set-key (kbd "C-z") 'ido-switch-buffer)
-(winner-mode)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(god-mode-all)
+(smex-initialize)
 (global-linum-mode)
+(ido-mode)
+(global-font-lock-mode)
+(show-paren-mode)
+(line-number-mode)
+(column-number-mode)
+(size-indication-mode)
+(transient-mark-mode)
+(delete-selection-mode)
 (envrc-global-mode)
 
-(add-hook 'shell-mode-hook 'turn-off-linum-mode)
-(add-hook 'magit-status-mode-hook 'turn-off-linum-mode)
-(add-hook 'flycheck-error-list-mode-hook 'turn-off-linum-mode)
-(add-hook 'messages-buffer-mode-hook 'turn-off-linum-mode)
-(add-hook 'intero-help-mode-hook 'turn-off-linum-mode)
-(add-hook 'git-commit-mode-hook 'turn-off-linum-mode)
-(add-hook 'intero-repl-mode-hook 'turn-off-linum-mode)
-(defun turn-off-linum-mode ()
-  (linum-mode -1))
+
+;; Extra setups
 
-;; (define-key slime-autodoc-mode-map (kbd "SPC") 'my-slime-space)
-
-(defun my-slime-space ()
-  (interactive)
-  (if god-local-mode
-      (call-interactively 'god-mode-self-insert)
-    (call-interactively 'slime-autodoc-space)))
+(set-auto-saves)
