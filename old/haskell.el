@@ -7,7 +7,6 @@
                                         ;(require 'haskell-simple-indent)
 (require 'haskell-interactive-mode)
 (require 'haskell)
-(require 'intero)
 (require 'haskell-font-lock)
 (require 'haskell-debug)
 (require 'sgml-mode)
@@ -318,7 +317,7 @@ import Data.Sequence (Seq)
 
 ;; Keybindings
 
-(define-key intero-mode-map (kbd "C-`") 'my-flycheck-list-errors)
+;; (define-key intero-mode-map (kbd "C-`") 'my-flycheck-list-errors)
 (defvar my-error-list-toggle nil)
 (defun my-flycheck-list-errors ()
   (interactive)
