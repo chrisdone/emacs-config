@@ -116,3 +116,15 @@
 
 (defun turn-off-linum-mode ()
   (linum-mode -1))
+
+(defun ls-files ()
+  (interactive)
+  (let ((default-directory (car (split-string (shell-command-to-string "git rev-parse --show-toplevel")))))
+    (find-file
+     (ivy-completing-read
+      "Find File: "
+      (split-string (shell-command-to-string "git ls-files") "\n")))))
+
+(defun rg ()
+  (interactive)
+  (counsel-rg (ag/dwim-at-point)))

@@ -17,7 +17,9 @@
     zenburn
     sunburn
     inheritenv
-    envrc)
+    envrc
+    ag
+    swiper)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -36,6 +38,7 @@
     "macos"
     "envrc"
     "shell"
+    "ivy"
     "hooks")
   "Configuration files that follow the config/foo.el file path
   format.")
@@ -62,7 +65,7 @@
 
 ;; Custom require calls
 
-; None.
+(require 'counsel)
 
 
 ;; Emacs configurations
