@@ -40,6 +40,7 @@
     "envrc"
     "shell"
     "ivy"
+    "haskell-functions"
     "hooks")
   "Configuration files that follow the config/foo.el file path
   format.")
