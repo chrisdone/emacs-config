@@ -18,4 +18,7 @@
    (setq-local comment-start-skip "-- ")
    (setq-local comment-end ""))
 
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.hs\\'" . h98-mode))
+
 (provide 'h98-mode)
