@@ -1,4 +1,10 @@
 
+;; Keyboard macros
+
+(global-set-key (kbd "C-=") 'kmacro-start-macro)
+(global-set-key (kbd "C-!") 'kmacro-end-or-call-macro)
+
+
 ;; Mode-specific
 
 (global-set-key (kbd "M-x") 'smex)
