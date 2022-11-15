@@ -13,6 +13,7 @@
 ;; Defaults
 
 (set-default 'tags-case-fold-search nil)
+(setq-default indent-tabs-mode nil)
 
 
 ;; Puts
