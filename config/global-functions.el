@@ -134,3 +134,13 @@
   (if n
       (call-interactively 'query-replace)
     (call-interactively 'replace-string)))
+
+(defun wget (url)
+  (interactive "sEnter URL: ")
+  (let ((filename (read-from-minibuffer "Filename: " (car (last (split-string url "/" t))))))
+    (url-copy-file url filename t)
+    (find-file filename)))
+
+(defun curl (url)
+  (interactive "sEnter URL: ")
+  (url-insert-file-contents url nil nil nil t))
