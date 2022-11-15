@@ -5,7 +5,7 @@
     ("^--.*" . font-lock-comment-face)
     ("\"\\(\\(\\\\\"\\)\\|[^\"]\\)*\"" . font-lock-string-face)
     ("\\<\\*?\\[?[A-Z][a-zA-Z]*\\]?\\>" . font-lock-type-face)
-    (,(concat "\\<" (regexp-opt '("deriving" "stock" "anyclass" "via" "import" "module" "qualified" "as" "class" "instance" "where" "data" "type" "newtype" "do" "let" "$")) "\\>") . font-lock-keyword-face)
+    (,(concat "\\<" (regexp-opt '("deriving" "case" "of" "stock" "anyclass" "via" "import" "module" "qualified" "as" "class" "instance" "where" "data" "type" "newtype" "do" "let" "$")) "\\>") . font-lock-keyword-face)
     ("^[a-zA-Z_']+ " . font-lock-function-name-face)))
 
 
