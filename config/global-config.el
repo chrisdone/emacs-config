@@ -6,7 +6,8 @@
  inhibit-startup-echo-area-message t
  suggest-key-bindings nil
  ido-auto-merge-delay-time 99999
- require-final-newline t)
+ require-final-newline t
+ frame-resize-pixelwise t)
 
 
 ;; Defaults
