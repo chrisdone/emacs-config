@@ -98,6 +98,10 @@
 (envrc-global-mode)
 
 
+;; Disable auto-revert mode
+(magit-auto-revert-mode -1)
+
+
 ;; Extra setups
 
 (set-auto-saves)
