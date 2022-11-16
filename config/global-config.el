@@ -7,7 +7,8 @@
  suggest-key-bindings nil
  ido-auto-merge-delay-time 99999
  require-final-newline t
- frame-resize-pixelwise t)
+ frame-resize-pixelwise t
+ explicit-shell-file-name "/bin/bash")
 
 
 ;; Defaults
