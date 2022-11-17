@@ -20,6 +20,7 @@
     envrc
     ag
     swiper
+    watchexec
     quickjump
     h98-mode)
   "Packages whose location follows the
