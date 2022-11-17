@@ -144,3 +144,29 @@
 (defun curl (url)
   (interactive "sEnter URL: ")
   (url-insert-file-contents url nil nil nil t))
+
+(defun my-comint-send ()
+  "Less silly return key for comint-mode."
+  (interactive)
+  (if (comint-after-pmark-p)
+      (call-interactively 'comint-send-input)
+    (let ((file-name-at-point (ffap-file-at-point)))
+      (if file-name-at-point
+          (let ((line (save-excursion
+                        (goto-char (line-beginning-position))
+                        (forward-char (length file-name-at-point))
+                        (when (looking-at ":\\([0-9]+\\)")
+                          (string-to-number (match-string-no-properties 1))))))
+            (find-file-other-window file-name-at-point)
+            (when line
+              (goto-line line)
+              (back-to-indentation)))
+        (goto-char (point-max))))))
+
+(defun my-comint-prev ()
+  "Less silly return key for comint-mode."
+  (interactive)
+  (if (comint-after-pmark-p)
+      (call-interactively 'comint-previous-input)
+    (progn (goto-char (point-max))
+           (call-interactively 'comint-previous-input))))
