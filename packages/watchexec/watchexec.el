@@ -89,6 +89,9 @@ buffer followed by hitting the RET key."
                  (buffer-live-p watchexec-repl-buffer))
         (with-current-buffer watchexec-repl-buffer
           (goto-char (point-max))
+          (let ((window (get-buffer-window (current-buffer) 'visible)))
+            (when window
+              (set-window-point window (point))))
           (insert watchexec-commands)
           (call-interactively (key-binding (kbd "RET"))))))))
 
