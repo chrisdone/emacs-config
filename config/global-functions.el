@@ -170,3 +170,7 @@
       (call-interactively 'comint-previous-input)
     (progn (goto-char (point-max))
            (call-interactively 'comint-previous-input))))
+
+(defun treefmt ()
+  (interactive)
+  (shell-command "treefmt"))
