@@ -1,5 +1,8 @@
 (require 'god-mode-isearch)
 
+(setq-default cursor-type 'bar)
+(blink-cursor-mode -1)
+
 
 ;; Functions
 
@@ -18,6 +21,10 @@
 
 
 ;; Keybindings
+
+(global-set-key (kbd "C->") 'end-of-buffer)
+(global-set-key (kbd "C-<") 'beginning-of-buffer)
+(global-set-key (kbd "C-!") 'eval-defun)
 
 (global-set-key (kbd "C-x C-1") 'delete-other-windows)
 (global-set-key (kbd "C-x C-2") 'split-window-below)

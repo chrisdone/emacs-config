@@ -1,9 +1,0 @@
-query ($id: ID!) {
-  person(id:$id){
-    id
-    name
-    friends {
-      name
-    }
-  }
-}

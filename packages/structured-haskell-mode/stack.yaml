@@ -1,3 +1,0 @@
-resolver: lts-11.13
-extra-deps:
-- haskell-src-exts-1.18.2

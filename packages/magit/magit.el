@@ -5236,7 +5236,7 @@ If REVISION is a remote branch, offer to create a local branch.
 Fails if working tree or staging area contain uncommitted changes.
 \('git checkout -b BRANCH REVISION')."
   (interactive
-   (list (read-string "Create branch: ")
+   (list (read-string "Create branch: " "chrisdone-artificial/")
          (magit-read-rev "Parent" (or (magit-guess-branch)
                                       (magit-get-current-branch)))))
   (cond ((run-hook-with-args-until-success
