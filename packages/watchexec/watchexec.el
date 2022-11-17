@@ -68,7 +68,7 @@ buffer followed by hitting the RET key."
            "--exts"
            watchexec-extensions
            "--watch"
-           directory-to-watch
+           (expand-file-name directory-to-watch)
            "echo"))
     (set-process-buffer
      watchexec-process
