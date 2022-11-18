@@ -69,3 +69,10 @@
 
 (define-key key-translation-map (kbd "s-g") (kbd "C-g"))
 (define-key input-decode-map "\C-m" [C-m])
+
+
+;; Remaps
+
+(global-set-key [remap paredit-kill] (bol-with-prefix paredit-kill))
+(global-set-key [remap org-kill-line] (bol-with-prefix org-kill-line))
+(global-set-key [remap kill-line] (bol-with-prefix kill-line))

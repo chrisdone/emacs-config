@@ -22,7 +22,8 @@
     swiper
     watchexec
     quickjump
-    h98-mode)
+    h98-mode
+    paredit)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -32,7 +33,8 @@
   package-name/module-name.el format.")
 
 (defvar configs
-  '("global-functions"
+  '("global-macros"
+    "global-functions"
     "global-keys"
     "global-config"
     "god"
@@ -43,7 +45,11 @@
     "shell"
     "ivy"
     "haskell-functions"
-    "hooks")
+    "paredit-functions"
+    "lisp-functions"
+    "paredit-keys"
+    "hooks"
+    "autoload")
   "Configuration files that follow the config/foo.el file path
   format.")
 
