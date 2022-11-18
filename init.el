@@ -23,7 +23,8 @@
     watchexec
     quickjump
     h98-mode
-    paredit)
+    paredit
+    markdown-mode)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
