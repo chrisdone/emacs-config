@@ -81,7 +81,8 @@
 ;; Emacs configurations
 
 (loop for name in configs
-      do (load (concat (file-name-directory load-file-name)
+      do (load (concat (file-name-directory (or load-file-name
+                                                buffer-file-name))
                        "config/"
                        name ".el")))
 
