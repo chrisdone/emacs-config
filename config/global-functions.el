@@ -1,3 +1,5 @@
+(require 'ffap)
+
 (defun avoid-this-key ()
   (interactive)
   (error "Use `h'"))
