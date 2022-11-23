@@ -2,7 +2,7 @@
 ;; Keyboard macros
 
 (global-set-key (kbd "C-=") 'kmacro-start-macro)
-(global-set-key (kbd "C-!") 'kmacro-end-or-call-macro)
+(global-set-key (kbd "C-!") 'kmacro-!)
 
 
 ;; Mode-specific

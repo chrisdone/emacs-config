@@ -176,3 +176,8 @@
 (defun treefmt ()
   (interactive)
   (shell-command "treefmt"))
+
+(defun kmacro-! ()
+  "End or call a macro."
+  (interactive)
+  (call-interactively 'kmacro-end-or-call-macro))
