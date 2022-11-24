@@ -25,7 +25,8 @@
     h98-mode
     ts-mode
     paredit
-    markdown-mode)
+    markdown-mode
+    company)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
