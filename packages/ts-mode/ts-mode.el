@@ -14,7 +14,7 @@
     ("^//.*" . font-lock-comment-face)
     ("\"\\(\\(\\\\\"\\)\\|[^\"]\\)*\"" . font-lock-string-face)
     ("\\<\\*?\\[?[A-Z][a-zA-Z0-9_']*\\]?\\>" . font-lock-type-face)
-    (,(concat "\\<" (regexp-opt '("if" "else" "case" "switch" "import" "as" "export" "function" "type" "class" "const" "?" "let")) "\\>") . font-lock-keyword-face)
+    (,(concat "\\<" (regexp-opt '("return" "if" "else" "case" "switch" "import" "as" "export" "function" "type" "class" "const" "?" "let")) "\\>") . font-lock-keyword-face)
     (,(regexp-opt '("?" "=>" "===" "||" "&&" ";")) . font-lock-builtin-face)
     ("^[a-zA-Z_'0-9]+ " . font-lock-function-name-face)))
 
