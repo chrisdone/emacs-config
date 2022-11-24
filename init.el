@@ -23,6 +23,7 @@
     watchexec
     quickjump
     h98-mode
+    ts-mode
     paredit
     markdown-mode)
   "Packages whose location follows the
