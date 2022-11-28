@@ -33,3 +33,9 @@
                  (list "index")
                  hiedb-directories
                  (list "--database" hiedb-path))))
+
+(defun haskell-refresh ()
+  "Refresh databases."
+  (interactive)
+  (hasktags)
+  (hiedb-index))

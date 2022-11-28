@@ -1,11 +1,11 @@
-(defcustom hasktags-directories (list ".")
+(defvar-local hasktags-directories (list ".")
   "Where to find Haskell source to generate tags from.")
 
-(defcustom hasktags-path ".tag"
+(defvar-local hasktags-path ".tag"
   "Where to write the TAGS file.")
 
-(defcustom hiedb-directories (list ".")
+(defvar-local hiedb-directories (list ".")
   "Where to find Haskell source to generate database from.")
 
-(defcustom hiedb-path ""
+(defvar-local hiedb-path ""
   "Where to write the hiedb file.")
