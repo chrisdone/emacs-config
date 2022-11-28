@@ -27,7 +27,7 @@
 (defun hiedb-index ()
   "Runs hiedb index."
   (interactive)
-  (message "Running hiedb index asynchronously ...")
+  (message "Started hiedb index job.")
   (apply #'start-process
          (append (list "hiedb-index" (get-buffer-create "*hiedb-index-output*") "hiedb")
                  (list "index")
