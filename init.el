@@ -26,7 +26,8 @@
     ts-mode
     paredit
     markdown-mode
-    company)
+    company
+    hiedb)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -48,6 +49,7 @@
     "shell"
     "ivy"
     "haskell-functions"
+    "haskell-customization"
     "paredit-functions"
     "lisp-functions"
     "paredit-keys"
