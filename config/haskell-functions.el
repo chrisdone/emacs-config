@@ -29,7 +29,10 @@
   (interactive)
   (message "Started hiedb index job.")
   (apply #'start-process
-         (append (list "hiedb-index" (get-buffer-create "*hiedb-index-output*") "hiedb")
+         (append (list "hiedb-index" (with-current-buffer (get-buffer-create "*hiedb-index-output*")
+                                       (erase-buffer)
+                                       (current-buffer))
+                       "hiedb")
                  (list "index")
                  hiedb-directories
                  (list "--database" hiedb-path))))
