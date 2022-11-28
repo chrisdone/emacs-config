@@ -8,7 +8,8 @@
  ido-auto-merge-delay-time 99999
  require-final-newline t
  frame-resize-pixelwise t
- explicit-shell-file-name "/bin/bash")
+ explicit-shell-file-name "/bin/bash"
+ tags-revert-without-query 1)
 
 
 ;; Defaults
