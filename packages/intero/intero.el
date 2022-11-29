@@ -716,3 +716,5 @@ Each option is a plist of (:key :default :title) wherein:
   "Skip #! and -- shebangs used in Haskell scripts."
   (when (looking-at-p "#!") (forward-line 1))
   (when (looking-at-p "-- stack ") (forward-line 1)))
+
+(provide 'intero)
