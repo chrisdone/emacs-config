@@ -48,6 +48,12 @@
   :type 'string
   :group 'hiedb)
 
+(defcustom hiedb-unit-id
+  nil
+  "Unit id to use with hiedb."
+  :type 'string
+  :group 'hiedb)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customization variables
 
@@ -74,18 +80,22 @@
   (let ((bin (hiedb-bin))
         (file (hiedb-file))
         (in-file nil)
-        (display nil))
+        (display nil)
+        (this-buffer (current-buffer)))
     (with-temp-buffer
       (let ((out-buffer (current-buffer)))
-        (cl-case (apply #'call-process
-                        (append (list bin
-                                      in-file
-                                      out-buffer
-                                      display)
-                                (list "-D" file)
-                                args))
-          (0 (with-current-buffer out-buffer (buffer-string)))
-          (t (error "hiedb error: %s" (with-current-buffer out-buffer (buffer-string)))))))))
+        (with-current-buffer this-buffer
+          (cl-case (apply #'call-process
+                          (append (list bin
+                                        in-file
+                                        out-buffer
+                                        display)
+                                  (list "-D" file)
+                                  args
+                                  (when hiedb-unit-id
+                                    (list "--unit-id"  hiedb-unit-id))))
+            (0 (with-current-buffer out-buffer (buffer-string)))
+            (t (error "hiedb error: %s" (with-current-buffer out-buffer (buffer-string))))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; RPC calls

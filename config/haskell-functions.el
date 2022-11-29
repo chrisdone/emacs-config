@@ -48,3 +48,15 @@
   (condition-case nil
       (haskell-refresh)
     (error (message "haskell-refresh was not successful."))))
+
+(defun hiedb-show-type-h98 ()
+  "Show type of thing at point, formatted with h98-mode."
+  (interactive)
+  (let ((types (hiedb-call-by-point 'hiedb-point-types)))
+    (when types
+      (message "%s"
+               (with-temp-buffer
+                 (h98-mode)
+                 (insert types)
+                 (font-lock-ensure)
+                 (buffer-string))))))

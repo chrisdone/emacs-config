@@ -53,6 +53,7 @@
     "paredit-functions"
     "lisp-functions"
     "paredit-keys"
+    "haskell-keys"
     "hooks"
     "autoload")
   "Configuration files that follow the config/foo.el file path
