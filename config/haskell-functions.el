@@ -101,3 +101,18 @@
       (hiedb-goto-def-via-ivy)
     (error
      (call-interactively 'xref-find-definitions))))
+
+(defun haskell-apply-suggestions ()
+  "Copy suggestions from the buffer of errors/warnings and then
+apply them in the current buffer."
+  (interactive)
+  (let* ((suggestions
+         (with-current-buffer (get-buffer "*compilation*")
+           (intero-collect-compiler-messages (intero-parse-errors-warnings-splices (buffer-string)))))
+         (applicable
+          (remove-if-not (lambda (suggestion)
+                           (string= (buffer-file-name)
+                                    (plist-get (plist-get suggestion :msg) :filename)))
+                         suggestions)))
+    (when applicable
+      (intero-apply-suggestions applicable))))
