@@ -73,3 +73,31 @@
            (string (buffer-substring start end)))
       (kill-new string)
       (message "Copied %d lines of imports." (length (split-string string "\n"))))))
+
+(defun hiedb-goto-def-via-ivy ()
+  "Jump to the definition of thing at point."
+  (interactive)
+  (let ((default-directory (car (split-string (shell-command-to-string "git rev-parse --show-toplevel")))))
+    (let* ((locations (hiedb-call-by-point 'hiedb-point-defs))
+           (location (car locations)))
+      (when location
+        (when (fboundp 'xref-push-marker-stack) ;; Emacs 25
+          (xref-push-marker-stack))
+        (find-file
+         (ivy-completing-read
+          "Find File: "
+          (split-string (shell-command-to-string "git ls-files") "\n")
+          nil nil
+          (plist-get location :module)))
+        (goto-char (point-min))
+        (forward-line (1- (plist-get location :line)))
+        (goto-char (line-beginning-position))
+        (forward-char (plist-get location :column))))))
+
+(defun hiedb-or-tags-goto-def ()
+  "Go to definition via ivy, or else go via TAGS."
+  (interactive)
+  (condition-case nil
+      (hiedb-goto-def-via-ivy)
+    (error
+     (call-interactively 'xref-find-definitions))))
