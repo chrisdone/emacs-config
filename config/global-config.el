@@ -29,3 +29,5 @@
 ;; Fsets
 
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(defvar usr1-hooks (list))

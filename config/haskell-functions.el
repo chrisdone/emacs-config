@@ -42,3 +42,9 @@
   (interactive)
   (hasktags)
   (hiedb-index))
+
+(defun haskell-refresh-hook ()
+  "Attempt to run haskell-refresh, but it's fine if it fails."
+  (condition-case nil
+      (haskell-refresh)
+    (error (message "haskell-refresh was not successful."))))

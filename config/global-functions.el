@@ -274,3 +274,8 @@ This can be useful when updating or checking out branches outside of Emacs."
             "")
           (t
             (format ", %d error (see message buffer)" count-error)))))))
+
+(defun usr1-handler ()
+  "Runs usr1-hooks."
+   (interactive)
+   (run-hooks 'usr1-hooks))

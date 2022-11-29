@@ -76,3 +76,9 @@
 (global-set-key [remap paredit-kill] (bol-with-prefix paredit-kill))
 (global-set-key [remap org-kill-line] (bol-with-prefix org-kill-line))
 (global-set-key [remap kill-line] (bol-with-prefix kill-line))
+
+
+;; Signals
+
+(define-key special-event-map [sigusr1] 'usr1-handler)
+;; test via (signal-process (emacs-pid) 'sigusr1)
