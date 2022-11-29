@@ -60,3 +60,16 @@
                  (insert types)
                  (font-lock-ensure)
                  (buffer-string))))))
+
+(defun haskell-copy-imports ()
+  (interactive)
+  (save-excursion
+    (let* ((start (progn (goto-char (point-min))
+                         (search-forward-regexp "^import")
+                         (line-beginning-position)))
+           (end (progn (goto-char (point-max))
+                       (search-backward-regexp "^import")
+                       (line-end-position)))
+           (string (buffer-substring start end)))
+      (kill-new string)
+      (message "Copied %d lines of imports." (length (split-string string "\n"))))))
