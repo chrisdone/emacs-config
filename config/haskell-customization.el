@@ -9,3 +9,7 @@
 
 (defvar-local hiedb-path ""
   "Where to write the hiedb file.")
+
+(defcustom haskell-suggestion-buffers
+  (list "*compilation*" "*ghci*")
+  "Buffers from which one can pull suggestions.")

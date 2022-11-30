@@ -106,8 +106,13 @@
   "Copy suggestions from the buffer of errors/warnings and then
 apply them in the current buffer."
   (interactive)
-  (let* ((suggestions
-         (with-current-buffer (get-buffer "*compilation*")
+  (let* ((source-buffers
+          (remove-if-not
+           (lambda (buffer)
+             (get-buffer-window buffer))
+           haskell-suggestion-buffers))
+         (suggestions
+          (with-current-buffer (car source-buffers)
            (intero-collect-compiler-messages (intero-parse-errors-warnings-splices (buffer-string)))))
          (applicable
           (remove-if-not (lambda (suggestion)
