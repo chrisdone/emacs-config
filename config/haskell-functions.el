@@ -112,8 +112,11 @@ apply them in the current buffer."
              (get-buffer-window buffer))
            haskell-suggestion-buffers))
          (suggestions
-          (with-current-buffer (car source-buffers)
-           (intero-collect-compiler-messages (intero-parse-errors-warnings-splices (buffer-string)))))
+          (progn
+            (when (not source-buffers)
+              (error "No buffers are visible from your list: %S" haskell-suggestion-buffers))
+            (with-current-buffer (car source-buffers)
+              (intero-collect-compiler-messages (intero-parse-errors-warnings-splices (buffer-string))))))
          (applicable
           (remove-if-not (lambda (suggestion)
                            (string= (buffer-file-name)
