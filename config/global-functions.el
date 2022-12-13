@@ -133,7 +133,7 @@
 
 (defun rg-dir (directory)
   (interactive (list (read-directory-name "Directory: ")))
-  (counsel-rg (ag/dwim-at-point) ()))
+  (counsel-rg (ag/dwim-at-point) directory))
 
 (defun replace-string-or-query-replace (n)
   (interactive "P")
