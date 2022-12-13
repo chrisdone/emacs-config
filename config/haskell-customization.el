@@ -11,5 +11,5 @@
   "Where to write the hiedb file.")
 
 (defcustom haskell-suggestion-buffers
-  (list "*compilation*" "*ghci*")
+  (list "*compilation*" "*ghci*" "*sh:server*")
   "Buffers from which one can pull suggestions.")
