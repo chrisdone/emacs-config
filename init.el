@@ -83,6 +83,7 @@
 ;; Custom require calls
 
 (require 'counsel)
+(require 'magit-blame)
 
 
 ;; Emacs configurations
