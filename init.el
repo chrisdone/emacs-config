@@ -26,6 +26,9 @@
     ts-mode
     paredit
     markdown-mode
+    s ;; for markdown-toc
+    dash ;; for markdown-toc
+    markdown-toc
     company
     hiedb
     intero)
