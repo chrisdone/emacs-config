@@ -124,3 +124,7 @@ apply them in the current buffer."
                          suggestions)))
     (when applicable
       (intero-apply-suggestions applicable))))
+
+(defun haskell-show-compile-buffer ()
+  (interactive)
+  (switch-to-buffer-other-window "*ghci*"))
