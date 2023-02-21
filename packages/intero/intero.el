@@ -717,4 +717,7 @@ Each option is a plist of (:key :default :title) wherein:
   (when (looking-at-p "#!") (forward-line 1))
   (when (looking-at-p "-- stack ") (forward-line 1)))
 
+(defvar haskell-import-mapping nil)
+(defvar haskell-quals nil)
+
 (provide 'intero)
