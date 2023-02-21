@@ -16,6 +16,7 @@
 
 (set-default 'tags-case-fold-search nil)
 (setq-default indent-tabs-mode nil)
+(setq-default auto-fill-function nil)
 
 
 ;; Puts
