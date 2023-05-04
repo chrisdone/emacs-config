@@ -20,8 +20,18 @@
     envrc
     ag
     swiper
+    watchexec
     quickjump
-    h98-mode)
+    h98-mode
+    ts-mode
+    paredit
+    markdown-mode
+    s ;; for markdown-toc
+    dash ;; for markdown-toc
+    markdown-toc
+    company
+    hiedb
+    intero)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -31,7 +41,8 @@
   package-name/module-name.el format.")
 
 (defvar configs
-  '("global-functions"
+  '("global-macros"
+    "global-functions"
     "global-keys"
     "global-config"
     "god"
@@ -42,7 +53,13 @@
     "shell"
     "ivy"
     "haskell-functions"
-    "hooks")
+    "haskell-customization"
+    "paredit-functions"
+    "lisp-functions"
+    "paredit-keys"
+    "haskell-keys"
+    "hooks"
+    "autoload")
   "Configuration files that follow the config/foo.el file path
   format.")
 
@@ -69,12 +86,14 @@
 ;; Custom require calls
 
 (require 'counsel)
+(require 'magit-blame)
 
 
 ;; Emacs configurations
 
 (loop for name in configs
-      do (load (concat (file-name-directory load-file-name)
+      do (load (concat (file-name-directory (or load-file-name
+                                                buffer-file-name))
                        "config/"
                        name ".el")))
 

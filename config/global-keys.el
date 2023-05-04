@@ -2,7 +2,7 @@
 ;; Keyboard macros
 
 (global-set-key (kbd "C-=") 'kmacro-start-macro)
-(global-set-key (kbd "C-!") 'kmacro-end-or-call-macro)
+(global-set-key (kbd "C-!") 'kmacro-!)
 
 
 ;; Mode-specific
@@ -69,3 +69,16 @@
 
 (define-key key-translation-map (kbd "s-g") (kbd "C-g"))
 (define-key input-decode-map "\C-m" [C-m])
+
+
+;; Remaps
+
+(global-set-key [remap paredit-kill] (bol-with-prefix paredit-kill))
+(global-set-key [remap org-kill-line] (bol-with-prefix org-kill-line))
+(global-set-key [remap kill-line] (bol-with-prefix kill-line))
+
+
+;; Signals
+
+(define-key special-event-map [sigusr1] 'usr1-handler)
+;; test via (signal-process (emacs-pid) 'sigusr1)
