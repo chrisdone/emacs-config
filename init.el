@@ -43,7 +43,6 @@
 (defvar configs
   '("global-macros"
     "global-functions"
-    "global-keys"
     "global-config"
     "god"
     "dired"
@@ -59,7 +58,10 @@
     "paredit-keys"
     "haskell-keys"
     "hooks"
-    "autoload")
+    "autoload"
+    ;; Global-keys needs to be at the end to override all other major
+    ;; modes.
+    "global-keys")
   "Configuration files that follow the config/foo.el file path
   format.")
 
