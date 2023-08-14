@@ -117,7 +117,7 @@
     (fill-paragraph nil)))
 
 (defun turn-off-linum-mode ()
-  (linum-mode -1))
+  (display-line-numbers-mode -1))
 
 (defun ls-files ()
   (interactive)

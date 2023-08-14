@@ -108,7 +108,7 @@
 (menu-bar-mode -1)
 (god-mode-all)
 (smex-initialize)
-(global-linum-mode)
+(global-display-line-numbers-mode)
 (ido-mode)
 (global-font-lock-mode)
 (show-paren-mode)
