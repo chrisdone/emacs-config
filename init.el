@@ -31,7 +31,8 @@
     markdown-toc
     company
     hiedb
-    intero)
+    intero
+    hcl-mode)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
