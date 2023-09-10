@@ -2,6 +2,9 @@
 ;; Overrides
 
 (setq
+ isearch-lazy-count t
+ lazy-count-prefix-format nil
+ lazy-count-suffix-format "   (%s/%s)"
  inhibit-startup-message t
  inhibit-startup-echo-area-message t
  suggest-key-bindings nil
