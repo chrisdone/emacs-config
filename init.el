@@ -32,7 +32,8 @@
     company
     hiedb
     intero
-    hcl-mode)
+    hcl-mode
+    art-mode)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -52,6 +53,7 @@
     "envrc"
     "shell"
     "ivy"
+    "art-customization"
     "haskell-functions"
     "haskell-customization"
     "paredit-functions"
@@ -90,6 +92,7 @@
 
 (require 'counsel)
 (require 'magit-blame)
+(require 'eglot)
 
 
 ;; Emacs configurations
