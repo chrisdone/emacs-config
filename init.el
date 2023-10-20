@@ -33,7 +33,8 @@
     hiedb
     intero
     hcl-mode
-    art-mode)
+    art-mode
+    yaml-mode)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
