@@ -9,7 +9,8 @@
  require-final-newline t
  frame-resize-pixelwise t
  explicit-shell-file-name "/bin/bash"
- tags-revert-without-query 1)
+ tags-revert-without-query 1
+ async-shell-command-buffer 'new-buffer)
 
 
 ;; Defaults
