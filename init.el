@@ -34,8 +34,7 @@
     intero
     hcl-mode
     art-mode
-    yaml-mode
-    restclient)
+    yaml-mode)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
