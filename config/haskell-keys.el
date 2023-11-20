@@ -2,3 +2,4 @@
 (define-key h98-mode-map (kbd "M-.") 'hiedb-or-tags-goto-def)
 (define-key h98-mode-map (kbd "C-c C-r") 'haskell-apply-suggestions)
 (define-key h98-mode-map (kbd "C-`") 'haskell-show-compile-buffer)
+(define-key h98-mode-map (kbd "C-c C-l") 'h98-reload)

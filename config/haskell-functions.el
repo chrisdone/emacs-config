@@ -1,3 +1,12 @@
+(defun h98-reload ()
+  (interactive)
+  (save-buffer)
+  (switch-to-buffer-other-window "*ghci*")
+  (erase-buffer)
+  (goto-char (point-max))
+  (insert ":r")
+  (my-comint-send))
+
 (defun haskell-copy-module-name ()
   "Guess the current module name of the buffer."
   (interactive)
