@@ -7,6 +7,12 @@
   (insert ":r")
   (my-comint-send))
 
+(defun h98-recomp ()
+  (interactive)
+  (save-buffer)
+  (switch-to-buffer-other-window "*compilation*")
+  (recompile))
+
 (defun haskell-copy-module-name ()
   "Guess the current module name of the buffer."
   (interactive)
