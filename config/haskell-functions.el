@@ -80,10 +80,10 @@
   (interactive)
   (save-excursion
     (let* ((start (progn (goto-char (point-min))
-                         (search-forward-regexp "^import")
+                         (search-forward-regexp "^import ")
                          (line-beginning-position)))
            (end (progn (goto-char (point-max))
-                       (search-backward-regexp "^import")
+                       (search-backward-regexp "^import ")
                        (line-end-position)))
            (string (buffer-substring start end)))
       (kill-new string)
