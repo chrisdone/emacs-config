@@ -143,3 +143,12 @@ apply them in the current buffer."
 (defun haskell-show-compile-buffer ()
   (interactive)
   (switch-to-buffer-other-window "*ghci*"))
+
+(defun haskell-add-import (line)
+  (interactive "sImport: ")
+  (save-excursion
+    (goto-char (point-min))
+    (haskell-navigate-imports)
+    (if (string-match "\n" line)
+        (insert line "\n")
+      (insert "import " (replace-regexp-in-string "^import " "" line) "\n"))))

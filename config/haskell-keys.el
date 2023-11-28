@@ -4,3 +4,4 @@
 (define-key h98-mode-map (kbd "C-`") 'haskell-show-compile-buffer)
 (define-key h98-mode-map (kbd "C-c C-l") 'h98-reload)
 (define-key h98-mode-map (kbd "C-c C-c") 'h98-recomp)
+(define-key h98-mode-map (kbd "C-c i") 'haskell-add-import)
