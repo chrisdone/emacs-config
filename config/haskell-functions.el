@@ -1,3 +1,18 @@
+(defun h98-reload ()
+  (interactive)
+  (save-buffer)
+  (switch-to-buffer-other-window "*ghci*")
+  (erase-buffer)
+  (goto-char (point-max))
+  (insert ":r")
+  (my-comint-send))
+
+(defun h98-recomp ()
+  (interactive)
+  (save-buffer)
+  (switch-to-buffer-other-window "*compilation*")
+  (recompile))
+
 (defun haskell-copy-module-name ()
   "Guess the current module name of the buffer."
   (interactive)
@@ -65,10 +80,10 @@
   (interactive)
   (save-excursion
     (let* ((start (progn (goto-char (point-min))
-                         (search-forward-regexp "^import")
+                         (search-forward-regexp "^import ")
                          (line-beginning-position)))
            (end (progn (goto-char (point-max))
-                       (search-backward-regexp "^import")
+                       (search-backward-regexp "^import ")
                        (line-end-position)))
            (string (buffer-substring start end)))
       (kill-new string)
@@ -128,3 +143,12 @@ apply them in the current buffer."
 (defun haskell-show-compile-buffer ()
   (interactive)
   (switch-to-buffer-other-window "*ghci*"))
+
+(defun haskell-add-import (line)
+  (interactive "sImport: ")
+  (save-excursion
+    (goto-char (point-min))
+    (haskell-navigate-imports)
+    (if (string-match "\n" line)
+        (insert line "\n")
+      (insert "import " (replace-regexp-in-string "^import " "" line) "\n"))))

@@ -8,6 +8,7 @@
 ;; Mode-specific
 
 (global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-&") 'async-shell-command-named)
 
 
 ;; Navigation

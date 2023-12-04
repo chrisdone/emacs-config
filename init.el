@@ -31,7 +31,11 @@
     markdown-toc
     company
     hiedb
-    intero)
+    intero
+    hcl-mode
+    art-mode
+    yaml-mode
+    haskell-navigate-imports)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -43,7 +47,6 @@
 (defvar configs
   '("global-macros"
     "global-functions"
-    "global-keys"
     "global-config"
     "god"
     "dired"
@@ -52,6 +55,7 @@
     "envrc"
     "shell"
     "ivy"
+    "art-customization"
     "haskell-functions"
     "haskell-customization"
     "paredit-functions"
@@ -59,7 +63,10 @@
     "paredit-keys"
     "haskell-keys"
     "hooks"
-    "autoload")
+    "autoload"
+    ;; Global-keys needs to be at the end to override all other major
+    ;; modes.
+    "global-keys")
   "Configuration files that follow the config/foo.el file path
   format.")
 
@@ -87,6 +94,7 @@
 
 (require 'counsel)
 (require 'magit-blame)
+(require 'eglot)
 
 
 ;; Emacs configurations
@@ -106,7 +114,7 @@
 (menu-bar-mode -1)
 (god-mode-all)
 (smex-initialize)
-(global-linum-mode)
+(global-display-line-numbers-mode)
 (ido-mode)
 (global-font-lock-mode)
 (show-paren-mode)

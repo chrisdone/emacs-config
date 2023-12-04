@@ -117,7 +117,7 @@
     (fill-paragraph nil)))
 
 (defun turn-off-linum-mode ()
-  (linum-mode -1))
+  (display-line-numbers-mode -1))
 
 (defun ls-files ()
   (interactive)
@@ -279,3 +279,26 @@ This can be useful when updating or checking out branches outside of Emacs."
   "Runs usr1-hooks."
    (interactive)
    (run-hooks 'usr1-hooks))
+
+(defun async-shell-command-named (command &optional output-buffer error-buffer)
+  "Copy of `async-shell-command-named' with optional naming."
+  (interactive
+   (list
+    (read-shell-command "Named async shell command: "
+                        nil nil
+			(let ((filename
+			       (cond
+				(buffer-file-name)
+				((eq major-mode 'dired-mode)
+				 (dired-get-filename nil t)))))
+			  (and filename (file-relative-name filename))))
+    nil
+    ;; FIXME: the following argument is always ignored by 'shell-commnd',
+    ;; when the command is invoked asynchronously, except, perhaps, when
+    ;; 'default-directory' is remote.
+    shell-command-default-error-buffer))
+  (let ((command-and-name (split-string command "#" nil)))
+    (async-shell-command
+     (nth 0 command-and-name)
+     (when (nth 1 command-and-name)
+       (format "*sh:%s*" (nth 1 command-and-name))))))
