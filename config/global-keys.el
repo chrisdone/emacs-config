@@ -5,6 +5,15 @@
 (global-set-key (kbd "C-!") 'kmacro-!)
 
 
+;; Tab bar
+
+(global-set-key (kbd "s-1") (lambda () (interactive) (tab-bar-select-tab 1)))
+(global-set-key (kbd "s-2") (lambda () (interactive) (tab-bar-select-tab 2)))
+(global-set-key (kbd "s-3") (lambda () (interactive) (tab-bar-select-tab 3)))
+(global-set-key (kbd "s-4") (lambda () (interactive) (tab-bar-select-tab 4)))
+(global-set-key (kbd "s-5") (lambda () (interactive) (tab-bar-select-tab 5)))
+
+
 ;; Mode-specific
 
 (global-set-key (kbd "M-x") 'smex)

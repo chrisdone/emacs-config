@@ -48,6 +48,7 @@
   '("global-macros"
     "global-functions"
     "global-config"
+    "tab-bar-config"
     "god"
     "dired"
     "git"
@@ -124,6 +125,7 @@
 (transient-mark-mode)
 (delete-selection-mode)
 (envrc-global-mode)
+(tab-bar-mode)
 
 
 ;; Disable auto-revert mode
