@@ -36,3 +36,9 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (defvar usr1-hooks (list))
+
+
+;; Faces
+
+(custom-set-faces
+ '(default ((t (:family "Ubuntu Mono" :foundry "nil" :slant normal :weight regular :height 140 :width normal)))))
