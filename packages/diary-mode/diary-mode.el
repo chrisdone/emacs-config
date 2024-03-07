@@ -16,7 +16,10 @@
   :group 'diary-faces)
 
 (defface diary-done-prefix-face
-  '((t (:bold t)))
+  '((((class color) (background dark))
+     (:foreground "#fff" :bold t))
+    (((class color) (background light))
+     (:foreground "#000" :bold t)))
   "Done prefix for items.."
   :group 'diary-faces)
 
