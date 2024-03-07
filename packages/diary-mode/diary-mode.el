@@ -64,4 +64,21 @@
 
 (define-key diary-mode-map (kbd "RET") 'diary-dwim-newline)
 
+(define-key diary-mode-map (kbd "TAB") 'diary-dwim-tab)
+(define-key diary-mode-map (kbd "<backtab>") 'diary-dwim-backtab)
+
+(defun diary-dwim-tab ()
+  (interactive)
+  (indent-rigidly
+   (line-beginning-position)
+   (line-end-position)
+   2))
+
+(defun diary-dwim-backtab ()
+  (interactive)
+  (indent-rigidly
+   (line-beginning-position)
+   (line-end-position)
+   -2))
+
 (provide 'diary-mode)
