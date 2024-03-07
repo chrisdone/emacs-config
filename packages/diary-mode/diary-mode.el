@@ -35,4 +35,21 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.diary\\'" . diary-mode))
 
+(defun diary-insert-done ()
+  (interactive)
+  (insert "• Done "))
+
+(defun diary-insert-day ()
+  (interactive)
+  (insert (format-time-string "\n%-d %b %Y\n" (current-time)))
+  (insert "\n"))
+
+(define-key diary-mode-map (kbd "M-RET") 'diary-dwim-done)
+
+(defun diary-dwim-done ()
+  (interactive)
+  (goto-char (line-beginning-position))
+  (open-line 1)
+  (diary-insert-done))
+
 (provide 'diary-mode)
