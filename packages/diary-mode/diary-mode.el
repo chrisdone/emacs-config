@@ -28,9 +28,7 @@
 (defconst diary-keywords
   `(("^[0-9]+ [A-Z][a-z]+ [0-9]+$" . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
-    ("^• Done " . 'diary-done-prefix-face)
-    ("\\[^[0-9]+\\]" . 'diary-reference-face)
-    ))
+    ("^• Done " . 'diary-done-prefix-face)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.diary\\'" . diary-mode))
@@ -51,5 +49,14 @@
   (goto-char (line-beginning-position))
   (open-line 1)
   (diary-insert-done))
+
+(defun diary-dwim-newline ()
+  (interactive)
+  (if (save-excursion (back-to-indentation) (looking-at "• "))
+      (progn (call-interactively 'newline)
+             (insert "• "))
+    (call-interactively 'newline)))
+
+(define-key diary-mode-map (kbd "RET") 'diary-dwim-newline)
 
 (provide 'diary-mode)
