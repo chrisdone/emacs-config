@@ -52,9 +52,13 @@
 
 (defun diary-dwim-done ()
   (interactive)
-  (goto-char (line-beginning-position))
-  (open-line 1)
-  (diary-insert-done))
+  (if (> (point) (line-beginning-position))
+      (progn (goto-char (line-end-position))
+             (insert "\n")
+             (diary-insert-done))
+    (goto-char (line-beginning-position))
+    (open-line 1)
+    (diary-insert-done)))
 
 (defun diary-dwim-newline ()
   (interactive)
