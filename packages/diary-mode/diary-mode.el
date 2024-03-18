@@ -64,9 +64,16 @@
     (call-interactively 'newline)))
 
 (define-key diary-mode-map (kbd "RET") 'diary-dwim-newline)
-
+(define-key diary-mode-map (kbd "SPC") 'diary-dwim-space)
 (define-key diary-mode-map (kbd "TAB") 'diary-dwim-tab)
 (define-key diary-mode-map (kbd "<backtab>") 'diary-dwim-backtab)
+
+(defun diary-dwim-space ()
+  (interactive)
+  (when (looking-back "\\*")
+    (delete-char -1)
+    (insert "•"))
+  (call-interactively 'self-insert-command))
 
 (defun diary-dwim-tab ()
   (interactive)
