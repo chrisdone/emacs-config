@@ -40,7 +40,8 @@
   packages/package-name/package-name.el format.")
 
 (defvar custom-load-paths
-  '("git-modes")
+  '("git-modes"
+    "diary-mode")
   "Custom load paths that don't follow the normal
   package-name/module-name.el format.")
 
@@ -96,6 +97,8 @@
 (require 'counsel)
 (require 'magit-blame)
 (require 'eglot)
+(require 'jumpto-addr)
+(require 'diary-mode)
 
 
 ;; Emacs configurations
