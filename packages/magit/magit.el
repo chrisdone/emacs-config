@@ -4074,7 +4074,8 @@ If the global `magit-auto-revert-mode' is turned on, then also
 revert all unmodified buffers that visit files being tracked in
 the current repository."
   (interactive)
-  (run-hooks 'magit-refresh-all-hooks))
+  (run-hooks 'magit-refresh-all-hooks)
+  (magit-refresh))
 
 (defun magit-refresh-all-buffers-function ()
   "Reverts all buffers."
