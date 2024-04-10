@@ -23,7 +23,7 @@
          (file (format "%s.git/bk-%s.json" (magit-get-top-dir) (sha1 branch-name))))
     (if (file-exists-p file)
         (let ((builds (json-parse-string
-                       (with-current-buffer (find-file-noselect file t t nil)
+                       (with-temp-buffer (insert-file-contents-literally file)
                          (buffer-string))
                        :object-type 'plist)))
           (if (= 0 (length builds))
