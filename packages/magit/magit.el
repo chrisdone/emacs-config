@@ -4062,6 +4062,10 @@ tracked in the current repository."
   (when magit-auto-revert-mode
     (magit-revert-buffers)))
 
+(defcustom magit-refresh-all-hooks
+  '(magit-refresh-all-buffers-function)
+  "What happens when you run G.")
+
 (defun magit-refresh-all ()
   "Refresh all buffers belonging to the current repository.
 
@@ -4070,6 +4074,10 @@ If the global `magit-auto-revert-mode' is turned on, then also
 revert all unmodified buffers that visit files being tracked in
 the current repository."
   (interactive)
+  (run-hooks 'magit-refresh-all-hooks))
+
+(defun magit-refresh-all-buffers-function ()
+  "Reverts all buffers."
   (magit-map-magit-buffers #'magit-mode-refresh-buffer default-directory)
   (magit-revert-buffers))
 
