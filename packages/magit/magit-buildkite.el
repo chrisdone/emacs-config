@@ -35,7 +35,7 @@
                        (plist-get build :state)
                        (propertize (substring (plist-get build :commit) 0 7)
                                    'face 'magit-log-sha1)
-                       (plist-get build :message)))
+                       (car (my-lines (plist-get build :message)))))
              builds
              "\n")))
       "CI: No data. Hit G to reload.")))
