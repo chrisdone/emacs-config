@@ -313,3 +313,8 @@ This can be useful when updating or checking out branches outside of Emacs."
 
 (defun my-lines (s)
   (split-string (replace-regexp-in-string "[\r\n]" "\n" s) "\n" t))
+
+(defun disable-newline-adding ()
+  "Locally turn off automatically adding newlines."
+  (interactive)
+  (set (make-local-variable 'require-final-newline) nil))
