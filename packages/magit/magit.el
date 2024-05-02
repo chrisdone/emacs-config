@@ -894,7 +894,7 @@ problematic option a member of the default value."
   :group 'magit-commit
   :type 'boolean)
 
-(defcustom magit-diff-refine-hunk nil
+(defcustom magit-diff-refine-hunk 'all
   "Show fine (word-granularity) differences within diff hunks.
 
 There are three possible settings:
