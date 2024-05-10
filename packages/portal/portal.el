@@ -216,6 +216,13 @@ location."
         (insert-file-contents file)))
     (buffer-string)))
 
+(defun portal-tail-file (portal n name)
+  "Tail last N lines of file NAME for the given PORTAL."
+  (with-temp-buffer
+    (let ((file (portal-file-name portal name)))
+      (when (file-exists-p file)
+        (portal-tail-n-lines n file)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Nano-IDs
 
@@ -278,10 +285,10 @@ location."
          (status (portal-read-json-file portal "status"))
          (stdout (if process
                      (process-get process :buffer)
-                   (portal-read-file portal "stdout")))
+                   (portal-tail-file portal "stdout")))
          (stderr (if process
                      (process-get (process-get process :stderr-process) :buffer)
-                   (portal-read-file portal "stderr"))))
+                   (portal-tail-file portal "stderr"))))
     (with-temp-buffer
       (insert (propertize
                (concat "# (" status ") " (combine-and-quote-strings command))
@@ -303,9 +310,7 @@ location."
   "Clean output for previewing, prefixed with #."
   (concat "# " (replace-regexp-in-string
     "\n" "\n# "
-    (portal-last-n-lines
-     5
-     (portal-no-empty-lines output)))))
+    (portal-no-empty-lines output))))
 
 (defun portal-process-name (portal)
   (concat portal "-main-process"))
@@ -318,11 +323,22 @@ location."
 
 (defun portal-no-empty-lines (string)
   "Drop empty lines from a string."
-  string)
+  (replace-regexp-in-string "\n$" "" string))
 
 (defun portal-last-n-lines (n string)
   "Take last N lines from STRING."
   (mapconcat #'identity (reverse (seq-take (reverse (split-string string "[\r\n]+" t)) n)) "\n"))
+
+(defun portal-tail-n-lines (n file-path)
+  "Tail the last N lines from FILE-PATH using tail, if possible. If
+not possible (due to lack of such tool), return nil."
+  (let ((this-buffer (current-buffer)))
+    (with-temp-buffer
+      (let ((out-buffer (current-buffer)))
+        (with-current-buffer this-buffer
+          (cl-case (call-process "tail" nil out-buffer nil "-n" (format "%d" n) file-path)
+            (0 (with-current-buffer out-buffer (buffer-string)))
+            (t nil)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Finding portals and gathering information for them
