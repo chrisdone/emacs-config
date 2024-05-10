@@ -7303,64 +7303,12 @@ or remove markup."
 
 ;;; Commands ==================================================================
 
-(defun markdown (&optional output-buffer-name)
+(defun markdown ()
   "Run `markdown-command' on buffer, sending output to OUTPUT-BUFFER-NAME.
 The output buffer name defaults to `markdown-output-buffer-name'.
 Return the name of the output buffer used."
   (interactive)
-  (save-window-excursion
-    (let* ((commands (cond ((stringp markdown-command) (split-string markdown-command))
-                           ((listp markdown-command) markdown-command)))
-           (command (car-safe commands))
-           (command-args (cdr-safe commands))
-           begin-region end-region)
-      (if (use-region-p)
-          (setq begin-region (region-beginning)
-                end-region (region-end))
-        (setq begin-region (point-min)
-              end-region (point-max)))
-
-      (unless output-buffer-name
-        (setq output-buffer-name markdown-output-buffer-name))
-      (when (and (stringp command) (not (executable-find command)))
-        (user-error "Markdown command %s is not found" command))
-      (let ((exit-code
-             (cond
-              ;; Handle case when `markdown-command' does not read from stdin
-              ((and (stringp command) markdown-command-needs-filename)
-               (if (not buffer-file-name)
-                   (user-error "Must be visiting a file")
-                 ;; Don’t use ‘shell-command’ because it’s not guaranteed to
-                 ;; return the exit code of the process.
-                 (let ((command (if (listp markdown-command)
-                                    (string-join markdown-command " ")
-                                  markdown-command)))
-                   (shell-command-on-region
-                    ;; Pass an empty region so that stdin is empty.
-                    (point) (point)
-                    (concat command " "
-                            (shell-quote-argument buffer-file-name))
-                    output-buffer-name))))
-              ;; Pass region to `markdown-command' via stdin
-              (t
-               (let ((buf (get-buffer-create output-buffer-name)))
-                 (with-current-buffer buf
-                   (setq buffer-read-only nil)
-                   (erase-buffer))
-                 (if (stringp command)
-                     (if (not (null command-args))
-                         (apply #'call-process-region begin-region end-region command nil buf nil command-args)
-                       (call-process-region begin-region end-region command nil buf))
-                   (funcall markdown-command begin-region end-region buf)
-                   ;; If the ‘markdown-command’ function didn’t signal an
-                   ;; error, assume it succeeded by binding ‘exit-code’ to 0.
-                   0))))))
-        ;; The exit code can be a signal description string, so don’t use ‘=’
-        ;; or ‘zerop’.
-        (unless (eq exit-code 0)
-          (user-error "%s failed with exit code %s"
-                      markdown-command exit-code))))
-    output-buffer-name))
+  (call-interactively 'markdown-mode))
 
 (defun markdown-standalone (&optional output-buffer-name)
   "Special function to provide standalone HTML output.
