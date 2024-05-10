@@ -332,3 +332,10 @@ location."
     (if (looking-at portal-regexp)
         (buffer-substring (match-beginning 0) (match-end 0))
       (error "Not at a portal."))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Notes
+
+;; Use this on a portals buffer to stop it constantly being saved:
+;
+;; (setq buffer-save-without-query t)
