@@ -220,8 +220,9 @@ location."
   "Tail last N lines of file NAME for the given PORTAL."
   (with-temp-buffer
     (let ((file (portal-file-name portal name)))
-      (when (file-exists-p file)
-        (portal-tail-n-lines n file)))))
+      (if (file-exists-p file)
+          (portal-tail-n-lines n file)
+        ""))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Nano-IDs
@@ -284,11 +285,15 @@ location."
   (let* ((command (portal-read-json-file portal "command"))
          (status (portal-read-json-file portal "status"))
          (stdout (if process
-                     (process-get process :buffer)
-                   (portal-tail-file portal "stdout")))
+                     (portal-last-n-lines
+                      5
+                      (process-get process :buffer))
+                   (portal-tail-file portal 5 "stdout")))
          (stderr (if process
-                     (process-get (process-get process :stderr-process) :buffer)
-                   (portal-tail-file portal "stderr"))))
+                     (portal-last-n-lines
+                      5
+                      (process-get (process-get process :stderr-process) :buffer))
+                   (portal-tail-file portal 5 "stderr"))))
     (with-temp-buffer
       (insert (propertize
                (concat "# (" status ") " (combine-and-quote-strings command))
@@ -336,9 +341,10 @@ not possible (due to lack of such tool), return nil."
     (with-temp-buffer
       (let ((out-buffer (current-buffer)))
         (with-current-buffer this-buffer
-          (cl-case (call-process "tail" nil out-buffer nil "-n" (format "%d" n) file-path)
+          (cl-case (call-process "tail" nil out-buffer nil "-n" (format "%d" n)
+                                 (expand-file-name file-path))
             (0 (with-current-buffer out-buffer (buffer-string)))
-            (t nil)))))))
+            (t "")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Finding portals and gathering information for them
