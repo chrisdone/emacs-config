@@ -28,6 +28,14 @@
   "Portal face."
   :group 'portal)
 
+(defface portal-exited-face
+  '((((class color) (background dark))
+     (:foreground "#777"))
+    (((class color) (background light))
+     (:foreground "#eee")))
+  "Portal exited face."
+  :group 'portal)
+
 (defface portal-meta-face
   '((t :inherit font-lock-comment-face))
   "Portal meta face."
@@ -266,7 +274,7 @@ location."
                               "# Invalid portal."))
                    (match-end (match-end 0))
                    (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless (and old-summary (string= summary old-summary))
+              (unless nil
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
@@ -297,15 +305,23 @@ location."
     (with-temp-buffer
       (insert (propertize
                (concat "# (" status ") " (combine-and-quote-strings command))
-               'face 'portal-meta-face))
+               'face
+               (if (string= status "run")
+                   'portal-meta-face
+                 'portal-exited-face)))
       (unless (= 0 (length (string-trim stdout)))
         (insert "\n"
                 (propertize (portal-clean-output stdout)
-                            'face 'portal-stdout-face)))
+                            'face (if (string= status "run")
+                                      'portal-stdout-face
+                                    'portal-exited-face))))
       (unless (= 0 (length (string-trim stderr)))
         (insert "\n"
                 (propertize (portal-clean-output stderr)
-                            'face 'portal-stderr-face)))
+                            'face
+                            (if (string= status "run")
+                                'portal-stderr-face
+                              'portal-exited-face))))
       (buffer-string))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
