@@ -36,6 +36,16 @@
   "Portal exited face."
   :group 'portal)
 
+(defface portal-exit-success-face
+  '((t :inherit font-lock-comment-face))
+  "Portal exit successful face."
+  :group 'portal)
+
+(defface portal-exit-failure-face
+  '((t :inherit error))
+  "Portal exit failure face."
+  :group 'portal)
+
 (defface portal-meta-face
   '((t :inherit font-lock-comment-face))
   "Portal meta face."
@@ -274,7 +284,7 @@ location."
                               "# Invalid portal."))
                    (match-end (match-end 0))
                    (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless nil
+              (unless nil ; (and old-summary (string= summary old-summary))
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
@@ -308,7 +318,9 @@ location."
                'face
                (if (string= status "run")
                    'portal-meta-face
-                 'portal-exited-face)))
+                 (if (string= status "0")
+                     'portal-exit-success-face
+                   'portal-exit-failure-face))))
       (unless (= 0 (length (string-trim stdout)))
         (insert "\n"
                 (propertize (portal-clean-output stdout)
