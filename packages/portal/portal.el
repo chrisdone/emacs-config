@@ -161,7 +161,7 @@ STDERR-PATH."
     (message "main-process-sentinel: %S: %S" process event))
   (portal-write-json-file
    (process-get process :portal)
-   "status" (format "%S" (process-status process))))
+   "status" (format "%S" (process-exit-status process))))
 
 (defun portal-stderr-pipe-sentinel (process event)
   "Handles the stderr pipe's status updates."
