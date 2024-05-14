@@ -288,6 +288,9 @@ location."
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
+                (put-text-property (line-beginning-position) (point)
+                                   'portal
+                                   portal)
                 (save-excursion
                   (when (looking-at "\n#")
                     (forward-line 1)
@@ -334,7 +337,7 @@ location."
                             (if (string= status "run")
                                 'portal-stderr-face
                               'portal-exited-face))))
-      (buffer-string))))
+      (propertize (buffer-string) 'portal portal))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; String generation
@@ -382,11 +385,12 @@ not possible (due to lack of such tool), return nil."
 
 (defun portal-at-point ()
   "Return the portal at point."
-  (save-excursion
-    (goto-char (line-beginning-position))
-    (if (looking-at portal-regexp)
-        (buffer-substring (match-beginning 0) (match-end 0))
-      (error "Not at a portal."))))
+  (or (save-excursion
+        (goto-char (line-beginning-position))
+        (when (looking-at portal-regexp)
+          (buffer-substring (match-beginning 0) (match-end 0))))
+      (get-text-property (point) 'portal)
+      (error "Not at a portal.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Notes
