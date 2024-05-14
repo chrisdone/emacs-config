@@ -290,7 +290,7 @@ location."
                               "# Invalid portal."))
                    (match-end (match-end 0))
                    (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless nil ; (and old-summary (string= summary old-summary))
+              (unless (and old-summary (string= summary old-summary))
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
