@@ -94,6 +94,12 @@ buffer."
   (interactive)
   (find-file (portal-file-name (portal-at-point) "stderr")))
 
+(defun portal-interrupt ()
+  "Interrupt the process at point."
+  (interactive)
+  (let ((proc (get-process (portal-process-name (portal-at-point)))))
+    (interrupt-process proc)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Launching processes
 
