@@ -28,39 +28,38 @@
   "Portal face."
   :group 'portal)
 
-(defface portal-exited-face
-  '((((class color) (background dark))
-     (:foreground "#777"))
-    (((class color) (background light))
-     (:foreground "#eee")))
-  "Portal exited face."
+(defface portal-exited-stdout-face
+  '((t :foreground "#acac9e"))
+  "Portal exited stdout face."
+  :group 'portal)
+
+(defface portal-exited-stderr-face
+  '((t :foreground "#aa7070"))
+  "Portal exited stderr face."
   :group 'portal)
 
 (defface portal-exit-success-face
-  '((t :inherit font-lock-comment-face))
+  '((t :foreground "#89b664"))
   "Portal exit successful face."
   :group 'portal)
 
 (defface portal-exit-failure-face
-  '((t :inherit error))
+  '((t :foreground "#ae6161"))
   "Portal exit failure face."
   :group 'portal)
 
 (defface portal-meta-face
-  '((t :inherit font-lock-comment-face))
+  '((t :foreground "#89b664"))
   "Portal meta face."
   :group 'portal)
 
 (defface portal-stdout-face
-  '((((class color) (background dark))
-     (:foreground "#fff"))
-    (((class color) (background light))
-     (:foreground "#fff")))
+  '((t :inherit 'default))
   "Portal stdout face."
   :group 'portal)
 
 (defface portal-stderr-face
-  '((t :inherit error))
+  '((t :foreground "#ae6161"))
   "Portal stderr face."
   :group 'portal)
 
@@ -290,7 +289,7 @@ location."
                               "# Invalid portal."))
                    (match-end (match-end 0))
                    (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless (and old-summary (string= summary old-summary))
+              (unless nil ; (and old-summary (string= summary old-summary))
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
@@ -335,14 +334,14 @@ location."
                 (propertize (portal-clean-output stdout)
                             'face (if (string= status "run")
                                       'portal-stdout-face
-                                    'portal-exited-face))))
+                                    'portal-exited-stdout-face))))
       (unless (= 0 (length (string-trim stderr)))
         (insert "\n"
                 (propertize (portal-clean-output stderr)
                             'face
                             (if (string= status "run")
                                 'portal-stderr-face
-                              'portal-exited-face))))
+                              'portal-exited-stderr-face))))
       (propertize (buffer-string) 'portal portal))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
