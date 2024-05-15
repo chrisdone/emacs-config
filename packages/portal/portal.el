@@ -66,7 +66,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive commands
 
-(defun portal-shell-command (command)
+(defun portal-insert-shell-command (command)
   "Launch an asynchronous shell of COMMAND, make a portal associated
 with the current buffer and insert the portal into the current
 buffer."
