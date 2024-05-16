@@ -349,9 +349,21 @@ location."
 
 (defun portal-clean-output (output)
   "Clean output for previewing, prefixed with #."
-  (concat "# " (replace-regexp-in-string
-    "\n" "\n# "
-    (portal-no-empty-lines output))))
+  (portal-limit-lines-to-80-columns
+   (concat "# " (replace-regexp-in-string
+                 "\n" "\n# "
+                 (portal-no-empty-lines output)))))
+
+(defun portal-limit-lines-to-80-columns (string)
+  "Limit all lines in STRING to 80 columns."
+  (with-temp-buffer
+    (insert string)
+    (goto-char (point-min))
+    (while (not (eobp))
+      (move-to-column 80 t)
+      (delete-region (point) (line-end-position))
+      (forward-line))
+    (buffer-string)))
 
 (defun portal-process-name (portal)
   (concat portal "-main-process"))
