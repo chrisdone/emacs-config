@@ -71,15 +71,8 @@
 with the current buffer and insert the portal into the current
 buffer."
   (interactive "sCommand: ")
-  (let* ((portal (portal-generate-nanoid)))
-    (portal-start
-     (current-buffer)
-     portal
-     (portal-file-name portal "stdout")
-     (portal-file-name portal "stderr")
-     shell-file-name
-     (list shell-command-switch command))
-    (insert portal)))
+  (portal-insert-command
+   (list shell-file-name shell-command-switch command)))
 
 (defun portal-open-stdout ()
   "Open the stdout of the file at point."
@@ -96,6 +89,18 @@ buffer."
   (interactive)
   (let ((proc (get-process (portal-process-name (portal-at-point)))))
     (interrupt-process proc)))
+
+(defun portal-clone ()
+  "Clone the portal at point."
+  (interactive)
+  (portal-jump-to-portal)
+  (let* ((portal (portal-at-point))
+         (command (portal-read-json-file portal "command"))
+         (env (portal-read-json-file portal "env"))
+         (default-directory (portal-read-json-file portal "directory")))
+    (save-excursion (insert "\n"))
+    (portal-insert-command (append  command nil))
+    (portal-refresh-soon)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Launching processes
@@ -137,6 +142,7 @@ STDERR-PATH."
 
     (portal-write-json-file portal "command" (apply #'vector (cons program program-args)))
     (portal-write-json-file portal "env" (apply #'vector process-environment))
+    (portal-write-json-file portal "directory" default-directory)
     (portal-write-json-file portal "status" (format "%S" (process-status main-process)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -292,26 +298,31 @@ later."
                               "# Invalid portal."))
                    (match-end (match-end 0))
                    (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless (and old-summary (string= summary old-summary))
+              (unless nil ; (and old-summary (string= summary old-summary))
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
                 (put-text-property (line-beginning-position) (point)
                                    'portal
                                    portal)
-                (save-excursion
-                  (when (looking-at "\n#")
-                    (forward-line 1)
-                    (let ((point (point)))
-                      (or (search-forward-regexp "^[^#]" nil t 1)
-                          (goto-char (point-max)))
-                      (delete-matching-lines "^#" point (point)))))
+                (portal-wipe-summary)
                 (insert "\n" summary)))))
         (goto-char point)))))
+
+(defun portal-wipe-summary ()
+  "Wipe the '# summary' lines that follow the portal."
+  (save-excursion
+    (when (looking-at "\n#")
+      (forward-line 1)
+      (let ((point (point)))
+        (or (search-forward-regexp "^[^#]" nil t 1)
+            (goto-char (point-max)))
+        (delete-matching-lines "^#" point (point))))))
 
 (defun portal-summary (portal process)
   "Generate a summary of the portal."
   (let* ((command (portal-read-json-file portal "command"))
+         (directory (portal-read-json-file portal "directory"))
          (status (portal-read-json-file portal "status"))
          (stdout (if process
                      (portal-last-n-lines
@@ -332,6 +343,9 @@ later."
                  (if (string= status "0")
                      'portal-exit-success-face
                    'portal-exit-failure-face))))
+      ;; Only show if it's different to the current directory,
+      ;; otherwise it's noise.
+      (unless (string= default-directory directory) (insert "\n# " directory))
       (unless (= 0 (length (string-trim stdout)))
         (insert "\n"
                 (propertize (portal-clean-output stdout)
@@ -345,7 +359,8 @@ later."
                             (if (string= status "run")
                                 'portal-stderr-face
                               'portal-exited-stderr-face))))
-      (propertize (buffer-string) 'portal portal))))
+      (propertize (buffer-string)
+                  'portal portal))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; String generation
@@ -412,6 +427,20 @@ not possible (due to lack of such tool), return nil."
       (get-text-property (point) 'portal)
       (error "Not at a portal.")))
 
+(defun portal-jump-to-portal ()
+  "If there's a portal at point or a summary of a portal at point,
+jump to the portal at the beginning of the line upwards within
+the same paragraph."
+  (let ((portal (portal-at-point)))
+    (goto-char
+     (save-excursion
+       (goto-char (line-end-position))
+       (re-search-backward
+        (concat "^" (regexp-quote portal))
+        (save-excursion (forward-paragraph -1))
+        nil
+        1)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Notes
 
@@ -430,14 +459,16 @@ not possible (due to lack of such tool), return nil."
   "Major mode for portals."
   (portal-alpha-minor-mode))
 
-(defun portal-run-line ()
-  "Run a line."
-  (interactive)
-  (let ((command (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
-    (if (string= (string-trim command) "")
-        (call-interactively 'newline)
-      (delete-region (line-beginning-position) (line-end-position))
-      (save-excursion
-        (insert "\n\n")
-        (portal-insert-shell-command command))
-      (portal-refresh-soon))))
+(defun portal-insert-command (command)
+  "Launch an asynchronous proc of COMMAND, make a portal associated
+with the current buffer and insert the portal into the current
+buffer."
+  (let* ((portal (portal-generate-nanoid)))
+    (portal-start
+     (current-buffer)
+     portal
+     (portal-file-name portal "stdout")
+     (portal-file-name portal "stderr")
+     (car command)
+     (cdr command))
+    (insert portal)))
