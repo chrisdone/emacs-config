@@ -79,8 +79,6 @@ buffer."
      (portal-file-name portal "stderr")
      shell-file-name
      (list shell-command-switch command))
-    (unless (= (line-beginning-position) (line-end-position))
-      (insert "\n"))
     (insert portal)))
 
 (defun portal-open-stdout ()
@@ -268,11 +266,16 @@ location."
 (define-minor-mode portal-alpha-minor-mode
   "TODO"
   :init-value nil
-  :lighter " Portal"
+  :lighter "@"
   (when portal-alpha-timer (cancel-timer portal-alpha-timer))
   (when portal-alpha-minor-mode
     (setq portal-alpha-timer
           (run-with-idle-timer 2 t 'portal-beta-refresh (current-buffer)))))
+
+(defun portal-refresh-soon ()
+  "Trigger a refresh within the blink of an eye, but no sooner, or
+later."
+  (run-with-timer 0.100 nil 'portal-beta-refresh (current-buffer)))
 
 (defun portal-beta-refresh (buffer)
   "Refresh portal displays."
@@ -289,7 +292,7 @@ location."
                               "# Invalid portal."))
                    (match-end (match-end 0))
                    (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless nil ; (and old-summary (string= summary old-summary))
+              (unless (and old-summary (string= summary old-summary))
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
@@ -415,3 +418,26 @@ not possible (due to lack of such tool), return nil."
 ;; Use this on a portals buffer to stop it constantly being saved:
 ;
 ;; (setq buffer-save-without-query t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Major mode
+
+(defvar-keymap portal-mode-map
+  "RET" 'portal-run-line)
+
+(define-derived-mode portal-mode
+  fundamental-mode "Portals"
+  "Major mode for portals."
+  (portal-alpha-minor-mode))
+
+(defun portal-run-line ()
+  "Run a line."
+  (interactive)
+  (let ((command (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+    (if (string= (string-trim command) "")
+        (call-interactively 'newline)
+      (delete-region (line-beginning-position) (line-end-position))
+      (save-excursion
+        (insert "\n\n")
+        (portal-insert-shell-command command))
+      (portal-refresh-soon))))
