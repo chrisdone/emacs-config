@@ -285,30 +285,33 @@ later."
 
 (defun portal-beta-refresh (buffer)
   "Refresh portal displays."
-  (when (and (buffer-live-p buffer)
-             (get-buffer-window buffer))
-    (with-current-buffer buffer
-      (let ((point (point)))
-        (save-excursion
-          (goto-char (point-min))
-          (while (re-search-forward portal-regexp nil t nil)
-            (let* ((portal (match-string 0))
-                   (process (get-process (portal-process-name portal)))
-                   (summary (if (portal-directory-exists-p portal)
-                                (portal-summary portal process)
-                              "# Invalid portal."))
-                   (match-end (match-end 0))
-                   (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless (and old-summary (string= summary old-summary))
-                (put-text-property (line-beginning-position) (point)
-                                   'portal-summary
-                                   summary)
-                (put-text-property (line-beginning-position) (point)
-                                   'portal
-                                   portal)
-                (portal-wipe-summary)
-                (insert "\n" summary)))))
-        (goto-char point)))))
+  (when (buffer-live-p buffer)
+    (let ((window (get-buffer-window buffer)))
+      (when window
+        (with-current-buffer buffer
+          (let ((point (point)))
+            (save-excursion
+              (goto-char (point-min))
+              (while (and (re-search-forward portal-regexp nil t nil)
+                          (<= (point) (window-end window)))
+                (when (<= (window-start window) (point) (window-end window))
+                  (let* ((portal (match-string 0))
+                         (process (get-process (portal-process-name portal)))
+                         (summary (if (portal-directory-exists-p portal)
+                                      (portal-summary portal process)
+                                    "# Invalid portal."))
+                         (match-end (match-end 0))
+                         (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
+                    (unless (and old-summary (string= summary old-summary))
+                      (put-text-property (line-beginning-position) (point)
+                                         'portal-summary
+                                         summary)
+                      (put-text-property (line-beginning-position) (point)
+                                         'portal
+                                         portal)
+                      (portal-wipe-summary)
+                      (insert "\n" summary))))))
+            (goto-char point)))))))
 
 (defun portal-wipe-summary ()
   "Wipe the '# summary' lines that follow the portal."
