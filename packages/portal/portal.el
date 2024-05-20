@@ -11,12 +11,12 @@
   :type 'string :group 'portal)
 
 (defcustom portal-default-stdout-buffer-len
-  1024
+  4096
   "Default buffer length for the stdout preview."
   :group 'portal :type 'number)
 
 (defcustom portal-default-stderr-buffer-len
-  1024
+  4096
   "Default buffer length for the stderr preview."
   :group 'portal :type 'number)
 
