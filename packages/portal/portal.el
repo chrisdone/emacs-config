@@ -471,7 +471,8 @@ the same paragraph."
 
 (defvar-keymap portal-mode-map
   "M-!" 'portal-shell-command
-  "C-c C-c" 'portal-interrupt)
+  "C-c C-c" 'portal-interrupt
+  "RET" 'portal-jump-to-thing-at-point)
 
 (define-derived-mode portal-mode
   fundamental-mode "Portals"
@@ -497,3 +498,19 @@ buffer."
   (interactive "sCommand: ")
   (portal-insert-command
    (list shell-file-name shell-command-switch command)))
+
+(defun portal-jump-to-thing-at-point ()
+  "Jump to the thing at point, i.e. an stdout/stderr output jumps to
+the file."
+  (interactive)
+  (let ((face (get-text-property (point) 'face)))
+    (cond
+     ((eq face 'portal-stderr-face)
+      (portal-open-stderr))
+     ((eq face 'portal-exited-stderr-face)
+      (portal-open-stderr))
+     ((eq face 'portal-stdout-face)
+      (portal-open-stdout))
+     ((eq face 'portal-exited-stdout-face)
+      (portal-open-stdout))
+     (t (call-interactively 'newline)))))
