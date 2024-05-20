@@ -94,6 +94,7 @@ buffer."
   "Re-run portal at point."
   (interactive)
   (portal-jump-to-portal)
+  (portal-interrupt)
   (let* ((portal (portal-at-point))
          (command (portal-read-json-file portal "command"))
          (env (portal-read-json-file portal "env"))
@@ -469,7 +470,8 @@ the same paragraph."
 ;; Major mode
 
 (defvar-keymap portal-mode-map
-  "RET" 'portal-run-line)
+  "M-!" 'portal-shell-command
+  "C-c C-c" 'portal-interrupt)
 
 (define-derived-mode portal-mode
   fundamental-mode "Portals"
@@ -489,3 +491,9 @@ buffer."
      (car command)
      (cdr command))
     (insert portal)))
+
+(defun portal-shell-command (command)
+  "Run a shell command and insert it at point."
+  (interactive "sCommand: ")
+  (portal-insert-command
+   (list shell-file-name shell-command-switch command)))
