@@ -90,6 +90,19 @@ buffer."
   (let ((proc (get-process (portal-process-name (portal-at-point)))))
     (interrupt-process proc)))
 
+(defun portal-rerun ()
+  "Re-run portal at point."
+  (interactive)
+  (portal-jump-to-portal)
+  (let* ((portal (portal-at-point))
+         (command (portal-read-json-file portal "command"))
+         (env (portal-read-json-file portal "env"))
+         (default-directory (portal-read-json-file portal "directory")))
+    (delete-region (line-beginning-position) (line-end-position))
+    (portal-wipe-summary)
+    (portal-insert-command (append command nil))
+    (portal-refresh-soon)))
+
 (defun portal-clone ()
   "Clone the portal at point."
   (interactive)
