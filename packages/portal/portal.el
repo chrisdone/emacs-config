@@ -276,7 +276,7 @@ location."
   (when portal-alpha-timer (cancel-timer portal-alpha-timer))
   (when portal-alpha-minor-mode
     (setq portal-alpha-timer
-          (run-with-idle-timer 2 t 'portal-beta-refresh (current-buffer)))))
+          (run-with-timer 1 2 'portal-beta-refresh (current-buffer)))))
 
 (defun portal-refresh-soon ()
   "Trigger a refresh within the blink of an eye, but no sooner, or
@@ -285,7 +285,8 @@ later."
 
 (defun portal-beta-refresh (buffer)
   "Refresh portal displays."
-  (when (buffer-live-p buffer)
+  (when (and (buffer-live-p buffer)
+             (get-buffer-window buffer))
     (with-current-buffer buffer
       (let ((point (point)))
         (save-excursion
@@ -298,7 +299,7 @@ later."
                               "# Invalid portal."))
                    (match-end (match-end 0))
                    (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-              (unless nil ; (and old-summary (string= summary old-summary))
+              (unless (and old-summary (string= summary old-summary))
                 (put-text-property (line-beginning-position) (point)
                                    'portal-summary
                                    summary)
