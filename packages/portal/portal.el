@@ -494,6 +494,6 @@ buffer."
 
 (defun portal-shell-command (command)
   "Run a shell command and insert it at point."
-  (interactive (list (read-command "Command: ")))
+  (interactive "sCommand: ")
   (portal-insert-command
    (list shell-file-name shell-command-switch command)))
