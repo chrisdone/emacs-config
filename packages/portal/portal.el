@@ -94,11 +94,25 @@ buffer."
   "Re-run portal at point."
   (interactive)
   (portal-jump-to-portal)
-  (portal-interrupt)
   (let* ((portal (portal-at-point))
          (command (portal-read-json-file portal "command"))
          (env (portal-read-json-file portal "env"))
          (default-directory (portal-read-json-file portal "directory")))
+    (portal-interrupt)
+    (delete-region (line-beginning-position) (line-end-position))
+    (portal-wipe-summary)
+    (portal-insert-command (append command nil))
+    (portal-refresh-soon)))
+
+(defun portal-edit ()
+  "Edit and re-run portal at point."
+  (interactive)
+  (portal-jump-to-portal)
+  (let* ((portal (portal-at-point))
+         (command (read-from-minibuffer "Command: " (portal-read-json-file portal "command")))
+         (env (portal-read-json-file portal "env"))
+         (default-directory (portal-read-json-file portal "directory")))
+    (portal-interrupt)
     (delete-region (line-beginning-position) (line-end-position))
     (portal-wipe-summary)
     (portal-insert-command (append command nil))
@@ -472,7 +486,8 @@ the same paragraph."
 (defvar-keymap portal-mode-map
   "M-!" 'portal-shell-command
   "C-c C-c" 'portal-interrupt
-  "RET" 'portal-jump-to-thing-at-point)
+  "RET" 'portal-jump-to-thing-at-point
+  )
 
 (define-derived-mode portal-mode
   fundamental-mode "Portals"
