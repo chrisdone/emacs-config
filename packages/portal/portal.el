@@ -88,7 +88,8 @@ buffer."
   "Interrupt the process at point."
   (interactive)
   (let ((proc (get-process (portal-process-name (portal-at-point)))))
-    (interrupt-process proc)))
+    (when (process-live-p proc)
+      (interrupt-process proc))))
 
 (defun portal-rerun ()
   "Re-run portal at point."
@@ -108,11 +109,17 @@ buffer."
   "Edit and re-run portal at point."
   (interactive)
   (portal-jump-to-portal)
+  (portal-interrupt)
   (let* ((portal (portal-at-point))
-         (command (read-from-minibuffer "Command: " (portal-read-json-file portal "command")))
+         (command
+          (vector
+           shell-file-name
+           shell-command-switch
+           (read-from-minibuffer
+            "Command: "
+            (portal-as-shell-command (portal-read-json-file portal "command")))))
          (env (portal-read-json-file portal "env"))
          (default-directory (portal-read-json-file portal "directory")))
-    (portal-interrupt)
     (delete-region (line-beginning-position) (line-end-position))
     (portal-wipe-summary)
     (portal-insert-command (append command nil))
@@ -396,6 +403,14 @@ later."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; String generation
+
+(defun portal-as-shell-command (command)
+  "If the vector COMMAND is a shell run, strip the prefix, else return the whole thing joined."
+  (if (and (= 3 (length command))
+           (string= (elt command 0) shell-file-name)
+           (string= (elt command 1) shell-command-switch))
+      (elt command 2)
+    (mapconcat 'shell-quote-argument command " ")))
 
 (defun portal-clean-output (output)
   "Clean output for previewing, prefixed with #."
