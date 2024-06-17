@@ -302,3 +302,30 @@ This can be useful when updating or checking out branches outside of Emacs."
      (nth 0 command-and-name)
      (when (nth 1 command-and-name)
        (format "*sh:%s*" (nth 1 command-and-name))))))
+
+(defun buildkite ()
+  (interactive)
+  (browse-url
+   (format
+    "https://buildkite.com/%s/builds?branch=%s"
+    (cadr (git-link--parse-remote (git-link--remote-url (git-link--select-remote))))
+    (url-hexify-string (car (my-lines (shell-command-to-string "git symbolic-ref --short HEAD")))))))
+
+(defun my-lines (s)
+  (split-string (replace-regexp-in-string "[\r\n]" "\n" s) "\n" t))
+
+(defun disable-newline-adding ()
+  "Locally turn off automatically adding newlines."
+  (interactive)
+  (set (make-local-variable 'require-final-newline) nil))
+
+(defun sh ()
+  (interactive)
+  "Launch a *sh:foo* buffer."
+  (let ((root (magit-get-top-dir)))
+    (if root
+        (let* ((name (file-name-nondirectory (directory-file-name (file-name-as-directory (magit-get-top-dir)))))
+               (purpose (read-from-minibuffer "Purpose of shell: "))
+               (buffer (get-buffer-create (format "*sh:%s:%s*" name purpose))))
+          (shell buffer))
+      (call-interactively 'shell))))

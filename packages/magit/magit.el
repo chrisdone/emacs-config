@@ -894,7 +894,7 @@ problematic option a member of the default value."
   :group 'magit-commit
   :type 'boolean)
 
-(defcustom magit-diff-refine-hunk nil
+(defcustom magit-diff-refine-hunk 'all
   "Show fine (word-granularity) differences within diff hunks.
 
 There are three possible settings:
@@ -4062,6 +4062,10 @@ tracked in the current repository."
   (when magit-auto-revert-mode
     (magit-revert-buffers)))
 
+(defcustom magit-refresh-all-hooks
+  '(magit-refresh-all-buffers-function)
+  "What happens when you run G.")
+
 (defun magit-refresh-all ()
   "Refresh all buffers belonging to the current repository.
 
@@ -4070,6 +4074,11 @@ If the global `magit-auto-revert-mode' is turned on, then also
 revert all unmodified buffers that visit files being tracked in
 the current repository."
   (interactive)
+  (run-hooks 'magit-refresh-all-hooks)
+  (magit-refresh))
+
+(defun magit-refresh-all-buffers-function ()
+  "Reverts all buffers."
   (magit-map-magit-buffers #'magit-mode-refresh-buffer default-directory)
   (magit-revert-buffers))
 
@@ -5236,7 +5245,7 @@ If REVISION is a remote branch, offer to create a local branch.
 Fails if working tree or staging area contain uncommitted changes.
 \('git checkout -b BRANCH REVISION')."
   (interactive
-   (list (read-string "Create branch: " "cd/")
+   (list (read-string "Create branch: " (format "cd/%s-" (replace-regexp-in-string "\n" "" (shell-command-to-string "date +\"%Y-%m-%d\""))))
          (magit-read-rev "Parent" (or (magit-guess-branch)
                                       (magit-get-current-branch)))))
   (cond ((run-hook-with-args-until-success
