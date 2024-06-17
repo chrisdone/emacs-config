@@ -375,7 +375,7 @@ later."
                    (portal-tail-file portal 5 "stderr"))))
     (with-temp-buffer
       (insert (propertize
-               (concat "# (" status ") " (portal-as-shell-command command))
+               (concat "# (" (if (string= status "run") "🌀" status) ") " (portal-as-shell-command command))
                'face
                (if (string= status "run")
                    'portal-meta-face
