@@ -502,6 +502,7 @@ the same paragraph."
   "M-!" 'portal-shell-command
   "C-c C-c" 'portal-interrupt
   "RET" 'portal-jump-to-thing-at-point
+  "M-p" 'portal-rerun
   )
 
 (define-derived-mode portal-mode
