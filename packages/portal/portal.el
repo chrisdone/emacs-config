@@ -116,7 +116,7 @@ buffer."
            shell-file-name
            shell-command-switch
            (read-from-minibuffer
-            "Command: "
+            "Edit command: "
             (portal-as-shell-command (portal-read-json-file portal "command")))))
          (env (portal-read-json-file portal "env"))
          (default-directory (portal-read-json-file portal "directory")))
@@ -499,7 +499,7 @@ the same paragraph."
 ;; Major mode
 
 (defvar-keymap portal-mode-map
-  "M-!" 'portal-shell-command
+  "M-!" 'portal-dwim-execute
   "C-c C-c" 'portal-interrupt
   "RET" 'portal-jump-to-thing-at-point
   "M-p" 'portal-rerun
@@ -523,6 +523,15 @@ buffer."
      (car command)
      (cdr command))
     (insert portal)))
+
+(defun portal-dwim-execute ()
+  (interactive)
+  (call-interactively
+   (if (condition-case nil
+           (portal-at-point)
+         (error nil))
+       'portal-edit
+     'portal-shell-command)))
 
 (defun portal-shell-command (command)
   "Run a shell command and insert it at point."
