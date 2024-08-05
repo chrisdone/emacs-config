@@ -35,7 +35,7 @@
 (defconst diary-keywords
   `(("^[0-9]+ [A-Z][a-z]+ [0-9]+$" . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
-    ("^• Done " . 'diary-done-prefix-face)))
+    ("^ *• Done " . 'diary-done-prefix-face)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.diary\\'" . diary-mode))
