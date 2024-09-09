@@ -23,6 +23,7 @@
     watchexec
     quickjump
     h98-mode
+    hell-mode
     ts-mode
     paredit
     markdown-mode
