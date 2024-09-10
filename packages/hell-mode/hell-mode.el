@@ -39,7 +39,8 @@
   (set (make-local-variable 'font-lock-defaults) '(hell-keywords t nil nil))
   (setq-local comment-start "-- ")
   (setq-local comment-start-skip "-- ")
-  (setq-local comment-end ""))
+  (setq-local comment-end "")
+  (company-mode))
 
 (defconst hell-keywords
   `((" -- .*$" . font-lock-comment-face)
