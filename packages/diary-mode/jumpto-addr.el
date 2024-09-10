@@ -123,6 +123,7 @@ will have no effect.")
   (let ((m (make-sparse-keymap)))
     (define-key m (kbd "<mouse-2>") #'jumpto-address-at-point)
     (define-key m (kbd "C-c RET") #'jumpto-address-at-point)
+    (define-key m (kbd "C-c C-o") #'jumpto-address-at-point)
     m)
   "Keymap to hold jumpto-addr's mouse key defs under highlighted URLs.")
 
@@ -242,8 +243,10 @@ using `browse-url-secondary-browser-function' instead."
   (save-excursion
     (if event (posn-set-point (event-end event)))
     (if (get-text-property (point) 'jumpto-url)
-        (progn (message "Got jumpto-url: %S" (get-text-property (point) 'jumpto-url))
-               (browse-url (get-text-property (point) 'jumpto-url)))
+        (progn ;; (message "Got jumpto-url: %S" (get-text-property (point) 'jumpto-url))
+               (if (string-match "^https?://" (get-text-property (point) 'jumpto-url))
+                   (browse-url (get-text-property (point) 'jumpto-url))
+                 (find-file-other-window (get-text-property (point) 'jumpto-url))))
         (let ((address (save-excursion (jumpto-address-find-address-at-point))))
           (if (and address
                    (save-excursion
