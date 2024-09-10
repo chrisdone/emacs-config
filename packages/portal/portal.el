@@ -508,6 +508,7 @@ the same paragraph."
 (define-derived-mode portal-mode
   fundamental-mode "Portals"
   "Major mode for portals."
+  (setq buffer-save-without-query t)
   (portal-alpha-minor-mode))
 
 (defun portal-insert-command (command)
