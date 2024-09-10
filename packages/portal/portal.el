@@ -116,7 +116,7 @@ buffer."
            shell-file-name
            shell-command-switch
            (read-from-minibuffer
-            "Command: "
+            "Edit command: "
             (portal-as-shell-command (portal-read-json-file portal "command")))))
          (env (portal-read-json-file portal "env"))
          (default-directory (portal-read-json-file portal "directory")))
@@ -375,7 +375,7 @@ later."
                    (portal-tail-file portal 5 "stderr"))))
     (with-temp-buffer
       (insert (propertize
-               (concat "# (" status ") " (portal-as-shell-command command))
+               (concat "# (" (if (string= status "run") "🌀" status) ") " (portal-as-shell-command command))
                'face
                (if (string= status "run")
                    'portal-meta-face
@@ -499,14 +499,16 @@ the same paragraph."
 ;; Major mode
 
 (defvar-keymap portal-mode-map
-  "M-!" 'portal-shell-command
+  "M-!" 'portal-dwim-execute
   "C-c C-c" 'portal-interrupt
   "RET" 'portal-jump-to-thing-at-point
+  "M-p" 'portal-rerun
   )
 
 (define-derived-mode portal-mode
   fundamental-mode "Portals"
   "Major mode for portals."
+  (setq buffer-save-without-query t)
   (portal-alpha-minor-mode))
 
 (defun portal-insert-command (command)
@@ -522,6 +524,15 @@ buffer."
      (car command)
      (cdr command))
     (insert portal)))
+
+(defun portal-dwim-execute ()
+  (interactive)
+  (call-interactively
+   (if (condition-case nil
+           (portal-at-point)
+         (error nil))
+       'portal-edit
+     'portal-shell-command)))
 
 (defun portal-shell-command (command)
   "Run a shell command and insert it at point."

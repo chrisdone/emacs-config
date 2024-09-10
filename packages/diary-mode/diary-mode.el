@@ -5,7 +5,8 @@
   (set (make-local-variable 'font-lock-defaults) '(diary-keywords t nil nil))
   (display-line-numbers-mode -1)
   (jumpto-address-mode 1)
-  (auto-fill-mode -1))
+  (auto-fill-mode -1)
+  (set (make-local-variable 'page-delimiter) "^[0-9]+ [A-Z][a-z]+ [0-9]+$"))
 
 (defgroup diary-faces nil
  "Faces for diary-mode.")
@@ -34,7 +35,7 @@
 (defconst diary-keywords
   `(("^[0-9]+ [A-Z][a-z]+ [0-9]+$" . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
-    ("^• Done " . 'diary-done-prefix-face)))
+    ("^ *• Done " . 'diary-done-prefix-face)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.diary\\'" . diary-mode))
@@ -75,6 +76,18 @@
 (define-key diary-mode-map (kbd "SPC") 'diary-dwim-space)
 (define-key diary-mode-map (kbd "TAB") 'diary-dwim-tab)
 (define-key diary-mode-map (kbd "<backtab>") 'diary-dwim-backtab)
+(define-key diary-mode-map (kbd "C-c C-t") 'diary-mark-done)
+
+(defun diary-mark-done ()
+  "Similar behavior to org-mode."
+  (interactive)
+  (save-excursion
+    (back-to-indentation)
+    (when (and (looking-at "• ")
+               (not (looking-at "• Done ")))
+     (forward-char 1)
+     (cycle-spacing 1)
+     (insert "Done "))))
 
 (defun diary-dwim-space ()
   (interactive)
