@@ -77,12 +77,18 @@ buffer."
 (defun portal-open-stdout ()
   "Open the stdout of the file at point."
   (interactive)
-  (find-file (portal-file-name (portal-at-point) "stdout")))
+  (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stdout"))
+    (auto-revert-tail-mode)
+    (goto-char (point-max))
+    (push-mark (point-max))))
 
 (defun portal-open-stderr ()
   "Open the stderr of the file at point."
   (interactive)
-  (find-file (portal-file-name (portal-at-point) "stderr")))
+  (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stderr"))
+    (auto-revert-tail-mode)
+    (goto-char (point-max))
+    (push-mark (point-max))))
 
 (defun portal-interrupt ()
   "Interrupt the process at point."
