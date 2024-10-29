@@ -29,14 +29,24 @@
     (mapconcat 'identity (reverse components) ".")))
 
 (defun hasktags ()
-  "Runs hasktags."
+  "Runs hasktags. If `fd' is installed and in the PATH, it'll be much faster."
   (interactive)
   (message "Running hasktags ...")
   (redisplay)
-  (apply #'call-process
-         (append (list "hasktags" nil (get-buffer-create "*hasktags-output*") t)
-                 hasktags-directories
-                 (list "-o" hasktags-path)))
+  (if (executable-find "fd")
+      (let ((hasktags-part
+             (mapconcat 'shell-quote-argument
+                        (append (list "hasktags") (list "-o" hasktags-path))
+                        " "))
+            (fd-part
+             (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$") hasktags-directories)
+                        " ")))
+        (call-process "sh" nil (get-buffer-create "*hasktags-output*") t
+                      "-c" (concat fd-part " | xargs " hasktags-part)))
+    (apply #'call-process
+           (append (list "hasktags" nil (get-buffer-create "*hasktags-output*") t)
+                   hasktags-directories
+                   (list "-o" hasktags-path))))
   (message "Running hasktags ... done!"))
 
 (defun haskell-refresh ()
