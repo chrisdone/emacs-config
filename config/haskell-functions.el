@@ -92,7 +92,7 @@
 (defun haskell-refresh ()
   "Refresh databases."
   (interactive)
-  (hasktags))
+  (ghc-tags))
 
 (defun haskell-refresh-hook ()
   "Attempt to run haskell-refresh, but it's fine if it fails."
