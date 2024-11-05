@@ -33,6 +33,11 @@
   "Portal exited stdout face."
   :group 'portal)
 
+(defface portal-timestamp-face
+  '((t :foreground "#888888"))
+  "Portal exited stdout face."
+  :group 'portal)
+
 (defface portal-exited-stderr-face
   '((t :foreground "#aa7070"))
   "Portal exited stderr face."
@@ -77,12 +82,18 @@ buffer."
 (defun portal-open-stdout ()
   "Open the stdout of the file at point."
   (interactive)
-  (find-file (portal-file-name (portal-at-point) "stdout")))
+  (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stdout"))
+    (auto-revert-tail-mode)
+    (goto-char (point-max))
+    (push-mark (point-max))))
 
 (defun portal-open-stderr ()
   "Open the stderr of the file at point."
   (interactive)
-  (find-file (portal-file-name (portal-at-point) "stderr")))
+  (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stderr"))
+    (auto-revert-tail-mode)
+    (goto-char (point-max))
+    (push-mark (point-max))))
 
 (defun portal-interrupt ()
   "Interrupt the process at point."
@@ -372,7 +383,8 @@ later."
                      (portal-last-n-lines
                       5
                       (process-get (process-get process :stderr-process) :buffer))
-                   (portal-tail-file portal 5 "stderr"))))
+                   (portal-tail-file portal 5 "stderr")))
+         (started-time (with-current-buffer (find-file-noselect (portal-file-name portal "command")) (visited-file-modtime))))
     (with-temp-buffer
       (insert (propertize
                (concat "# (" (if (string= status "run") "🌀" status) ") " (portal-as-shell-command command))
@@ -382,6 +394,14 @@ later."
                  (if (string= status "0")
                      'portal-exit-success-face
                    'portal-exit-failure-face))))
+      (insert "\n"
+              (concat
+               (propertize (format-time-string "# Started: %Y-%m-%d %T" started-time)
+                           'face 'portal-timestamp-face)
+               (if (string= status "run")
+                   ""
+                 (propertize (format-time-string ", exited: %Y-%m-%d %T" started-time)
+                             'face 'portal-timestamp-face))))
       ;; Only show if it's different to the current directory,
       ;; otherwise it's noise.
       (unless (string= default-directory directory) (insert "\n# " directory))

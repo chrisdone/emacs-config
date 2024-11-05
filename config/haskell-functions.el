@@ -29,20 +29,70 @@
     (mapconcat 'identity (reverse components) ".")))
 
 (defun hasktags ()
-  "Runs hasktags."
+  "Runs hasktags. If `fd' is installed and in the PATH, it'll be much faster."
   (interactive)
   (message "Running hasktags ...")
   (redisplay)
-  (apply #'call-process
-         (append (list "hasktags" nil (get-buffer-create "*hasktags-output*") t)
-                 hasktags-directories
-                 (list "-o" hasktags-path)))
-  (message "Running hasktags ... done!"))
+  (if (executable-find "hasktags")
+      (progn (if (executable-find "fd")
+                 (let ((hasktags-part
+                        (mapconcat 'shell-quote-argument
+                                   (append (list "hasktags") (list "-o" hasktags-path))
+                                   " "))
+                       (fd-part
+                        (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$") hasktags-directories)
+                                   " ")))
+                   (call-process "sh" nil (get-buffer-create "*hasktags-output*") t
+                                 "-c" (concat fd-part " | xargs " hasktags-part)))
+               (apply #'call-process
+                      (append (list "hasktags" nil (get-buffer-create "*hasktags-output*") t)
+                              hasktags-directories
+                              (list "-o" hasktags-path))))
+             (message "Running hasktags ... done!"))
+    (warn "No hasktags is installed!")))
+
+(defun ghc-tags ()
+  "Runs ghc-tags. Requires `ghc-tags' and `fd' to be installed."
+  (interactive)
+  (message "Running ghc-tags ...")
+  (redisplay)
+  (if (and (executable-find "ghc-tags")
+           (executable-find "fd"))
+      (let ((ghc-tags-part
+             (mapconcat 'shell-quote-argument
+                        (append (list "ghc-tags") (list "-e" "-o" hasktags-path))
+                        " "))
+            (fd-part
+             (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$") hasktags-directories)
+                        " ")))
+        (call-process "sh" nil (get-buffer-create "*ghc-tags-output*") t
+                      "-c" (concat fd-part " | xargs " ghc-tags-part)))
+    (warn "I need `ghc-tags' and `fd' to be installed!"))
+  (message "Running ghc-tags ... done!"))
+
+(defun fast-tags ()
+  "Runs fast-tags. Requires `fast-tags' and `fd' to be installed."
+  (interactive)
+  (message "Running fast-tags ...")
+  (redisplay)
+  (if (and (executable-find "fast-tags")
+           (executable-find "fd"))
+      (let ((fast-tags-part
+             (mapconcat 'shell-quote-argument
+                        (append (list "fast-tags") (list "-e" "-o" hasktags-path))
+                        " "))
+            (fd-part
+             (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$") hasktags-directories)
+                        " ")))
+        (call-process "sh" nil (get-buffer-create "*fast-tags-output*") t
+                      "-c" (concat fd-part " | xargs " fast-tags-part)))
+    (warn "I need `fast-tags' and `fd' to be installed!"))
+  (message "Running fast-tags ... done!"))
 
 (defun haskell-refresh ()
   "Refresh databases."
   (interactive)
-  (hasktags))
+  (ghc-tags))
 
 (defun haskell-refresh-hook ()
   "Attempt to run haskell-refresh, but it's fine if it fails."
