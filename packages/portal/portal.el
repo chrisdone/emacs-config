@@ -33,6 +33,11 @@
   "Portal exited stdout face."
   :group 'portal)
 
+(defface portal-timestamp-face
+  '((t :foreground "#888888"))
+  "Portal exited stdout face."
+  :group 'portal)
+
 (defface portal-exited-stderr-face
   '((t :foreground "#aa7070"))
   "Portal exited stderr face."
@@ -378,7 +383,8 @@ later."
                      (portal-last-n-lines
                       5
                       (process-get (process-get process :stderr-process) :buffer))
-                   (portal-tail-file portal 5 "stderr"))))
+                   (portal-tail-file portal 5 "stderr")))
+         (started-time (with-current-buffer (find-file-noselect (portal-file-name portal "command")) (visited-file-modtime))))
     (with-temp-buffer
       (insert (propertize
                (concat "# (" (if (string= status "run") "🌀" status) ") " (portal-as-shell-command command))
@@ -388,6 +394,14 @@ later."
                  (if (string= status "0")
                      'portal-exit-success-face
                    'portal-exit-failure-face))))
+      (insert "\n"
+              (concat
+               (propertize (format-time-string "# Started: %Y-%m-%d %T" started-time)
+                           'face 'portal-timestamp-face)
+               (if (string= status "run")
+                   ""
+                 (propertize (format-time-string ", exited: %Y-%m-%d %T" started-time)
+                             'face 'portal-timestamp-face))))
       ;; Only show if it's different to the current directory,
       ;; otherwise it's noise.
       (unless (string= default-directory directory) (insert "\n# " directory))
