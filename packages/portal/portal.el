@@ -493,7 +493,7 @@ The function will display the time in the most appropriate unit (from ns to days
   (replace-regexp-in-string
    ;; Drop ANSI codes from terminal output
    ;; <https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream>
-   "\\(\x1B\\[[0-9;]*m\\|\n$\\)"
+   "\\(\x1B\\[[0-9;]*[A-Za-z]\\|[\x00-\x09\x0B-\x1F\x7F]\\|\n$\\|^\n\\)"
    ""
    string))
 
