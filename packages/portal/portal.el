@@ -384,7 +384,8 @@ later."
                       5
                       (process-get (process-get process :stderr-process) :buffer))
                    (portal-tail-file portal 5 "stderr")))
-         (started-time (with-current-buffer (find-file-noselect (portal-file-name portal "command")) (visited-file-modtime))))
+         (started-time (with-current-buffer (find-file-noselect (portal-file-name portal "command")) (visited-file-modtime)))
+         (exited-time (with-current-buffer (find-file-noselect (portal-file-name portal "status")) (visited-file-modtime))))
     (with-temp-buffer
       (insert (propertize
                (concat "# (" (if (string= status "run") "🌀" status) ") " (portal-as-shell-command command))
