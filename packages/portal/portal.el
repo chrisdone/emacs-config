@@ -490,7 +490,12 @@ The function will display the time in the most appropriate unit (from ns to days
 
 (defun portal-no-empty-lines (string)
   "Drop empty lines from a string."
-  (replace-regexp-in-string "\n$" "" string))
+  (replace-regexp-in-string
+   ;; Drop ANSI codes from terminal output
+   ;; <https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream>
+   "\\(\x1B\\[[0-9;]*m\\|\n$\\)"
+   ""
+   string))
 
 (defun portal-last-n-lines (n string)
   "Take last N lines from STRING."
