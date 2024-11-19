@@ -1361,6 +1361,8 @@ to values."
 
 (defalias 'sunburn #'color-theme-sunburn)
 
+(set-face-foreground 'vertical-border sunburn-highlight-subtle-background)
+
 (provide 'sunburn)
 
 ;; Local Variables:
