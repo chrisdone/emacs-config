@@ -36,7 +36,8 @@
     hcl-mode
     art-mode
     yaml-mode
-    haskell-navigate-imports)
+    haskell-navigate-imports
+    page-break-lines)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
@@ -130,6 +131,7 @@
 (delete-selection-mode)
 (envrc-global-mode)
 (tab-bar-mode)
+(page-break-lines-mode)
 
 
 ;; Disable auto-revert mode
