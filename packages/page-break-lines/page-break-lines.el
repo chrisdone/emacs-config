@@ -86,8 +86,8 @@ If nil, indicator will span the width of the frame."
   :group 'page-break-lines)
 
 (defface page-break-lines
-  `((((class color) (background dark))
-     (:foreground ,zenburn-highlight-subtle-background :bold nil :italic nil))
+  '((((class color) (background dark))
+     (:foreground "#555" :bold nil :italic nil))
     (((class color) (background light))
      (:foreground "#ddd" :bold nil :italic nil)))
   "Face used to colorize page break lines.
