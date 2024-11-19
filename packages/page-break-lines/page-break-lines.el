@@ -86,7 +86,10 @@ If nil, indicator will span the width of the frame."
   :group 'page-break-lines)
 
 (defface page-break-lines
-  '((t :inherit font-lock-comment-face :bold nil :italic nil))
+  '((((class color) (background dark))
+     (:foreground "#353535" :bold nil :italic nil))
+    (((class color) (background light))
+     (:foreground "#ddd" :bold nil :italic nil)))
   "Face used to colorize page break lines.
 If using :bold or :italic, please ensure `page-break-lines-char'
 is available in that variant of your font, otherwise it may be
