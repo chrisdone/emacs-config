@@ -132,6 +132,7 @@
 (envrc-global-mode)
 (tab-bar-mode)
 (global-page-break-lines-mode)
+(toggle-truncate-lines -1)
 
 
 ;; Disable auto-revert mode
