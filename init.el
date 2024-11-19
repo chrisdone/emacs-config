@@ -131,7 +131,7 @@
 (delete-selection-mode)
 (envrc-global-mode)
 (tab-bar-mode)
-(page-break-lines-mode)
+(global-page-break-lines-mode)
 
 
 ;; Disable auto-revert mode
