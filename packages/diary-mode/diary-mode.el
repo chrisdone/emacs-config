@@ -24,7 +24,15 @@
      (:foreground "#fff" :bold t))
     (((class color) (background light))
      (:foreground "#000" :bold t)))
-  "Done prefix for items.."
+  "Done prefix for items."
+  :group 'diary-faces)
+
+(defface diary-meet-prefix-face
+  '((((class color) (background dark))
+     (:foreground "#fff" :bold t))
+    (((class color) (background light))
+     (:foreground "#1a6e8e" :bold t)))
+  "Meet prefix for items."
   :group 'diary-faces)
 
 (defface diary-reference-face
@@ -35,7 +43,8 @@
 (defconst diary-keywords
   `(("^[0-9]+ [A-Z][a-z]+ [0-9]+$" . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
-    ("^ *• Done " . 'diary-done-prefix-face)))
+    ("^ *• Done " . 'diary-done-prefix-face)
+    ("^ *• Meet " . 'diary-meet-prefix-face)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.diary\\'" . diary-mode))
