@@ -29,7 +29,7 @@
 
 (defface diary-meet-prefix-face
   '((((class color) (background dark))
-     (:foreground "#fff" :bold t))
+     (:foreground "#65c9ef" :bold t))
     (((class color) (background light))
      (:foreground "#1a6e8e" :bold t)))
   "Meet prefix for items."
