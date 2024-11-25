@@ -41,4 +41,5 @@
 ;; Faces
 
 (custom-set-faces
- '(default ((t (:family "Ubuntu Mono" :foundry "nil" :slant normal :weight regular :height 160 :width normal)))))
+ '(default ((t (:family "Ubuntu Mono" :foundry "nil" :slant normal :weight regular :height 160 :width normal))))
+ '(link ((t (:foreground "#7f9f7f" :underline t)))))

@@ -1419,6 +1419,8 @@ to values."
 	   twitter-header-face))
       )))
 
+(set-face-foreground 'vertical-border zenburn-highlight-subtle-background)
+
 (defalias 'zenburn #'color-theme-zenburn)
 
 (provide 'zenburn)

@@ -49,7 +49,7 @@
     ("^--.*" . font-lock-comment-face)
     ("\"\\(\\(\\\\\"\\)\\|[^\"]\\)*\"" . font-lock-string-face)
     ("\\<\\*?\\[?[A-Z][a-zA-Z0-9_']*\\]?\\>" . font-lock-type-face)
-    (,(concat "\\<" (regexp-opt '("if" "then" "else" "data" "do" "let" "$" ".")) "\\>") . font-lock-keyword-face)
+    (,(concat "\\<" (regexp-opt '("if" "case" "of" "then" "else" "data" "do" "let" "$" ".")) "\\>") . font-lock-keyword-face)
     ("^[a-zA-Z_'0-9]+ " . font-lock-function-name-face)))
 
 ;;;###autoload

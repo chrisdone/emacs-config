@@ -5,8 +5,7 @@
   (set (make-local-variable 'font-lock-defaults) '(diary-keywords t nil nil))
   (display-line-numbers-mode -1)
   (jumpto-address-mode 1)
-  (auto-fill-mode -1)
-  (set (make-local-variable 'page-delimiter) "^[0-9]+ [A-Z][a-z]+ [0-9]+$"))
+  (auto-fill-mode -1))
 
 (defgroup diary-faces nil
  "Faces for diary-mode.")
@@ -24,7 +23,15 @@
      (:foreground "#fff" :bold t))
     (((class color) (background light))
      (:foreground "#000" :bold t)))
-  "Done prefix for items.."
+  "Done prefix for items."
+  :group 'diary-faces)
+
+(defface diary-meet-prefix-face
+  '((((class color) (background dark))
+     (:foreground "#65c9ef" :bold t))
+    (((class color) (background light))
+     (:foreground "#1a6e8e" :bold t)))
+  "Meet prefix for items."
   :group 'diary-faces)
 
 (defface diary-reference-face
@@ -35,7 +42,8 @@
 (defconst diary-keywords
   `(("^[0-9]+ [A-Z][a-z]+ [0-9]+$" . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
-    ("^ *• Done " . 'diary-done-prefix-face)))
+    ("^ *• Done " . 'diary-done-prefix-face)
+    ("^ *• Meet " . 'diary-meet-prefix-face)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.diary\\'" . diary-mode))

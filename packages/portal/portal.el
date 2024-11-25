@@ -403,7 +403,10 @@ later."
                       5
                       (process-get (process-get process :stderr-process) :buffer))
                    (portal-tail-file portal 5 "stderr")))
-         (started-time (with-current-buffer (find-file-noselect (portal-file-name portal "command")) (visited-file-modtime))))
+         (started-time
+          (file-attribute-modification-time (file-attributes (portal-file-name portal "command"))))
+         (exited-time
+          (file-attribute-modification-time (file-attributes (portal-file-name portal "status")))))
     (with-temp-buffer
       (insert (propertize
                (concat "# (" (if (string= status "run") "🌀" status) ") " (portal-as-shell-command command))
@@ -419,7 +422,10 @@ later."
                            'face 'portal-timestamp-face)
                (if (string= status "run")
                    ""
-                 (propertize (format-time-string ", exited: %Y-%m-%d %T" started-time)
+                 (propertize (concat
+                              (format-time-string ", exited: %Y-%m-%d %T" exited-time)
+                              " => "
+                              (portal-display-time-difference started-time exited-time))
                              'face 'portal-timestamp-face))))
       ;; Only show if it's different to the current directory,
       ;; otherwise it's noise.
@@ -439,6 +445,29 @@ later."
                               'portal-exited-stderr-face))))
       (propertize (buffer-string)
                   'portal portal))))
+
+(defun portal-display-time-difference (start-time end-time)
+  "Display the time difference between START-TIME and END-TIME in human-readable format.
+START-TIME and END-TIME should be Emacs Lisp time values as returned by `current-time'.
+The function will display the time in the most appropriate unit (from ns to days)."
+  (let* ((diff (float-time (time-subtract end-time start-time))))
+    (apply #'format
+           (cons "%.3f %s"
+                 (cond
+                  ((< diff 1e-6)
+                   (list (* diff 1e9) "ns"))
+                  ((< diff 1e-3)
+                   (list (* diff 1e6) "us"))
+                  ((< diff 1)
+                   (list (* diff 1e3) "ms"))
+                  ((< diff 60)
+                   (list diff "s"))
+                  ((< diff 3600)
+                   (list (/ diff 60) "mins"))
+                  ((< diff 86400)
+                   (list (/ diff 3600) "hours"))
+                  (t
+                   (list (/ diff 86400) "days")))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; String generation
@@ -480,7 +509,12 @@ later."
 
 (defun portal-no-empty-lines (string)
   "Drop empty lines from a string."
-  (replace-regexp-in-string "\n$" "" string))
+  (replace-regexp-in-string
+   ;; Drop ANSI codes from terminal output
+   ;; <https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream>
+   "\\(\x1B\\[[0-9;]*[A-Za-z]\\|[\x00-\x09\x0B-\x1F\x7F]\\|\n$\\|^\n\\)"
+   ""
+   string))
 
 (defun portal-last-n-lines (n string)
   "Take last N lines from STRING."
