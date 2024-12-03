@@ -23,7 +23,6 @@
     watchexec
     quickjump
     h98-mode
-    hell-mode
     ts-mode
     paredit
     markdown-mode
@@ -31,6 +30,7 @@
     dash ;; for markdown-toc
     markdown-toc
     company
+    hell-mode
     hiedb
     intero
     hcl-mode
