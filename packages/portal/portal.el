@@ -609,3 +609,5 @@ the file."
      ((eq face 'portal-exited-stdout-face)
       (portal-open-stdout))
      (t (call-interactively 'newline)))))
+
+(provide 'portal)
