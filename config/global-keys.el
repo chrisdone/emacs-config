@@ -7,15 +7,15 @@
 
 ;; Tab bar
 
-(global-set-key (kbd "M-1") (lambda () (interactive) (tab-bar-select-tab 1)))
-(global-set-key (kbd "M-2") (lambda () (interactive) (tab-bar-select-tab 2)))
-(global-set-key (kbd "M-3") (lambda () (interactive) (tab-bar-select-tab 3)))
-(global-set-key (kbd "M-4") (lambda () (interactive) (tab-bar-select-tab 4)))
-(global-set-key (kbd "M-5") (lambda () (interactive) (tab-bar-select-tab 5)))
-(global-set-key (kbd "M-6") (lambda () (interactive) (tab-bar-select-tab 6)))
-(global-set-key (kbd "M-7") (lambda () (interactive) (tab-bar-select-tab 7)))
-(global-set-key (kbd "M-8") (lambda () (interactive) (tab-bar-select-tab 8)))
-(global-set-key (kbd "M-9") (lambda () (interactive) (tab-bar-select-tab 9)))
+(global-set-key (kbd "s-1") (lambda () (interactive) (tab-bar-select-tab 1)))
+(global-set-key (kbd "s-2") (lambda () (interactive) (tab-bar-select-tab 2)))
+(global-set-key (kbd "s-3") (lambda () (interactive) (tab-bar-select-tab 3)))
+(global-set-key (kbd "s-4") (lambda () (interactive) (tab-bar-select-tab 4)))
+(global-set-key (kbd "s-5") (lambda () (interactive) (tab-bar-select-tab 5)))
+(global-set-key (kbd "s-6") (lambda () (interactive) (tab-bar-select-tab 6)))
+(global-set-key (kbd "s-7") (lambda () (interactive) (tab-bar-select-tab 7)))
+(global-set-key (kbd "s-8") (lambda () (interactive) (tab-bar-select-tab 8)))
+(global-set-key (kbd "s-9") (lambda () (interactive) (tab-bar-select-tab 9)))
 
 
 ;; Mode-specific
