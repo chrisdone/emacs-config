@@ -1,1 +1,1 @@
-(setq envrc-direnv-executable "~/.nix-profile/bin/direnv")
+(setq envrc-direnv-executable "/home/chris/.nix-profile/bin/direnv")
