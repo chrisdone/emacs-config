@@ -38,7 +38,8 @@
     yaml-mode
     haskell-navigate-imports
     page-break-lines
-    portal)
+    portal
+    visual-replace)
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
