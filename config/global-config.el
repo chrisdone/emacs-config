@@ -43,3 +43,7 @@
 (custom-set-faces
  '(default ((t (:family "Ubuntu Mono" :foundry "nil" :slant normal :weight regular :height 160 :width normal))))
  '(link ((t (:foreground "#7f9f7f" :underline t)))))
+
+(custom-set-faces
+ `(visual-replace-delete-match
+   ((t (:strike-through t :background ,zenburn-red :foreground "black")))))
