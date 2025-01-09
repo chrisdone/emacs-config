@@ -64,6 +64,7 @@
 
 (global-set-key (kbd "C-c i") 'indent-buffer)
 (global-set-key (kbd "C-t") 'replace-string-or-query-replace)
+(global-set-key (kbd "C-v") 'visual-replace)
 (global-set-key (kbd "C-x C-k C-o") 'delete-blank-lines-in)
 (global-set-key (kbd "M-Q") 'unfill-paragraph)
 

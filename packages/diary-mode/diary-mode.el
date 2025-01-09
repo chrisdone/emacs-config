@@ -5,7 +5,8 @@
   (set (make-local-variable 'font-lock-defaults) '(diary-keywords t nil nil))
   (display-line-numbers-mode -1)
   (jumpto-address-mode 1)
-  (auto-fill-mode -1))
+  (auto-fill-mode -1)
+  (set (make-local-variable 'paragraph-start) "|[ 	]*$\\|[ ]*• "))
 
 (defgroup diary-faces nil
  "Faces for diary-mode.")
