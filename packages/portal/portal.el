@@ -83,6 +83,7 @@ buffer."
   "Open the stdout of the file at point."
   (interactive)
   (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stdout"))
+    (portal-ansi-colors-minor-mode)
     (auto-revert-tail-mode)
     (goto-char (point-max))
     (push-mark (point-max))))
@@ -91,6 +92,7 @@ buffer."
   "Open the stderr of the file at point."
   (interactive)
   (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stderr"))
+    (portal-ansi-colors-minor-mode)
     (auto-revert-tail-mode)
     (goto-char (point-max))
     (push-mark (point-max))))
@@ -307,6 +309,15 @@ location."
          (base64-encoded (base64-encode-string sha1-hash))
          (nanoid (string-trim-right (substring base64-encoded 0 21))))
     (concat "portal_" nanoid)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; A minor mode for applying ansi-term colors to a buffer
+
+(define-minor-mode portal-ansi-colors-minor-mode
+  "Apply ANSI colors for terminal outputs."
+  :init-value nil
+  :lighter "ANSI"
+  (ansi-color-apply-on-region (point-min) (point-max)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; A small minor mode that just sets up a timer that runs a thing in a
