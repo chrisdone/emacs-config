@@ -329,3 +329,13 @@ This can be useful when updating or checking out branches outside of Emacs."
                (buffer (get-buffer-create (format "*sh:%s:%s*" name purpose))))
           (shell buffer))
       (call-interactively 'shell))))
+
+(defun strip-terminal-codes ()
+  (interactive)
+  (save-excursion
+    (replace-regexp
+     "\\(\x1B\\[[0-9;]*[A-Za-z]\\|[\x00-\x09\x0B-\x1F\x7F]\\)"
+     ""
+     nil
+     (region-beginning)
+     (region-end))))
