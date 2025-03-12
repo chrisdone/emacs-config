@@ -144,3 +144,17 @@
 ;; Extra setups
 
 (set-auto-saves)
+
+
+;; Binaries
+
+;; Adds binaries to the PATH and exec-path, so that they're available
+;; to Emacs and all shells within Emacs.
+(let ((bin-dir (concat
+                (file-name-directory (or load-file-name
+                                         (buffer-file-name)))
+                (if (string= (shell-command-to-string "uname -m") "aarch64\n")
+                    "/bin/arm64"
+                  "/bin/amd64"))))
+  (add-to-list 'exec-path bin-dir)
+  (setenv "PATH" (concat bin-dir ":" (getenv "PATH"))))
