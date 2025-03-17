@@ -148,3 +148,12 @@ apply them in the current buffer."
     (if (string-match "\n" line)
         (insert line "\n")
       (insert "import " (replace-regexp-in-string "^import " "" line) "\n"))))
+
+(defun lexx ()
+  (interactive)
+  (shell-command-on-region
+   (region-beginning)
+   (region-end)
+   "lexx"
+   :in-place
+   :replace-it))
