@@ -339,3 +339,11 @@ This can be useful when updating or checking out branches outside of Emacs."
      nil
      (region-beginning)
      (region-end))))
+
+(defun unquote-region ()
+  (interactive)
+  (replace-string "\\\"" "\"" nil (region-beginning) (region-end)))
+
+(defun quote-region ()
+  (interactive)
+  (replace-string "\"" "\\\"" nil (region-beginning) (region-end)))
