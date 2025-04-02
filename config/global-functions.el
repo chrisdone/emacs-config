@@ -347,3 +347,14 @@ This can be useful when updating or checking out branches outside of Emacs."
 (defun quote-region ()
   (interactive)
   (replace-string "\"" "\\\"" nil (region-beginning) (region-end)))
+
+(defun tf-copy-resource-name ()
+  "Copy the fully qualified name of the current resource."
+  (interactive)
+  (save-excursion
+    (when (search-backward-regexp "^resource \"\\(.+?\\)\" \"\\(.+?\\)\"" nil t 1)
+      (let* ((type (match-string 1))
+             (name (match-string 2))
+             (resource-name (format "%s.%s" type name)))
+        (kill-new resource-name)
+        (message "Copied resource name %s" resource-name)))))
