@@ -24,6 +24,12 @@
   "Portal group."
   :group 'convenience)
 
+(defcustom portal-spinner-sequence
+  "◐◓◑◒"
+  "Sequence of characters used for showing a 'spinner'."
+  :type 'string
+  :group 'portal)
+
 (defcustom portal-outputs-directory
   "~/.portals/"
   "Directory where to create output artifacts."
@@ -399,6 +405,29 @@ later."
             (goto-char (point-max)))
         (delete-matching-lines "^#" point (point))))))
 
+(defun portal-cycle-spinner (process)
+  "Update PROCESS to contain the next char in its spinner sequence."
+  (let ((next-char
+         (portal-cycle-character
+          portal-spinner-sequence
+          (process-get process :portal-spinner))))
+    (process-put
+     process
+     :portal-spinner
+     next-char)
+    next-char))
+
+(defun portal-cycle-character (string current)
+  "Cycle the character of a STRING given CURRENT, which may be `nil'
+to start with."
+  (with-temp-buffer
+    (save-excursion (insert string))
+    (when current
+      (search-forward current nil :no-error 1))
+    (when (= (point) (point-max))
+      (goto-char (point-min)))
+    (buffer-substring (point) (1+ (point)))))
+
 (defun portal-summary (portal process)
   "Generate a summary of the portal."
   (let* ((command (portal-read-json-file portal "command"))
@@ -420,7 +449,11 @@ later."
           (file-attribute-modification-time (file-attributes (portal-file-name portal "status")))))
     (with-temp-buffer
       (insert (propertize
-               (concat "# (" (if (string= status "run") "🌀" status) ") " (portal-as-shell-command command))
+               (concat "# (" (if (string= status "run")
+                                 (portal-cycle-spinner process)
+                               status)
+                       ") "
+                       (portal-as-shell-command command))
                'face
                (if (string= status "run")
                    'portal-meta-face
