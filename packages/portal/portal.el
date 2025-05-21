@@ -79,7 +79,7 @@
   :group 'portal)
 
 (defface portal-meta-face
-  '((t :foreground "#89b664"))
+  '((t :foreground "#8cd0d3"))
   "Portal meta face."
   :group 'portal)
 
