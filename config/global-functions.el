@@ -127,6 +127,14 @@
       "Find File: "
       (split-string (shell-command-to-string "git ls-files") "\n")))))
 
+(defun ls-files-dir (directory)
+  (interactive (list (read-directory-name "Directory: " (car (split-string (shell-command-to-string "git rev-parse --show-toplevel"))))))
+  (let ((default-directory directory))
+    (find-file
+     (ivy-completing-read
+      "Find File: "
+      (split-string (shell-command-to-string "git ls-files") "\n")))))
+
 (defun rg ()
   (interactive)
   (counsel-rg (ag/dwim-at-point)))
@@ -168,6 +176,21 @@
               (goto-line line)
               (back-to-indentation)))
         (goto-char (point-max))))))
+
+(defun visit-file-at-point ()
+  (interactive)
+  (let ((file-name-at-point (ffap-file-at-point)))
+      (if file-name-at-point
+          (let ((line (save-excursion
+                        (goto-char (line-beginning-position))
+                        (forward-char (length file-name-at-point))
+                        (when (looking-at ":\\([0-9]+\\)")
+                          (string-to-number (match-string-no-properties 1))))))
+            (find-file-other-window file-name-at-point)
+            (when line
+              (goto-line line)
+              (back-to-indentation)))
+        (goto-char (point-max)))))
 
 (defun my-comint-prev ()
   "Less silly return key for comint-mode."

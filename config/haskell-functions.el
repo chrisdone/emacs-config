@@ -1,12 +1,17 @@
 (defun h98-reload ()
   (interactive)
-  (let ((hspec (string-match "Spec\\.hs$" (buffer-file-name) nil t)))
-    (save-buffer)
-    (switch-to-buffer-other-window "*ghci*")
-    (erase-buffer)
-    (goto-char (point-max))
-    (insert (if hspec ":cmd return \":r\\nhspec spec\"" ":r"))
-    (my-comint-send)))
+  (save-buffer)
+  (switch-to-buffer-other-window "*ghci*")
+  (comint-interrupt-subjob)
+  (erase-buffer)
+  (let ((last-line (ring-ref comint-input-ring 0)))
+    (insert
+     (if (and last-line
+              (string-match "^:" last-line))
+         last-line
+       ":r")))
+  (goto-char (point-max))
+  (call-interactively 'comint-send-input))
 
 (defun h98-recomp ()
   (interactive)

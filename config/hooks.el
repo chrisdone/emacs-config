@@ -5,6 +5,7 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'minibuffer-setup-hook 'conditionally-enable-paredit-mode)
 (add-hook 'h98-mode-hook 'company-mode)
+(add-hook 'h98-mode-hook 'hindent-mode)
 (add-hook 'usr1-hooks 'haskell-refresh-hook)
 (add-hook 'art-mode-hook 'eglot-ensure)
 (add-hook 'art-mode-hook 'company-mode)
