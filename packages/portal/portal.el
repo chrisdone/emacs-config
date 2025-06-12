@@ -108,19 +108,13 @@ buffer."
   "Open the stdout of the file at point."
   (interactive)
   (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stdout"))
-    (portal-ansi-colors-minor-mode)
-    (auto-revert-tail-mode)
-    (goto-char (point-max))
-    (push-mark (point-max))))
+    (portal-out-mode)))
 
 (defun portal-open-stderr ()
   "Open the stderr of the file at point."
   (interactive)
   (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stderr"))
-    (portal-ansi-colors-minor-mode)
-    (auto-revert-tail-mode)
-    (goto-char (point-max))
-    (push-mark (point-max))))
+    (portal-out-mode)))
 
 (defun portal-interrupt ()
   "Interrupt the process at point."
@@ -672,5 +666,13 @@ the file."
      ((eq face 'portal-exited-stdout-face)
       (portal-open-stdout))
      (t (call-interactively 'newline)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Portal output mode
+
+(define-derived-mode portal-out-mode
+  fundamental-mode "PortalOut"
+  "Major mode for portals' output."
+  )
 
 (provide 'portal)
