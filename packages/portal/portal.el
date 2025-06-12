@@ -107,14 +107,18 @@ buffer."
 (defun portal-open-stdout ()
   "Open the stdout of the file at point."
   (interactive)
-  (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stdout"))
-    (portal-out-mode)))
+  (let ((portal (portal-at-point)))
+    (with-current-buffer (find-file-other-window (portal-file-name portal "stdout"))
+      (portal-out-mode)
+      (setq portal-out-portal portal))))
 
 (defun portal-open-stderr ()
   "Open the stderr of the file at point."
   (interactive)
-  (with-current-buffer (find-file-other-window (portal-file-name (portal-at-point) "stderr"))
-    (portal-out-mode)))
+  (let ((portal (portal-at-point)))
+    (with-current-buffer (find-file-other-window (portal-file-name portal "stderr"))
+      (portal-out-mode)
+      (setq portal-out-portal portal))))
 
 (defun portal-interrupt ()
   "Interrupt the process at point."
@@ -670,9 +674,11 @@ the file."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Portal output mode
 
+(defvar-local portal-out-portal nil
+  "Portal associated with an output buffer.")
+
 (define-derived-mode portal-out-mode
   fundamental-mode "PortalOut"
-  "Major mode for portals' output."
-  )
+  "Major mode for portals' output.")
 
 (provide 'portal)
