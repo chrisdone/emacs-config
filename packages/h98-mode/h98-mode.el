@@ -8,7 +8,7 @@
    (setq-local comment-end ""))
 
 (defconst h98-keywords
-  `((" -- .*$" . font-lock-comment-face)
+  `((" --[- ].*$" . font-lock-comment-face)
     ("{-.*-}" . font-lock-comment-face)
     (" --$" . font-lock-comment-face)
     ("^--.*" . font-lock-comment-face)
