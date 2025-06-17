@@ -2,7 +2,7 @@
   (interactive)
   (save-buffer)
   (switch-to-buffer-other-window "*ghci*")
-  (comint-interrupt-subjob)
+  ; (comint-interrupt-subjob)
   (erase-buffer)
   (let ((last-line (ring-ref comint-input-ring 0)))
     (insert
