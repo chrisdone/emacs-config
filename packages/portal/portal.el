@@ -124,7 +124,7 @@ buffer."
   "Interrupt the process at point."
   (interactive)
   (let ((proc (get-process (portal-process-name (portal-at-point)))))
-    (when (process-live-p proc)
+    (when (and proc (process-live-p proc))
       (interrupt-process proc))))
 
 (defun portal-rerun ()
@@ -376,21 +376,21 @@ later."
                           (<= (point) (window-end window)))
                 (when (<= (window-start window) (point) (window-end window))
                   (let* ((portal (match-string 0))
-                         (process (get-process (portal-process-name portal)))
-                         (summary (if (portal-directory-exists-p portal)
-                                      (portal-summary portal process)
-                                    "# Invalid portal."))
-                         (match-end (match-end 0))
-                         (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
-                    (unless (and old-summary (string= summary old-summary))
-                      (put-text-property (line-beginning-position) (point)
-                                         'portal-summary
-                                         summary)
-                      (put-text-property (line-beginning-position) (point)
-                                         'portal
-                                         portal)
-                      (portal-wipe-summary)
-                      (insert "\n" summary))))))
+                         (process (get-process (portal-process-name portal))))
+                    (let ((summary (if (portal-directory-exists-p portal)
+                                       (portal-summary portal process)
+                                     "# Invalid portal."))
+                          (match-end (match-end 0))
+                          (old-summary (get-text-property (line-beginning-position) 'portal-summary)))
+                      (unless (and old-summary (string= summary old-summary))
+                        (put-text-property (line-beginning-position) (point)
+                                           'portal-summary
+                                           summary)
+                        (put-text-property (line-beginning-position) (point)
+                                           'portal
+                                           portal)
+                        (portal-wipe-summary)
+                        (insert "\n" summary)))))))
             (goto-char point)))))))
 
 (defun portal-wipe-summary ()
