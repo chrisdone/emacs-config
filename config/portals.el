@@ -1,7 +1,7 @@
 (add-hook 'portal-out-mode-hook 'my-portal-out-hook)
+(add-hook 'portal-out-mode-hook 'portal-ansi-colors-minor-mode)
 
 (defun my-portal-out-hook ()
-  (portal-ansi-colors-minor-mode)
   (auto-revert-tail-mode)
   (goto-char (point-max))
   (push-mark (point-max)))
