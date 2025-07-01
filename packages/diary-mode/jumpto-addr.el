@@ -171,7 +171,7 @@ and `jumpto-address-fontify-p'."
     (when (or (eq t jumpto-address-fontify-maximum-size)
 	      (< (- (or end (point-max)) (point))
                  jumpto-address-fontify-maximum-size))
-      (while (re-search-forward "\\[\\(.*?\\)\\](\\(.*?\\))"
+      (while (re-search-forward "\\[\\(\\(.\\|\n\\)*?\\)\\](\\(.*?\\))"
                                 ;; jumpto-address-url-regexp
                                 end t)
 	(let* ((s (match-beginning 0))
