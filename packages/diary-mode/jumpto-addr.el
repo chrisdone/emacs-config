@@ -196,7 +196,9 @@ and `jumpto-address-fontify-p'."
 			 'help-echo "mouse-2, C-c RET: follow URL")
 	    (overlay-put this-overlay
 			 'keymap jumpto-address-highlight-keymap)
-	    (overlay-put this-overlay 'jumpto-address t))))
+	    (overlay-put this-overlay 'jumpto-address t)
+            ;; strip newlines from the display, truncate length too.
+            (overlay-put this-overlay 'display (replace-in-string title "\n" "")))))
       (goto-char (or start (point-min)))
       (while (re-search-forward jumpto-address-mail-regexp end t)
 	(let* ((s (match-beginning 0))
