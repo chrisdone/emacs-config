@@ -8,17 +8,17 @@
 (make-process
  :name "llm"
  :buffer (generate-new-buffer "*llm-stream*")
- :command (list "curl" "http://10.0.1.85:8080/api/generate" "--no-buffer"  "-d" "{\"model\": \"deepseek-r1:7b\", \"prompt\": \"is haskell the best programming language?\", \"options\": {\"num_predict\":1000}  }, \"stream\": true}" "--silent")
+ :command (list "curl" (concat "http://" (funcall llm-host-port) "/api/generate") "--no-buffer"  "-d" "{\"model\": \"deepseek-r1:7b\", \"prompt\": \"random quote\", \"options\": {\"num_predict\":10}  }, \"stream\": true}" "--silent")
  :connection-type 'pipe
  :filter 'llm-process-filter)
 
 (defun llm-process-filter (process string)
   (with-current-buffer (process-buffer process)
-    ; (message "chars: %s" string)
     (save-excursion (insert string))
-    (let ((message (condition-case nil (json-parse-buffer :object-type 'plist)
-                     (json-end-of-file nil))))
-      (message "message: %S" message))))
+    (cl-loop for message = (condition-case nil (json-parse-buffer :object-type 'plist)
+                             (json-end-of-file nil))
+             while message
+             do (message "message: %S" message))))
 
 ;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.639906Z" :response " community" :done :false)
 ;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.683592Z" :response " growing" :done :false)
