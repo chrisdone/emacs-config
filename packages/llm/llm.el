@@ -5,6 +5,37 @@
 (defun llm-default-host-port ()
   "localhost:6379")
 
+(make-process
+ :name "llm"
+ :buffer (generate-new-buffer "*llm-stream*")
+ :command (list "curl" "http://10.0.1.85:8080/api/generate" "--no-buffer"  "-d" "{\"model\": \"deepseek-r1:7b\", \"prompt\": \"is haskell the best programming language?\", \"options\": {\"num_predict\":1000}  }, \"stream\": true}" "--silent")
+ :connection-type 'pipe
+ :filter 'llm-process-filter)
+
+(defun llm-process-filter (process string)
+  (with-current-buffer (process-buffer process)
+    ; (message "chars: %s" string)
+    (save-excursion (insert string))
+    (let ((message (condition-case nil (json-parse-buffer :object-type 'plist)
+                     (json-end-of-file nil))))
+      (message "message: %S" message))))
+
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.639906Z" :response " community" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.683592Z" :response " growing" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.742197Z" :response " in" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.800439Z" :response " machine" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.844474Z" :response " libraries" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.859124Z" :response " such" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.902762Z" :response " and" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:04.96144Z" :response "5" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:05.005091Z" :response "Performance" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:05.063575Z" :response " enough" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:05.078278Z" :response " for" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:05.093227Z" :response " most" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:05.137546Z" :response " though" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:05.196089Z" :response " slower" :done :false)
+;; message: (:model "deepseek-r1:7b" :created_at "2025-07-03T15:51:05.239779Z" :response " languages" :done :false)
+
 
 ;; It's a sequence of messages that could be piped to an Emacs buffer,
 ;; and then a JSON parser could walk across it, consuming messages,
