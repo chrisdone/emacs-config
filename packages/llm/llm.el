@@ -3,12 +3,37 @@
 (defun llm-default-host-port ()
   "localhost:6379")
 
-(make-process
- :name "llm"
- :buffer (generate-new-buffer "*llm-stream*")
- :command (list "curl" (concat "http://" (funcall llm-host-port) "/api/generate") "--no-buffer"  "-d" "{\"model\": \"deepseek-r1:7b\", \"prompt\": \"random quote\", \"options\": {\"num_predict\":20}  }, \"stream\": true}" "--silent")
- :connection-type 'pipe
- :filter 'llm-process-filter)
+(with-current-buffer (get-buffer "*scratch*")
+  (goto-char (point-max))
+  (insert "\n\n")
+  (llm-generate-to-buffer
+   (list :model "deepseek-r1:7b"
+         :prompt "random quote about luddites"
+         :stream t
+         :options (list :num_predict 50 :think nil))
+   (current-buffer)))
+
+(defun llm-generate-to-buffer (config buffer)
+  (with-current-buffer buffer
+    (let ((process (make-process
+                    :name "llm"
+                    :buffer (generate-new-buffer "*llm-stream*")
+                    :command (list "curl"
+                                   (concat "http://" (funcall llm-host-port) "/api/generate")
+                                   "--no-buffer"
+                                   "--silent"
+                                   "-d" (json-encode config))
+                    :connection-type 'pipe
+                    :filter 'llm-process-filter)))
+      (process-put process :typewriter-buffer buffer)
+      (process-put process :callback 'llm-typewriter-callback))))
+
+(defun llm-typewriter-callback (process chunk)
+  (let ((typewriter-buffer (process-get process :typewriter-buffer)))
+    (when typewriter-buffer
+      (with-current-buffer typewriter-buffer
+        (goto-char (point-max))
+        (insert (plist-get message :response))))))
 
 (defun llm-process-filter (process string)
   (with-current-buffer (process-buffer process)
@@ -16,4 +41,6 @@
     (cl-loop for message = (condition-case nil (json-parse-buffer :object-type 'plist)
                              (json-end-of-file nil))
              while message
-             do (message "%s" (plist-get message :response)))))
+             do (funcall (process-get process :callback)
+                         process
+                         (plist-get message :response)))))
