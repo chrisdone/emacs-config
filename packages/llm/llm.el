@@ -3,23 +3,13 @@
 (defun llm-default-host-port ()
   "localhost:6379")
 
-(with-current-buffer (get-buffer "*scratch*")
-  (goto-char (point-max))
-  (insert "\n\n")
-  (llm-generate-to-buffer
-   (list :model "deepseek-r1:7b"
-         :prompt "random quote"
-         :stream t
-         :options (list :num_predict 50 :think nil))
-   (current-buffer)))
-
 (defun llm-generate-region-to-buffer ()
   (interactive)
   (llm-generate-to-buffer
    (list :model "deepseek-r1:7b"
-         :prompt "random quote about luddites"
+         :prompt (buffer-substring (region-beginning) (region-end))
          :stream t
-         :options (list :num_predict 50 :think nil))
+         :options (list :think nil))
    (current-buffer)))
 
 (defun llm-generate-to-buffer (config buffer)
