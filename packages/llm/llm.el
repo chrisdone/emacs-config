@@ -8,25 +8,36 @@
   (insert "\n\n")
   (llm-generate-to-buffer
    (list :model "deepseek-r1:7b"
+         :prompt "random quote"
+         :stream t
+         :options (list :num_predict 50 :think nil))
+   (current-buffer)))
+
+(defun llm-generate-region-to-buffer ()
+  (interactive)
+  (llm-generate-to-buffer
+   (list :model "deepseek-r1:7b"
          :prompt "random quote about luddites"
          :stream t
          :options (list :num_predict 50 :think nil))
    (current-buffer)))
 
 (defun llm-generate-to-buffer (config buffer)
-  (with-current-buffer buffer
-    (let ((process (make-process
-                    :name "llm"
-                    :buffer (generate-new-buffer "*llm-stream*")
-                    :command (list "curl"
-                                   (concat "http://" (funcall llm-host-port) "/api/generate")
-                                   "--no-buffer"
-                                   "--silent"
-                                   "-d" (json-encode config))
-                    :connection-type 'pipe
-                    :filter 'llm-process-filter)))
-      (process-put process :typewriter-buffer buffer)
-      (process-put process :callback 'llm-typewriter-callback))))
+  (let ((process (llm-make-process config)))
+    (process-put process :typewriter-buffer buffer)
+    (process-put process :callback 'llm-typewriter-callback)))
+
+(defun llm-make-process (config)
+  (make-process
+   :name "llm"
+   :buffer (generate-new-buffer "*llm-stream*")
+   :command (list "curl"
+                  (concat "http://" (funcall llm-host-port) "/api/generate")
+                  "--no-buffer"
+                  "--silent"
+                  "-d" (json-encode config))
+   :connection-type 'pipe
+   :filter 'llm-process-filter))
 
 (defun llm-typewriter-callback (process chunk)
   (let ((typewriter-buffer (process-get process :typewriter-buffer)))
