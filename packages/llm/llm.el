@@ -8,9 +8,9 @@
 ;;        :messages
 ;;        (vector
 ;;         (list :role "system"
-;;               :content "You are an assistant that consults Emacs documentation via a reliable tool. When the tool returns documentation, treat its contents as authoritative and do not question or reinterpret it. Do not offer alternative interpretations or suggestions that contradict the tool output")
+;;               :content "always use the describe-function tool before recommending an emacs lisp function")
 ;;         (list :role "user"
-;;               :content "does emacs lisp form save-excursion affect mark state after emacs 25.1?"))
+;;               :content "what should I use to save buffer mark state in emacs lisp before doing changes?"))
 ;;        :tools
 ;;        (vector
 ;;         (list
@@ -153,10 +153,11 @@
                                    (if (string= (plist-get function :name) "describe-function")
                                        (with-temp-buffer
                                          (let ((standard-output (current-buffer)))
-                                           (describe-function-1
-                                            (intern
-                                             (plist-get (plist-get function :arguments)
-                                                        :function_name)))
+                                           (let ((name (intern
+                                                        (plist-get (plist-get function :arguments)
+                                                                   :function_name))))
+                                             (when (fboundp name)
+                                               (describe-function-1 name)))
                                            (buffer-string)))
                                      "")))))
                        tool-calls)))))
