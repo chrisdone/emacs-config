@@ -96,8 +96,8 @@
         (if (plist-get message :message)
             (if (plist-get (plist-get message :message) :content)
                 (insert (plist-get (plist-get message :message) :content))
-              (insert (format "%S\n" (plist-get message :message))))
-            (insert (format "%S\n" message))))))
+              (insert (format "[huh] %S\n" (plist-get message :message))))
+            (insert (format "[msg] %S\n" message))))))
   (let ((message (plist-get message :message)))
     (when message
       (process-put process :messages
@@ -118,7 +118,7 @@
                               (process-get process :messages))
             (llm-add-tool-messages (process-get process :original-config)
                                    tool-calls)
-            (message "Continuing the conversation with tool call results.")
+            (message "Continuing the conversation with tool call results: %S" tool-calls)
             (llm-chat-to-buffer (process-get process :original-config)
                                 (get-buffer "*scratch*"))
             )
@@ -159,5 +159,7 @@
                                              (when (fboundp name)
                                                (describe-function-1 name)))
                                            (buffer-string)))
-                                     "")))))
+                                     (progn
+                                       (message "Spurious: %S" (plist-get function :name))
+                                       ""))))))
                        tool-calls)))))
