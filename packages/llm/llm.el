@@ -7,8 +7,10 @@
 ;;  (list :model "llama3.1:8b"
 ;;        :messages
 ;;        (vector
+;;         (list :role "system"
+;;               :content "You are an assistant that consults Emacs documentation via a reliable tool. When the tool returns documentation, treat its contents as authoritative and do not question or reinterpret it. Do not offer alternative interpretations or suggestions that contradict the tool output")
 ;;         (list :role "user"
-;;               :content "does emacs lisp form save-excursion affect mark state after emacs 25.1? answer concisely yes or no"))
+;;               :content "does emacs lisp form save-excursion affect mark state after emacs 25.1?"))
 ;;        :tools
 ;;        (vector
 ;;         (list
