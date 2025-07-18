@@ -3,32 +3,33 @@
 (defun llm-default-host-port ()
   "localhost:6379")
 
-;; (llm-chat-to-buffer
-;;  (list :model "llama3.1:8b"
-;;        :messages
-;;        (vector
-;;         (list :role "system"
-;;               :content "always use the describe-function tool before recommending an emacs lisp function")
-;;         (list :role "user"
-;;               :content "what should I use to save buffer mark state in emacs lisp before doing changes?"))
-;;        :tools
-;;        (vector
-;;         (list
-;;          :type "function"
-;;          :function
-;;          (list
-;;           :name "describe-function"
-;;           :description "Get detailed information about a Lisp function including its signature, documentation, and examples"
-;;           :parameters
-;;           (list :type "object"
-;;                 :properties
-;;                 (list :function_name
-;;                       (list :type "string"
-;;                             :description "The name of the Lisp function to describe"))
-;;                 :required (vector "function_name")))))
-;;        :stream t
-;;        :options (list :think nil))
-;;  (get-buffer "*scratch*"))
+;; (progn
+;;   (llm-chat-to-buffer
+;;    (list :model "llama3.1:8b"
+;;          :messages
+;;          (vector
+;;           ;; (list :role "system"
+;;           ;;       :content "always use the describe-function tool before recommending an emacs lisp function")
+;;           (list :role "user"
+;;                 :content "what should I use to save buffer mark state in emacs lisp before doing changes?"))
+;;          :tools
+;;          (vector
+;;           (list
+;;            :type "function"
+;;            :function
+;;            (list
+;;             :name "describe-function"
+;;             :description "Get detailed information about a Lisp function including its signature, documentation, and examples"
+;;             :parameters
+;;             (list :type "object"
+;;                   :properties
+;;                   (list :function_name
+;;                         (list :type "string"
+;;                               :description "The name of the Lisp function to describe"))
+;;                   :required (vector "function_name")))))
+;;          :stream t
+;;          :options (list :think nil))
+;;    (get-buffer "*scratch*")))
 
 (defun llm-generate-region-to-buffer ()
   (interactive)
@@ -63,23 +64,30 @@
     (process-put process :callback 'llm-typewriter-callback)))
 
 (defun llm-chat-to-buffer (config buffer)
+  (llm-dribble "[control] Starting process")
   (let ((process (llm-make-process "/api/chat" config)))
     (process-put process :original-config config)
     (process-put process :typewriter-buffer buffer)
     (process-put process :callback 'llm-chat-callback)))
 
 (defun llm-make-process (endpoint config)
-  (message "llm-make-process: %S" config)
-  (make-process
-   :name "llm"
-   :buffer (generate-new-buffer "*llm-stream*")
-   :command (list "curl"
-                  (concat "http://" (funcall llm-host-port) endpoint)
-                  "--no-buffer"
-                  "--silent"
-                  "-d" (json-encode config))
-   :connection-type 'pipe
-   :filter 'llm-process-filter))
+  (let ((args (list "curl"
+                    "--max-time" "5"
+                    (concat "http://" (funcall llm-host-port) endpoint)
+                    "--no-buffer"
+                    "--silent"
+                    "-d" (json-encode config))))
+    (llm-dribble "[outgoing] %s"
+             (json-encode config))
+    (make-process
+     :name "llm"
+     :buffer (generate-new-buffer "*llm-stream*")
+     :command args
+     :connection-type 'pipe
+     :filter 'llm-process-filter
+     :sentinel 'llm-process-sentinel
+     :stderr (get-buffer-create "*llm-dribble*")
+     )))
 
 (defun llm-typewriter-callback (process message)
   (let ((typewriter-buffer (process-get process :typewriter-buffer)))
@@ -97,7 +105,7 @@
             (if (plist-get (plist-get message :message) :content)
                 (insert (plist-get (plist-get message :message) :content))
               (insert (format "[huh] %S\n" (plist-get message :message))))
-            (insert (format "[msg] %S\n" message))))))
+          (insert (format "[msg] %S\n" message))))))
   (let ((message (plist-get message :message)))
     (when message
       (process-put process :messages
@@ -118,13 +126,18 @@
                               (process-get process :messages))
             (llm-add-tool-messages (process-get process :original-config)
                                    tool-calls)
-            (message "Continuing the conversation with tool call results: %S" tool-calls)
+
             (llm-chat-to-buffer (process-get process :original-config)
                                 (get-buffer "*scratch*"))
             )
-        (message "Interaction complete.")))))
+        ))))
+
+(defun llm-process-sentinel (process status)
+  (llm-dribble "[sentinel] %s = %s" process status)
+  (kill-buffer (process-buffer process)))
 
 (defun llm-process-filter (process string)
+  (llm-dribble "[incoming] %s" string)
   (with-current-buffer (process-buffer process)
     (save-excursion (insert string))
     (cl-loop for message = (condition-case nil (json-parse-buffer :object-type 'plist)
@@ -160,6 +173,14 @@
                                                (describe-function-1 name)))
                                            (buffer-string)))
                                      (progn
-                                       (message "Spurious: %S" (plist-get function :name))
+                                       ;; spurious; warn?
+                                       (llm-dribble "[warn] spurious function: %s"
+                                                    (plist-get function :name))
                                        ""))))))
                        tool-calls)))))
+
+(defun llm-dribble (f &rest args)
+  (with-current-buffer (get-buffer-create "*llm-dribble*")
+    (save-excursion
+      (goto-char (point-max))
+      (insert (apply 'format (cons f args)) "\n"))))
