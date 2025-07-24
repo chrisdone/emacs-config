@@ -4,14 +4,36 @@
   "localhost:6379")
 
 ;; (progn
+;;   (with-current-buffer (get-buffer "*scratch*") (erase-buffer))
 ;;   (llm-chat-to-buffer
 ;;    (list :model "llama3.1:8b"
 ;;          :messages
 ;;          (vector
-;;           ;; (list :role "system"
-;;           ;;       :content "always use the describe-function tool before recommending an emacs lisp function")
 ;;           (list :role "user"
-;;                 :content "what should I use to save buffer mark state in emacs lisp before doing changes?"))
+;;                 :content "Tell me about Canada."))
+;;          :format (list
+;;                   :type "object"
+;;                   :properties (list
+;;                                :name (list :type "string")
+;;                                :capital (list :type "string")
+;;                                :languages (list
+;;                                            :type "array"
+;;                                            :items (list
+;;                                                    :type "string"))))
+;;          :stream t
+;;          )
+;;    (get-buffer "*scratch*")))
+
+;; (progn
+;;   (with-current-buffer (get-buffer "*scratch*") (erase-buffer))
+;;   (llm-chat-to-buffer
+;;    (list :model "llama3.1:8b"
+;;          :messages
+;;          (vector
+;;           (list :role "system"
+;;                 :content "use tools before recommending emacs lisp function")
+;;           (list :role "user"
+;;                 :content "what emacs lisp function restores buffer point after doing some work?"))
 ;;          :tools
 ;;          (vector
 ;;           (list
@@ -28,8 +50,18 @@
 ;;                               :description "The name of the Lisp function to describe"))
 ;;                   :required (vector "function_name")))))
 ;;          :stream t
-;;          :options (list :think nil))
+;;          ;; :options (list :think nil)
+;;          )
 ;;    (get-buffer "*scratch*")))
+
+(defun llm-text-region-to-buffer ()
+  (interactive)
+  (llm-generate-to-buffer
+   (list :model "llama3.2:3b-text-q2_K"
+         :prompt (buffer-substring (region-beginning) (region-end))
+         :stream t
+         :options (list :think nil))
+   (current-buffer)))
 
 (defun llm-generate-region-to-buffer ()
   (interactive)
@@ -52,7 +84,7 @@
 (defun llm-generate-to-scratch (string)
   (interactive "sPrompt: ")
   (llm-generate-to-buffer
-   (list :model "deepseek-r1:7b"
+   (list :model "llama3.2:3b-text-q2_K"
          :prompt string
          :stream t
          :options (list :think nil))
@@ -72,7 +104,7 @@
 
 (defun llm-make-process (endpoint config)
   (let ((args (list "curl"
-                    "--max-time" "5"
+                    ;; "--max-time" "5"
                     (concat "http://" (funcall llm-host-port) endpoint)
                     "--no-buffer"
                     "--silent"
@@ -163,20 +195,22 @@
                                    :tool_call_id (plist-get function :id) ; doesn't seem to exist?
                                    :name (plist-get function :name)
                                    :content
-                                   (if (string= (plist-get function :name) "describe-function")
-                                       (with-temp-buffer
-                                         (let ((standard-output (current-buffer)))
-                                           (let ((name (intern
-                                                        (plist-get (plist-get function :arguments)
-                                                                   :function_name))))
-                                             (when (fboundp name)
-                                               (describe-function-1 name)))
-                                           (buffer-string)))
-                                     (progn
-                                       ;; spurious; warn?
-                                       (llm-dribble "[warn] spurious function: %s"
-                                                    (plist-get function :name))
-                                       ""))))))
+                                   (cond
+                                    ((string= (plist-get function :name) "describe-function")
+                                     (with-temp-buffer
+                                       (let ((standard-output (current-buffer)))
+                                         (let ((name (intern
+                                                      (plist-get (plist-get function :arguments)
+                                                                 :function_name))))
+                                           (when (fboundp name)
+                                             (progn (llm-dribble "[TOOL USE] describe-function: %s" name)
+                                                    (describe-function-1 name))))
+                                         (buffer-string))))
+                                    (t
+                                     ;; spurious; warn?
+                                     (llm-dribble "[warn] spurious function: %s"
+                                                  (plist-get function :name))
+                                     ""))))))
                        tool-calls)))))
 
 (defun llm-dribble (f &rest args)
