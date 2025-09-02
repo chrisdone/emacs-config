@@ -9,3 +9,6 @@
 (add-hook 'usr1-hooks 'haskell-refresh-hook)
 (add-hook 'art-mode-hook 'eglot-ensure)
 (add-hook 'art-mode-hook 'company-mode)
+(add-hook 'compilation-mode-hook 'next-error-follow-minor-mode)
+(add-hook 'grep-mode-hook 'next-error-follow-minor-mode)
+(add-hook 'ag-mode-hook 'next-error-follow-minor-mode)
