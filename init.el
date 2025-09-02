@@ -70,6 +70,7 @@
     "haskell-keys"
     "hooks"
     "autoload"
+    "portals"
     ;; Global-keys needs to be at the end to override all other major
     ;; modes.
     "global-keys")
