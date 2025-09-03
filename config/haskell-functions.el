@@ -2,7 +2,10 @@
   (interactive)
   (save-buffer)
   (switch-to-buffer-other-window "*ghci*")
-  ; (comint-interrupt-subjob)
+  (while (not (memq 'comint-highlight-prompt (get-text-property (1- (point-max)) 'face)))
+    (comint-interrupt-subjob)
+    (message "Waiting for GHCi job to terminate ...")
+    (sit-for 0.5))
   (erase-buffer)
   (let ((last-line (ring-ref comint-input-ring 0)))
     (insert
