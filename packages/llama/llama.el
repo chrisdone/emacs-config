@@ -9,6 +9,7 @@
 ;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2" :n-predict 300))
 ;;
 ;; Chat example:
+;;
 ;; (llama-insert-tokens
 ;;  (make-llama-chat-stream
 ;;   :n-predict 300
@@ -18,6 +19,25 @@
 ;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
 ;;    (list :role "user"
 ;;          :content "What LLM model are you? How many parameters?"))))
+
+(defun llama-chat ()
+  "Query the LLM and get the output in *llama-output* buffer."
+  (interactive)
+  (let ((prompt (read-from-minibuffer "Prompt: ")))
+    (switch-to-buffer-other-window
+     (get-buffer-create "*llama-output*"))
+    (markdown-mode)
+    (goto-char (point-max))
+    (insert "\n\n> " prompt "\n\n")
+    (llama-insert-tokens
+     (make-llama-chat-stream
+      :n-predict 300
+      :messages
+      (vector
+       (list :role "system"
+             :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+       (list :role "user"
+             :content prompt))))))
 
 (defun llama-insert-tokens (stream)
   "Insert all tokens from STREAM into the current buffer."
