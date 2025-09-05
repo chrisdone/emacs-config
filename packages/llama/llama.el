@@ -2,13 +2,10 @@
 
 (require 'cl-lib)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; /v1/chat/completions
-
-(llama-insert-tokens
- (make-llama-stream
-  :prompt "Explain Emacs"
-  :n-predict 300))
+;; (llama-insert-tokens
+;;  (make-llama-stream
+;;   :prompt "Explain Emacs"
+;;   :n-predict 300))
 
 (defun llama-insert-tokens (stream)
   "Insert all tokens from STREAM into the current buffer."
