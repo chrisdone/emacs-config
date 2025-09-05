@@ -28,7 +28,7 @@ prompt, and get the output in *llama-output* buffer."
          (concat
           (read-from-minibuffer "Prompt: ")
           "\n\n"
-          (buffer-substring-no-properties
+          (buffer-substring
            (region-beginning)
            (region-end)))))
     (switch-to-buffer-other-window
@@ -38,7 +38,6 @@ prompt, and get the output in *llama-output* buffer."
     (insert "\n\n> " prompt "\n\n")
     (llama-insert-tokens
      (make-llama-chat-stream
-      :n-predict 300
       :messages
       (vector
        (list :role "system"
