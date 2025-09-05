@@ -2,10 +2,22 @@
 
 (require 'cl-lib)
 
+;; Examples
+;;
+;; Completion example:
+;;
+;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2" :n-predict 300))
+;;
+;; Chat example:
 ;; (llama-insert-tokens
-;;  (make-llama-stream
-;;   :prompt "Explain Emacs"
-;;   :n-predict 300))
+;;  (make-llama-chat-stream
+;;   :n-predict 300
+;;   :messages
+;;   (vector
+;;    (list :role "system"
+;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+;;    (list :role "user"
+;;          :content "What LLM model are you? How many parameters?"))))
 
 (defun llama-insert-tokens (stream)
   "Insert all tokens from STREAM into the current buffer."
@@ -13,10 +25,21 @@
    :func (lambda (object) (insert (llama-get-token object)))
    :stream stream))
 
+(defun llama-message-objects (stream)
+  "Call MESSAGE on all objects from STREAM into the current buffer."
+  (llama-map
+   :func (lambda (object) (message "%S" object))
+   :stream stream))
+
 (defun llama-get-token (object)
   (apply 'concat
          (mapcar (lambda (choice)
-                   (plist-get choice :text))
+                   (let ((content (or (plist-get choice :text)
+                                      (let ((delta (plist-get choice :delta)))
+                                        (plist-get delta :content)))))
+                     (if (stringp content)
+                         content
+                       "")))
                  (plist-get object :choices))))
 
 (cl-defun llama-map (&key func stream)
@@ -52,12 +75,34 @@
          :func fold
          :original-buffer (current-buffer))))
 
-(cl-defun make-llama-stream (&key prompt n-predict)
+(defun llama-debug-raw-stream (stream)
+  "Print everything from the stream via MESSAGE."
+  (funcall
+   stream
+   (lambda (_ chunk)
+     (message "%s" chunk))
+   nil))
+
+(cl-defun make-llama-complete-stream (&key prompt n-predict)
+  "Make a SUSPENDED RAW complete stream against the llama server with PROMPT."
+  (make-llama-stream
+   "/v1/completions"
+   (list :n_predict n-predict
+         :stream t
+         :prompt prompt)))
+
+(cl-defun make-llama-chat-stream (&key messages n-predict)
+  "Make a SUSPENDED RAW chat stream against the llama server with MESSAGES."
+  (make-llama-stream
+   "/v1/chat/completions"
+   (list :n_predict n-predict
+         :stream t
+         :messages messages)))
+
+(defun make-llama-stream (path config)
   "Make a SUSPENDED RAW stream against the llama server with PROMPT."
   (lambda (func acc)
-    (let* ((json-body (json-encode (list :n_predict n-predict
-                                         :stream t
-                                         :prompt prompt)))
+    (let* ((json-body (json-encode config))
            (content-length (number-to-string (string-bytes json-body)))
            (proc (make-network-process
                   :name "llama-stream"
@@ -75,12 +120,12 @@
                                                   chunk))))
       (process-send-string
        proc
-       (format "POST /v1/completions HTTP/1.1\r\n\
+       (format "POST %s HTTP/1.1\r\n\
 Content-Type: application/json\r\n\
 Content-Length: %s\r\n\
 Connection: close\r\n\
 \r\n%s"
-               content-length json-body)))))
+               path content-length json-body)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MacBook-specific server starting
