@@ -18,7 +18,33 @@
 ;;    (list :role "system"
 ;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
 ;;    (list :role "user"
-;;          :content "What LLM model are you? How many parameters?"))))
+;;          :content "Write a factorial function in Haskell"))))
+
+(defun llama-chat-region ()
+  "Query the LLM, with current region appended to the end of the
+prompt, and get the output in *llama-output* buffer."
+  (interactive)
+  (let ((prompt
+         (concat
+          (read-from-minibuffer "Prompt: ")
+          "\n\n"
+          (buffer-substring-no-properties
+           (region-beginning)
+           (region-end)))))
+    (switch-to-buffer-other-window
+     (get-buffer-create "*llama-output*"))
+    (markdown-mode)
+    (goto-char (point-max))
+    (insert "\n\n> " prompt "\n\n")
+    (llama-insert-tokens
+     (make-llama-chat-stream
+      :n-predict 300
+      :messages
+      (vector
+       (list :role "system"
+             :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+       (list :role "user"
+             :content prompt))))))
 
 (defun llama-chat ()
   "Query the LLM and get the output in *llama-output* buffer."
