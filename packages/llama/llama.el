@@ -1,5 +1,3 @@
-;;; ...  -*- lexical-binding: t -*-
-
 (require 'cl-lib)
 
 ;; Examples
@@ -128,6 +126,9 @@ prompt, and get the output in *llama-output* buffer."
      (message "%s" chunk))
    nil))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Source streams
+
 (cl-defun make-llama-complete-stream (&key prompt n-predict)
   "Make a SUSPENDED RAW complete stream against the llama server with PROMPT."
   (make-llama-stream
@@ -146,31 +147,33 @@ prompt, and get the output in *llama-output* buffer."
 
 (defun make-llama-stream (path config)
   "Make a SUSPENDED RAW stream against the llama server with PROMPT."
-  (lambda (func acc)
-    (let* ((json-body (json-encode config))
-           (content-length (number-to-string (string-bytes json-body)))
-           (proc (make-network-process
-                  :name "llama-stream"
-                  :buffer "*llama-stream*"
-                  :host (shell-command-to-string "/home/chris/Work/chrisdone-artificial/utm/host-ip.hell")
-                  :service 8080
-                  :nowait t)))
-      (process-put proc :func func)
-      (process-put proc :acc acc)
-      (set-process-filter proc
-                          (lambda (proc chunk)
-                            (process-put proc :acc
-                                         (funcall (process-get proc :func)
-                                                  (process-get proc :acc)
-                                                  chunk))))
-      (process-send-string
-       proc
-       (format "POST %s HTTP/1.1\r\n\
+  (lexical-let ((path path)
+                (config config))
+    (lambda (func acc)
+      (let* ((json-body (json-encode config))
+             (content-length (number-to-string (string-bytes json-body)))
+             (proc (make-network-process
+                    :name "llama-stream"
+                    :buffer "*llama-stream*"
+                    :host (shell-command-to-string "/home/chris/Work/chrisdone-artificial/utm/host-ip.hell")
+                    :service 8080
+                    :nowait t)))
+        (process-put proc :func func)
+        (process-put proc :acc acc)
+        (set-process-filter proc
+                            (lambda (proc chunk)
+                              (process-put proc :acc
+                                           (funcall (process-get proc :func)
+                                                    (process-get proc :acc)
+                                                    chunk))))
+        (process-send-string
+         proc
+         (format "POST %s HTTP/1.1\r\n\
 Content-Type: application/json\r\n\
 Content-Length: %s\r\n\
 Connection: close\r\n\
 \r\n%s"
-               path content-length json-body)))))
+                 path content-length json-body))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MacBook-specific server starting
