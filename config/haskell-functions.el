@@ -166,3 +166,36 @@ apply them in the current buffer."
    "lexx"
    :in-place
    :replace-it))
+
+(defun h98-summarize-module ()
+  (interactive)
+  (message "%s"
+           (llama-chat-on-buffer-to-string "summarize this Haskell module in one sentence")))
+
+(defun h98-summarize-region ()
+  (interactive)
+  (message "%s"
+           (llama-chat-on-region-to-string "summarize this Haskell code in one sentence")))
+
+(defun my-h98-eldoc-function (callback &rest args)
+  (when (eq major-mode 'h98-mode)
+    (let ((start-end (hindent-decl-points)))
+      (when start-end
+        (lexical-let ((beg (car start-end))
+                      (end (cdr start-end))
+                      (callback callback))
+          (llama-fold-sse-json
+           :fold (lambda (acc token)
+                   (cons (llama-get-token token) acc))
+           :accum (list)
+           :stream (make-llama-chat-stream
+                    :messages
+                    (vector
+                     (list :role "system"
+                           :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+                     (list :role "user"
+                           :content
+                           (concat "summarize this Haskell code in one sentence"
+                                   "\n\n"
+                                   (buffer-substring-no-properties beg end)))))
+           :end (lambda (list) (funcall callback (apply 'concat (reverse list))))))))))
