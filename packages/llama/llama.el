@@ -1,11 +1,12 @@
 (require 'cl-lib)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Examples
-;;
+
 ;; Completion example:
 ;;
 ;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2" :n-predict 300))
-;;
+
 ;; Chat example:
 ;;
 ;; (llama-insert-tokens
@@ -17,6 +18,9 @@
 ;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
 ;;    (list :role "user"
 ;;          :content "Write a factorial function in Haskell"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Interactive functions
 
 (defun llama-chat-region ()
   "Query the LLM, with current region appended to the end of the
@@ -61,6 +65,9 @@ prompt, and get the output in *llama-output* buffer."
              :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
        (list :role "user"
              :content prompt))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Stream consumers and conduits
 
 (defun llama-insert-tokens (stream)
   "Insert all tokens from STREAM into the current buffer."
