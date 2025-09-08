@@ -5,7 +5,7 @@
 
 ;; Completion example:
 ;;
-;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2" :n-predict 300))
+;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2" :n-predict 10))
 
 ;; Chat example:
 ;;
@@ -120,6 +120,8 @@ prompt, and get the output in *llama-output* buffer."
                                  (plist-get state :acc)
                                  message)))))
      state)
+   (lambda (state)
+     (kill-buffer (plist-get state :buffer)))
    (list :buffer (generate-new-buffer "*llama-fold-sse*")
          :acc accum
          :func fold
@@ -131,7 +133,8 @@ prompt, and get the output in *llama-output* buffer."
    stream
    (lambda (_ chunk)
      (message "%s" chunk))
-   nil))
+   nil
+   'ignore))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Source streams
@@ -156,7 +159,7 @@ prompt, and get the output in *llama-output* buffer."
   "Make a SUSPENDED RAW stream against the llama server with PROMPT."
   (lexical-let ((path path)
                 (config config))
-    (lambda (func acc)
+    (lambda (func end acc)
       (let* ((json-body (json-encode config))
              (content-length (number-to-string (string-bytes json-body)))
              (proc (make-network-process
@@ -167,6 +170,13 @@ prompt, and get the output in *llama-output* buffer."
                     :nowait t)))
         (process-put proc :func func)
         (process-put proc :acc acc)
+        (process-put proc :end end)
+        (set-process-sentinel proc
+                              (lambda (proc event)
+                                (unless (string= "open\n" event)
+                                  (funcall (process-get proc :end)
+                                           (process-get proc :acc))
+                                  (kill-buffer (process-buffer proc)))))
         (set-process-filter proc
                             (lambda (proc chunk)
                               (process-put proc :acc
