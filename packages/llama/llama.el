@@ -3,6 +3,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Examples
 
+;;
+;; Synchronous to string:
+;; (llama-tokens-to-string (make-llama-complete-stream :prompt "e=mc2" :n-predict 10))
+
 ;; Completion example:
 ;;
 ;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2" :n-predict 10))
@@ -97,9 +101,34 @@ prompt, and get the output in *llama-output* buffer."
   (llama-fold-sse-json
    :fold (lambda (func object) (funcall func object) func)
    :accum func
-   :stream stream))
+   :stream stream
+   :end 'identity))
 
-(cl-defun llama-fold-sse-json (&key fold accum stream)
+(defun llama-chat-on-buffer-to-string (prompt)
+  "Run a query against the current buffer, returning the output as a string."
+  (llama-tokens-to-string
+   (make-llama-chat-stream
+    :messages
+    (vector
+     (list :role "system"
+           :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+     (list :role "user"
+           :content (concat prompt "\n\n" (buffer-string)))))))
+
+(defun llama-tokens-to-string (stream)
+  "Output all tokens from STREAM into a string synchronously."
+  (lexical-let ((output nil))
+    (llama-fold-sse-json
+     :fold (lambda (acc token)
+             (cons (llama-get-token token) acc))
+     :accum (list)
+     :stream stream
+     :end (lambda (list) (setq output (apply 'concat (reverse list)))))
+    (while (eq nil output)
+      (sit-for 0.1))
+    output))
+
+(cl-defun llama-fold-sse-json (&key fold accum stream end)
   "Fold over the SSE JSON blobs output with F(ACCUM,object) over STREAM."
   (funcall
    stream
@@ -121,10 +150,13 @@ prompt, and get the output in *llama-output* buffer."
                                  message)))))
      state)
    (lambda (state)
-     (kill-buffer (plist-get state :buffer)))
+     (kill-buffer (plist-get state :buffer))
+     (funcall (plist-get state :end)
+              (plist-get state :acc)))
    (list :buffer (generate-new-buffer "*llama-fold-sse*")
          :acc accum
          :func fold
+         :end end
          :original-buffer (current-buffer))))
 
 (defun llama-debug-raw-stream (stream)
