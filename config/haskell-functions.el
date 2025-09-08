@@ -195,7 +195,10 @@ apply them in the current buffer."
                            :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
                      (list :role "user"
                            :content
-                           (concat "summarize this Haskell code in one sentence"
-                                   "\n\n"
-                                   (buffer-substring-no-properties beg end)))))
+                           (concat "here is a Haskell declaration\n\n"
+                                   (buffer-substring-no-properties beg end)))
+                     (list :role "user"
+                           :content
+                           (concat "give a one-sentence summary of this line of code\n\n"
+                                   (buffer-substring-no-properties (line-beginning-position) (line-end-position))))))
            :end (lambda (list) (funcall callback (apply 'concat (reverse list))))))))))
