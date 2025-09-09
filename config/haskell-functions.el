@@ -160,12 +160,19 @@ apply them in the current buffer."
 
 (defun lexx ()
   (interactive)
-  (shell-command-on-region
-   (region-beginning)
-   (region-end)
-   "lexx"
-   :in-place
-   :replace-it))
+  (if (region-active-p)
+      (shell-command-on-region
+       (region-beginning)
+       (region-end)
+       "lexx"
+       :in-place
+       :replace-it)
+    (shell-command-on-region
+     (line-beginning-position)
+     (line-end-position)
+     "lexx"
+     :in-place
+     :replace-it)))
 
 (defun h98-summarize-module ()
   (interactive)
