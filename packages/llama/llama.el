@@ -244,6 +244,7 @@ Connection: close\r\n\
                (list "Downloads/llama/bin/llama-server"
                      "--model"
                      "UTM-Shared/LLMs/Llama-3.2-3B-Instruct-uncensored.Q4_K_M.gguf"
+                     "--host 0.0.0.0"
                      "--port 8080")
                " "))
       (call-interactively 'comint-send-input)
