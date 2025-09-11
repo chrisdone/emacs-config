@@ -218,6 +218,8 @@ prompt, and get the output in *llama-output* buffer."
                                            (funcall (process-get proc :func)
                                                     (process-get proc :acc)
                                                     chunk))))
+        ;; (with-current-buffer (get-buffer-create "*scratch*")
+        ;;   (insert json-body))
         (process-send-string
          proc
          (format "POST %s HTTP/1.1\r\n\
