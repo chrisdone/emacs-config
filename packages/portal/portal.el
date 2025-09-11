@@ -405,15 +405,17 @@ later."
 
 (defun portal-cycle-spinner (process)
   "Update PROCESS to contain the next char in its spinner sequence."
-  (let ((next-char
-         (portal-cycle-character
-          portal-spinner-sequence
-          (process-get process :portal-spinner))))
-    (process-put
-     process
-     :portal-spinner
-     next-char)
-    next-char))
+  (if process
+    (let ((next-char
+           (portal-cycle-character
+            portal-spinner-sequence
+            (process-get process :portal-spinner))))
+      (process-put
+       process
+       :portal-spinner
+       next-char)
+      next-char)
+    "0"))
 
 (defun portal-cycle-character (string current)
   "Cycle the character of a STRING given CURRENT, which may be `nil'
