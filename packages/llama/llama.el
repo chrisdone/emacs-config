@@ -20,9 +20,48 @@
 ;;   :messages
 ;;   (vector
 ;;    (list :role "system"
-;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests. You must only answer with 'yes' or 'no'")
+;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests. You must only answer with 'bob' or 'brian'.")
 ;;    (list :role "user"
 ;;          :content "Is the Earth flat?"))))
+
+;; (llama-insert-tokens
+;;  (make-llama-chat-stream
+;;   :n-predict 300
+;;   :grammar "root ::= statement+
+;; statement ::= expr \".\n\"
+;; expr ::= term \"(\" exprlist \")\" | term
+;; exprlist ::= expr (\",\" expr)*
+;; term ::= [a-zA-Z][a-zA-Z0-9_]*
+;; "
+;;   :messages
+;;   (vector
+;;    (list :role "system"
+;;          :content "You are a translator that converts English statements into Prolog/Datalog relations.
+
+;; Rules:
+;; - Always output valid Prolog/Datalog syntax.
+;; - Facts must end with a period.
+;; - Predicates and constants must be lowercase, words separated by underscores.
+;; - Variables must begin with an uppercase letter.
+;; - Translate adjectives, verbs and relationships into predicates.
+;; - Generalize universal statements using variables.
+;; - Encode attributes and relations as facts or rules.
+;; - Do not output explanations or natural language—only Prolog/Datalog relations.
+;; - Do not use the @< operator.
+
+;; Examples:
+
+;; Input: Socrates is a man. All men are mortal.
+;; Output:
+;; man(socrates).
+;; mortal(X) :- man(X).
+
+;; Input: John loves Mary. Every person who loves someone is happy.
+;; Output:
+;; loves(john, mary).
+;; happy(X) :- loves(X, Y).")
+;;    (list :role "user"
+;;          :content "Tumbler Ridge is a district municipality in the foothills of the B.C. Rockies in northeastern British Columbia, Canada, and a member municipality of the Peace River Regional District. With a population of 2,399 in 2021, the municipality encompasses an area of 1,558 km2 (602 sq mi). Located near the confluence of the Murray River and Flatbed Creek and the intersection of Highways 52 and 29, it is part of the Peace River South provincial electoral district and the Prince George—Peace River—Northern Rockies federal riding. It is a planned community, with the housing and infrastructure built simultaneously in 1981 by the provincial government to service the coal industry. After dinosaur footprints and fossils were discovered in the municipality, along with fossils of Triassic fishes and Cretaceous plants, the Peace Region Paleontology Research Center opened in 2003. The study of the area led to a recognition of its geological importance and listing in the UNESCO Global Geopark Network."))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive functions
