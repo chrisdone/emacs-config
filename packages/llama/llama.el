@@ -16,12 +16,13 @@
 ;; (llama-insert-tokens
 ;;  (make-llama-chat-stream
 ;;   :n-predict 300
+;;   :grammar "root ::= \"yes\" | \"no\""
 ;;   :messages
 ;;   (vector
 ;;    (list :role "system"
-;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+;;          :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests. You must only answer with 'yes' or 'no'")
 ;;    (list :role "user"
-;;          :content "Write a factorial function in Haskell"))))
+;;          :content "Is the Earth flat?"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive functions
@@ -171,20 +172,22 @@ prompt, and get the output in *llama-output* buffer."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Source streams
 
-(cl-defun make-llama-complete-stream (&key prompt n-predict)
+(cl-defun make-llama-complete-stream (&key prompt n-predict grammar)
   "Make a SUSPENDED RAW complete stream against the llama server with PROMPT."
   (make-llama-stream
    "/v1/completions"
    (list :n_predict n-predict
          :stream t
+         :grammar grammar
          :prompt prompt)))
 
-(cl-defun make-llama-chat-stream (&key messages n-predict)
+(cl-defun make-llama-chat-stream (&key messages n-predict grammar)
   "Make a SUSPENDED RAW chat stream against the llama server with MESSAGES."
   (make-llama-stream
    "/v1/chat/completions"
    (list :n_predict n-predict
          :stream t
+         :grammar grammar
          :messages messages)))
 
 (defun make-llama-stream (path config)
