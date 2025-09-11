@@ -121,11 +121,18 @@ buffer."
       (setq portal-out-portal portal))))
 
 (defun portal-interrupt ()
-  "Interrupt the process at point."
+  "Interrupt the process at point. If we restarted Emacs, so we
+don't have an Emacs Process to track the child anymore, this will
+mark it as \"purged\"."
   (interactive)
-  (let ((proc (get-process (portal-process-name (portal-at-point)))))
+  (let* ((portal (portal-at-point))
+         (proc (get-process (portal-process-name portal))))
     (when (and proc (process-live-p proc))
-      (interrupt-process proc))))
+      (interrupt-process proc))
+    (when (not proc)
+      (let ((status (portal-read-json-file portal "status")))
+        (when (string= status "run")
+          (portal-write-json-file portal "status" "purged"))))))
 
 (defun portal-rerun ()
   "Re-run portal at point."
