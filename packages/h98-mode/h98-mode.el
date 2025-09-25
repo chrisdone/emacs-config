@@ -31,6 +31,10 @@ visited."
           (directory-file-name (file-name-as-directory (magit-get-top-dir)))
 
           "/.tags")))
-    (xref-find-definitions (symbol-name (symbol-at-point)))))
+    (let ((string (symbol-name (symbol-at-point))))
+      (condition-case err
+          (xref-find-definitions string)
+        (user-error
+         (counsel-rg (regexp-quote string)))))))
 
 (provide 'h98-mode)
