@@ -66,6 +66,50 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive functions
 
+(defun llama-summarise-buffer ()
+  "Split the buffer into paragraphs. Then summarise each one. Then
+summarise the summaries."
+  (interactive)
+  (let* ((paragraphs
+          (let ((paras (list)))
+            (save-excursion
+              (goto-char (point-min))
+              (let ((prev (point)))
+                (while (= 0 (forward-paragraph))
+                  (let ((text (buffer-substring prev (point))))
+                    (when (not (string= "" (string-trim text)))
+                      (setq paras (cons text paras))))
+                  (setq prev (point)))))
+            (reverse paras)))
+         (summaries
+          (mapcar (lambda (para)
+                    (llama-tokens-to-string
+                     (make-llama-chat-stream
+                      :messages
+                      (vector
+                       (list :role "system"
+                             :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+                       (list :role "user"
+                             :content (concat "Reword the following paragraph into one sentence: "
+                                              para))))))
+                  paragraphs)))
+    (mapcar (lambda (s) (message "p=%s" s)) summaries)
+    (switch-to-buffer-other-window
+     (get-buffer-create "*llama-output*"))
+    (markdown-mode)
+    (goto-char (point-max))
+    (insert "\n\n> summarise buffer:\n\n")
+    (llama-insert-tokens
+     (make-llama-chat-stream
+      :n-predict 300
+      :messages
+      (vector
+       (list :role "system"
+             :content "You are an AI assistant. Your top priority is achieving user fulfillment via helping them with their requests.")
+       (list :role "user"
+             :content (concat "Summarise the following document in one sentence:\n\n"
+                              (mapconcat 'identity summaries "\n\n"))))))))
+
 (defun llama-chat-region ()
   "Query the LLM, with current region appended to the end of the
 prompt, and get the output in *llama-output* buffer."
