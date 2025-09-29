@@ -37,33 +37,31 @@
                              collect (replace-regexp-in-string "\\.l?hs$" "" part))))
     (mapconcat 'identity (reverse components) ".")))
 
-(defun hasktags ()
-  "Runs hasktags. If `fd' is installed and in the PATH, it'll be much faster."
-  (interactive)
-  (message "Running hasktags ...")
-  (redisplay)
-  (if (executable-find "hasktags")
-      (progn (if (executable-find "fd")
-                 (let ((hasktags-part
-                        (mapconcat 'shell-quote-argument
-                                   (append (list "hasktags") (list "-o" hasktags-path))
-                                   " "))
-                       (fd-part
-                        (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$") hasktags-directories)
-                                   " ")))
-                   (call-process "sh" nil (get-buffer-create "*hasktags-output*") t
-                                 "-c" (concat fd-part " | xargs " hasktags-part)))
-               (apply #'call-process
-                      (append (list "hasktags" nil (get-buffer-create "*hasktags-output*") t)
-                              hasktags-directories
-                              (list "-o" hasktags-path))))
-             (message "Running hasktags ... done!"))
-    (warn "No hasktags is installed!")))
+;; TODO: Make these run in the correct directory automatically.
 
-;; I tried to use ghc-tags but it fails with alex issues. I'm going to
-;; count ghc-tags among my "you just can't rely on this" bucket of
-;; Haskell tooling. Onwards with hasktags...
-;;
+;; (defun hasktags ()
+;;   "Runs hasktags. If `fd' is installed and in the PATH, it'll be much faster."
+;;   (interactive)
+;;   (message "Running hasktags ...")
+;;   (redisplay)
+;;   (if (executable-find "hasktags")
+;;       (progn (if (executable-find "fd")
+;;                  (let ((hasktags-part
+;;                         (mapconcat 'shell-quote-argument
+;;                                    (append (list "hasktags") (list "-o" hasktags-path))
+;;                                    " "))
+;;                        (fd-part
+;;                         (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$") hasktags-directories)
+;;                                    " ")))
+;;                    (call-process "sh" nil (get-buffer-create "*hasktags-output*") t
+;;                                  "-c" (concat fd-part " | xargs " hasktags-part)))
+;;                (apply #'call-process
+;;                       (append (list "hasktags" nil (get-buffer-create "*hasktags-output*") t)
+;;                               hasktags-directories
+;;                               (list "-o" hasktags-path))))
+;;              (message "Running hasktags ... done!"))
+;;     (warn "No hasktags is installed!")))
+
 ;; (defun ghc-tags ()
 ;;   "Runs ghc-tags. Requires `ghc-tags' and `fd' to be installed."
 ;;   (interactive)
