@@ -29,7 +29,6 @@ visited."
   (let ((tags-file-name
          (concat
           (directory-file-name (file-name-as-directory (magit-get-top-dir)))
-
           "/.tags")))
     (let ((string (symbol-name (symbol-at-point))))
       (condition-case err

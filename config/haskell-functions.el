@@ -62,24 +62,34 @@
 ;;              (message "Running hasktags ... done!"))
 ;;     (warn "No hasktags is installed!")))
 
-;; (defun ghc-tags ()
-;;   "Runs ghc-tags. Requires `ghc-tags' and `fd' to be installed."
-;;   (interactive)
-;;   (message "Running ghc-tags ...")
-;;   (redisplay)
-;;   (if (and (executable-find "ghc-tags")
-;;            (executable-find "fd"))
-;;       (let ((ghc-tags-part
-;;              (mapconcat 'shell-quote-argument
-;;                         (append (list "ghc-tags") (list "-e" "-o" hasktags-path))
-;;                         " "))
-;;             (fd-part
-;;              (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$") hasktags-directories)
-;;                         " ")))
-;;         (call-process "sh" nil (get-buffer-create "*ghc-tags-output*") t
-;;                       "-c" (concat fd-part " | xargs " ghc-tags-part)))
-;;     (warn "I need `ghc-tags' and `fd' to be installed!"))
-;;   (message "Running ghc-tags ... done!"))
+(defun ghc-tags ()
+  "Runs ghc-tags. Requires `ghc-tags' and `fd' to be installed."
+  (interactive)
+  (let* ((top-dir (magit-get-top-dir))
+         (cabal.project
+          (let ((default-directory top-dir))
+            (shell-command-to-string
+             "fd '^cabal\.project$'  --absolute-path")))
+         (default-directory
+          (or (and cabal.project (file-name-directory cabal.project))
+              top-dir)))
+    (message "Running ghc-tags in %s ..." default-directory)
+    (redisplay)
+    (if (and (executable-find "ghc-tags")
+           (executable-find "fd"))
+      (let ((ghc-tags-part
+             (mapconcat 'shell-quote-argument
+                        (append (list "ghc-tags") (list "-e" "-o" (concat top-dir
+                                                                          hasktags-path)))
+                        " "))
+            (fd-part
+             (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$")
+                                                      hasktags-directories)
+                        " ")))
+        (call-process "sh" nil (get-buffer-create "*ghc-tags-output*") t
+                      "-c" (concat fd-part " | xargs " ghc-tags-part)))
+    (warn "I need `ghc-tags' and `fd' to be installed!"))
+    (message "Running ghc-tags ... done!")))
 
 ;; fast-tags is about as fast as hasktags, so seems redundant.
 ;;
