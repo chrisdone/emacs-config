@@ -22,6 +22,7 @@
     swiper
     watchexec
     quickjump
+    hindent-mode
     h98-mode
     ts-mode
     paredit
