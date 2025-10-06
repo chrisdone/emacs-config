@@ -13,9 +13,9 @@
 
 (defface diary-heading-face
   '((((class color) (background dark))
-     (:foreground "#fff" :background "#333" :box (:line-width (5 . 2) :color "#333" :style flat-butotn) :height 200 :family "Arial"))
+     (:foreground "#fff" :background "#333" :box (:line-width (5 . 2) :color "#333" :style flat-button) :height 200 :family "Arial"))
     (((class color) (background light))
-     (:foreground "#000" :background "#eee" :box (:line-width (5 . 2) :color "#eee" :style flat-butotn) :height 200 :family "Arial")))
+     (:foreground "#000" :background "#eee" :box (:line-width (5 . 2) :color "#eee" :style flat-button) :height 200 :family "Arial")))
   "Headings."
   :group 'diary-faces)
 
@@ -118,5 +118,16 @@
    (line-beginning-position)
    (line-end-position)
    -2))
+
+(defun diary-export-md ()
+  (interactive)
+  (kill-new
+   (let ((string (buffer-substring (region-beginning)
+                                   (region-end))))
+     (replace-regexp-in-string
+      "* Done" "* **Done** "
+      (replace-regexp-in-string
+       "* Meet" "* **Meet** "
+       (replace-regexp-in-string "•" "*" string))))))
 
 (provide 'diary-mode)
