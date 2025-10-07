@@ -20,20 +20,4 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.hs\\'" . h98-mode))
 
-(define-key h98-mode-map (kbd "M-.") 'h98-xref-find-definitions)
-
-(defun h98-xref-find-definitions ()
-  "Calls xref-find-definitions but with the right tags table
-visited."
-  (interactive)
-  (let ((tags-file-name
-         (concat
-          (directory-file-name (file-name-as-directory (magit-get-top-dir)))
-          "/.tags")))
-    (let ((string (symbol-name (symbol-at-point))))
-      (condition-case err
-          (xref-find-definitions string)
-        (user-error
-         (counsel-rg (regexp-quote string)))))))
-
 (provide 'h98-mode)

@@ -223,3 +223,16 @@ apply them in the current buffer."
                            (concat "give a one-sentence summary of this line of code\n\n"
                                    (buffer-substring-no-properties (line-beginning-position) (line-end-position))))))
            :end (lambda (list) (funcall callback (apply 'concat (reverse list))))))))))
+(defun h98-xref-find-definitions ()
+  "Calls xref-find-definitions but with the right tags table
+visited."
+  (interactive)
+  (let ((tags-file-name
+         (concat
+          (directory-file-name (file-name-as-directory (magit-get-top-dir)))
+          "/.tags")))
+    (let ((string (symbol-name (symbol-at-point))))
+      (condition-case err
+          (xref-find-definitions string)
+        (user-error
+         (counsel-rg (regexp-quote string)))))))
