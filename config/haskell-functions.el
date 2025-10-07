@@ -223,6 +223,32 @@ apply them in the current buffer."
                            (concat "give a one-sentence summary of this line of code\n\n"
                                    (buffer-substring-no-properties (line-beginning-position) (line-end-position))))))
            :end (lambda (list) (funcall callback (apply 'concat (reverse list))))))))))
+
+(defun dwim-get-ghci-buffer ()
+  "Do-what-I-mean get the GHCi buffer:
+First try `ghci-buffer-onscreen', else try `ghci-buffer-recent'."
+  (or (ghci-buffer-onscreen)
+      (ghci-buffer-recent)
+      (error "Couldn't DWIM find a *ghci* buffer!")))
+
+(defun ghci-buffer-recent ()
+  "Find a recent GHCi buffer that matches `parse-ghci-buffer'."
+  (car (remove-if-not #'parse-ghci-buffer (buffer-list (selected-frame)))))
+
+(defun ghci-buffer-onscreen ()
+  "Find the onscreen GHCi buffer that matches `parse-ghci-buffer'."
+  (let ((result (remove-if-not (lambda (window)
+                                 (parse-ghci-buffer (window-buffer window)))
+                               (window-list))))
+    (when result
+      (window-buffer (car result)))))
+
+(defun parse-ghci-buffer (buffer)
+  "Given a buffer, if it matches the GHCi format, return it, else `nil'."
+  (when (or (string-match "^\\*ghci" (buffer-name buffer))
+            (string-match "ghci\\*$" (buffer-name buffer)))
+    buffer))
+
 (defun h98-xref-find-definitions ()
   "Calls xref-find-definitions but with the right tags table
 visited."
