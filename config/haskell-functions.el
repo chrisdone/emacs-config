@@ -1,7 +1,7 @@
 (defun h98-reload ()
   (interactive)
   (save-buffer)
-  (switch-to-buffer-other-window "*ghci*")
+  (switch-to-buffer-other-window (dwim-get-ghci-buffer))
   (while (not (memq 'comint-highlight-prompt (get-text-property (1- (point-max)) 'face)))
     (comint-interrupt-subjob)
     (message "Waiting for GHCi job to terminate ...")
@@ -161,7 +161,7 @@ apply them in the current buffer."
 
 (defun haskell-show-compile-buffer ()
   (interactive)
-  (switch-to-buffer-other-window "*ghci*"))
+  (switch-to-buffer-other-window (dwim-get-ghci-buffer)))
 
 (defun haskell-add-import (line)
   (interactive "sImport: ")
