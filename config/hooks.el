@@ -12,4 +12,5 @@
 (add-hook 'compilation-mode-hook 'next-error-follow-minor-mode)
 (add-hook 'grep-mode-hook 'next-error-follow-minor-mode)
 (add-hook 'ag-mode-hook 'next-error-follow-minor-mode)
-(add-hook 'eldoc-documentation-functions 'my-h98-eldoc-function)
+(when nil
+  (add-hook 'eldoc-documentation-functions 'my-h98-eldoc-function))
