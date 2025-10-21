@@ -40,8 +40,11 @@
   "References to links highlighted."
   :group 'diary-faces)
 
+(defconst diary-heading-regex
+  "^[0-9]+ [A-Z][a-z]+ [0-9]+$")
+
 (defconst diary-keywords
-  `(("^[0-9]+ [A-Z][a-z]+ [0-9]+$" . 'diary-heading-face)
+  `((,diary-heading-regex . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
     ("^ *• Done " . 'diary-done-prefix-face)
     ("^ *• Meet " . 'diary-meet-prefix-face)))
@@ -140,5 +143,30 @@
       (delete-blank-lines)
       (insert date "\n")
       (save-excursion (insert "\n\n")))))
+
+(defun diary-goto-previous-heading-exclusive ()
+  "Jump to the end of the line at the previous heading."
+  (interactive)
+  (search-backward-regexp diary-heading-regex nil t 1)
+  (end-of-line))
+
+(defun diary-goto-next-heading-exclusive ()
+  "Jump to the beginning of the line at the next heading."
+  (interactive)
+  (search-forward-regexp diary-heading-regex nil t 1)
+  (beginning-of-line))
+
+(defun diary-break-out-lines ()
+  (interactive)
+  "Insert exactly one blank line between the two current lines."
+  (insert "\n"))
+
+(defun diary-space-out-headings ()
+  (save-excursion
+    (diary-goto-previous-heading-exclusive)
+    (diary-break-out-lines))
+  (save-excursion
+    (diary-goto-next-heading-exclusive)
+    (diary-break-out-lines)))
 
 (provide 'diary-mode)
