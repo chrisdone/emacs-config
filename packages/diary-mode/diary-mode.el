@@ -130,4 +130,15 @@
        "* Meet" "* **Meet** "
        (replace-regexp-in-string "•" "*" string))))))
 
+(defun diary-insert-day ()
+  (interactive)
+  (let ((date (format-time-string "\n%-d %b %Y\n" (current-time))))
+    (goto-char (point-min))
+    (if (search-forward date nil t 1)
+        (end-of-line)
+      (forward-line 1)
+      (delete-blank-lines)
+      (insert date "\n")
+      (save-excursion (insert "\n\n")))))
+
 (provide 'diary-mode)
