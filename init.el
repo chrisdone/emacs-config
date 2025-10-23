@@ -44,6 +44,14 @@
   "Packages whose location follows the
   packages/package-name/package-name.el format.")
 
+(defvar emacs-bin-path
+  (concat
+   (file-name-directory (or load-file-name
+                            (buffer-file-name)))
+   (if (string= (shell-command-to-string "uname -m") "aarch64\n")
+       "bin/arm64"
+     "bin/amd64")))
+
 (defvar custom-load-paths
   '("git-modes"
     "diary-mode")
@@ -152,11 +160,6 @@
 
 ;; Adds binaries to the PATH and exec-path, so that they're available
 ;; to Emacs and all shells within Emacs.
-(let ((bin-dir (concat
-                (file-name-directory (or load-file-name
-                                         (buffer-file-name)))
-                (if (string= (shell-command-to-string "uname -m") "aarch64\n")
-                    "/bin/arm64"
-                  "/bin/amd64"))))
+(let ((bin-dir emacs-bin-path))
   (add-to-list 'exec-path bin-dir)
   (setenv "PATH" (concat bin-dir ":" (getenv "PATH"))))
