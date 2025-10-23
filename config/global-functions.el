@@ -381,3 +381,18 @@ This can be useful when updating or checking out branches outside of Emacs."
              (resource-name (format "%s.%s" type name)))
         (kill-new resource-name)
         (message "Copied resource name %s" resource-name)))))
+
+(defun yaml-to-json-region (start end)
+  "Convert YAML in region to JSON using yq."
+  (interactive "r")
+  (shell-command-on-region start end (concat (emacs-bin-program "yq") " -o=json") t t))
+
+(defun json-to-yaml-region (start end)
+  "Convert JSON in region to YAML using yq."
+  (interactive "r")
+  (shell-command-on-region start end (concat (emacs-bin-program "yq") " -P") t t))
+
+(defun emacs-bin-program (name)
+  "Produce a path for a program which sits in bin/{arch}/ in this Emacs
+configuration repo."
+  (concat emacs-bin-path "/" name))
