@@ -67,29 +67,30 @@
   (interactive)
   (let* ((top-dir (magit-get-top-dir))
          (cabal.project
-          (let ((default-directory top-dir))
-            (shell-command-to-string
-             "fd '^cabal\.project$'  --absolute-path")))
+          (file-name-directory (let ((default-directory top-dir))
+                                 (shell-command-to-string
+                                  "fd '^cabal\.project$'  --absolute-path"))))
          (default-directory
-          (or (and cabal.project (file-name-directory cabal.project))
-              top-dir)))
+          (or (and cabal.project cabal.project)
+              top-dir))
+         (tags-table-filename (concat default-directory hasktags-path)))
     (message "Running ghc-tags in %s ..." default-directory)
     (redisplay)
     (if (and (executable-find "ghc-tags")
-           (executable-find "fd"))
-      (let ((ghc-tags-part
-             (mapconcat 'shell-quote-argument
-                        (append (list "ghc-tags") (list "-e" "-o" (concat top-dir
-                                                                          hasktags-path)))
-                        " "))
-            (fd-part
-             (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$")
-                                                      hasktags-directories)
-                        " ")))
-        (call-process "sh" nil (get-buffer-create "*ghc-tags-output*") t
-                      "-c" (concat fd-part " | xargs " ghc-tags-part)))
-    (warn "I need `ghc-tags' and `fd' to be installed!"))
-    (message "Running ghc-tags ... done!")))
+             (executable-find "fd"))
+        (let ((ghc-tags-part
+               (mapconcat 'shell-quote-argument
+                          (append (list "ghc-tags") (list "-e" "-o" tags-table-filename))
+                          " "))
+              (fd-part
+               (mapconcat 'shell-quote-argument (append (list "fd" "\.hs$")
+                                                        hasktags-directories)
+                          " ")))
+          (call-process "sh" nil (get-buffer-create "*ghc-tags-output*") t
+                        "-c" (concat fd-part " | xargs " ghc-tags-part)))
+      (warn "I need `ghc-tags' and `fd' to be installed!"))
+    (message "Visiting tags table.")
+    (visit-tags-table tags-table-filename)))
 
 ;; fast-tags is about as fast as hasktags, so seems redundant.
 ;;
@@ -253,10 +254,14 @@ First try `ghci-buffer-onscreen', else try `ghci-buffer-recent'."
   "Calls xref-find-definitions but with the right tags table
 visited."
   (interactive)
-  (let ((tags-file-name
-         (concat
-          (directory-file-name (file-name-as-directory (magit-get-top-dir)))
-          "/.tags")))
+  (let* ((top-dir (magit-get-top-dir))
+         (cabal.project
+          (let ((default-directory top-dir))
+            (shell-command-to-string
+             "fd '^cabal\.project$'  --absolute-path")))
+         (default-directory
+          (or (and cabal.project (file-name-directory cabal.project))
+              top-dir)))
     (let ((string (symbol-name (symbol-at-point))))
       (condition-case err
           (xref-find-definitions string)
