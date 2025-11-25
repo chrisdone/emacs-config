@@ -124,14 +124,17 @@
 
 (defun diary-export-md ()
   (interactive)
-  (kill-new
-   (let ((string (buffer-substring (region-beginning)
-                                   (region-end))))
-     (replace-regexp-in-string
-      "* Done" "* **Done** "
-      (replace-regexp-in-string
-       "* Meet" "* **Meet** "
-       (replace-regexp-in-string "•" "*" string))))))
+  (with-current-buffer "export.md"
+    (erase-buffer)
+    (insert
+     (let ((string (buffer-substring (region-beginning)
+                                     (region-end))))
+       (replace-regexp-in-string
+        "* Done" "* **Done** "
+        (replace-regexp-in-string
+         "* Meet" "* **Meet** "
+         (replace-regexp-in-string "•" "*" string)))))
+    (save-buffer)))
 
 (defun diary-insert-day ()
   (interactive)
