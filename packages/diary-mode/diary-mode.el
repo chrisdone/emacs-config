@@ -35,6 +35,28 @@
   "Meet prefix for items."
   :group 'diary-faces)
 
+(defface diary-p1-face
+  '((((class color) (background dark))
+     (:foreground "#C48C8C" :bold t))
+    (((class color) (background light))
+     (:foreground "#1a6e8e" :bold t)))
+  "Meet prefix for items."
+  :group 'diary-faces)
+(defface diary-p2-face
+  '((((class color) (background dark))
+     (:foreground "#F0DFAF" :bold t))
+    (((class color) (background light))
+     (:foreground "#1a6e8e" :bold t)))
+  "Meet prefix for items."
+  :group 'diary-faces)
+(defface diary-p3-face
+  '((((class color) (background dark))
+     (:foreground "#7F9F7F" :bold t))
+    (((class color) (background light))
+     (:foreground "#1a6e8e" :bold t)))
+  "Meet prefix for items."
+  :group 'diary-faces)
+
 (defface diary-reference-face
   '((t (:height 100)))
   "References to links highlighted."
@@ -47,6 +69,12 @@
   `((,diary-heading-regex . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
     ("^ *• Done " . 'diary-done-prefix-face)
+    ("^ *• p1 [a-z][a-z][a-z]: " . 'diary-p1-face)
+    ("^ *• p2 [a-z][a-z][a-z]:" . 'diary-p2-face)
+    ("^ *• p3 [a-z][a-z][a-z]:" . 'diary-p3-face)
+    ("^ *• p1 " . 'diary-p1-face)
+    ("^ *• p2" . 'diary-p2-face)
+    ("^ *• p3" . 'diary-p3-face)
     ("^ *• Meet " . 'diary-meet-prefix-face)))
 
 ;;;###autoload
