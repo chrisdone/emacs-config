@@ -396,3 +396,23 @@ This can be useful when updating or checking out branches outside of Emacs."
   "Produce a path for a program which sits in bin/{arch}/ in this Emacs
 configuration repo."
   (concat emacs-bin-path "/" name))
+
+(defun claude ()
+  "Starts or restarts claude on the current project."
+  (interactive)
+  (let ((root (magit-get-top-dir)))
+    (when root
+      (let* ((name (file-name-nondirectory (directory-file-name (file-name-as-directory (magit-get-top-dir)))))
+             (purpose "claude")
+             (buffer (get-buffer-create (format "*sh:%s:%s*" name purpose))))
+        (shell buffer)
+        (unless (= (point-min) (point-max))
+          (while (not (memq 'comint-highlight-prompt (get-text-property (1- (point-max)) 'face)))
+            (comint-interrupt-subjob)
+            (message "Waiting for job to terminate ...")
+            (sit-for 0.5)))
+        (erase-buffer)
+        (insert
+         "cat .prompt && cat .prompt | nix run -- github:sadjow/claude-code-nix -p --output-format stream-json --verbose --permission-mode bypassPermissions --allowed-tools 'Read,Bash(grep:*),Bash(cat:*),Bash(ls:*)' --add-dir `pwd`")
+        (call-interactively 'comint-send-input)
+        (goto-char (point-max))))))
