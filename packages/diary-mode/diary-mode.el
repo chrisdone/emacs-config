@@ -34,6 +34,13 @@
      (:foreground "#1a6e8e" :bold t)))
   "Meet prefix for items."
   :group 'diary-faces)
+(defface diary-note-prefix-face
+  '((((class color) (background dark))
+     (:foreground "#888" :bold t))
+    (((class color) (background light))
+     (:foreground "#1a6e8e" :bold t)))
+  "Meet prefix for items."
+  :group 'diary-faces)
 
 (defface diary-p1-face
   '((((class color) (background dark))
@@ -75,7 +82,8 @@
     ("^ *• p1 " . 'diary-p1-face)
     ("^ *• p2" . 'diary-p2-face)
     ("^ *• p3" . 'diary-p3-face)
-    ("^ *• Meet " . 'diary-meet-prefix-face)))
+    ("^ *• Meet " . 'diary-meet-prefix-face)
+    ("^ *• Note " . 'diary-note-prefix-face)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.diary\\'" . diary-mode))
@@ -121,13 +129,19 @@
 (defun diary-mark-done ()
   "Similar behavior to org-mode."
   (interactive)
-  (save-excursion
-    (back-to-indentation)
-    (when (and (looking-at "• ")
-               (not (looking-at "• Done ")))
-     (forward-char 1)
-     (cycle-spacing 1)
-     (insert "Done "))))
+  (let* ((keywords (list "Done" "Meet" "Note"))
+         (keywords-ring (ring-convert-sequence-to-ring keywords))
+         (word-regexp (regexp-opt keywords t)))
+    (save-excursion
+      (back-to-indentation)
+      (search-forward-regexp "• " (+ (point) 2))
+      (if (looking-at word-regexp)
+          (let* ((word (match-string 1))
+                 (index (ring-member keywords-ring word))
+                 (next (ring-ref keywords-ring (1+ index))))
+            (delete-region (point) (save-excursion (forward-word 1) (point)))
+            (insert next))
+        (insert "Done")))))
 
 (defun diary-dwim-space ()
   (interactive)
