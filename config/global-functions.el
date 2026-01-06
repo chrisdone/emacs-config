@@ -418,7 +418,7 @@ configuration repo."
                   (sit-for 0.5)))
               (erase-buffer)
               (insert
-               "cat .prompt && cat .prompt | nix run -- github:sadjow/claude-code-nix -p --output-format stream-json --verbose --permission-mode bypassPermissions --allowed-tools 'Read,Bash(grep:*),Bash(cat:*),Bash(ls:*)' --add-dir `pwd`")
+               "cat .prompt && cat .prompt | nix run -- github:sadjow/claude-code-nix -p --output-format stream-json --verbose --permission-mode bypassPermissions --allowed-tools 'Read,Bash(grep:*),Bash(cat:*),Bash(ls:*)' --add-dir `pwd` | jq")
               (call-interactively 'comint-send-input)
               (goto-char (point-max)))
           (when (y-or-n-p "Should be in a .prompt file. Make one?")
