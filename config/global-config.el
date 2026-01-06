@@ -42,8 +42,11 @@
 ;; Faces
 
 (custom-set-faces
- '(default ((t (:family "Ubuntu Mono" :foundry "nil" :slant normal :weight regular :height 160 :width normal))))
- '(link ((t (:foreground "#7f9f7f" :underline t)))))
+ '(default ((t (:family "Ubuntu Mono" :foundry "nil" :slant normal :weight regular :height 120 :width normal))))
+ '(link ((t (:foreground "#7f9f7f" :underline t))))
+ '(diff-refine-changed ((t (:foreground "#8db88d" :bold t))))
+ '(diff-refine-added ((t (:foreground "#a5d9a5" :bold t))))
+ '(diff-refine-removed ((t (:foreground "#e8613c" :bold t)))))
 
 (custom-set-faces
  `(visual-replace-delete-match
