@@ -141,7 +141,7 @@
                  (next (ring-ref keywords-ring (1+ index))))
             (delete-region (point) (save-excursion (forward-word 1) (point)))
             (insert next))
-        (insert "Done")))))
+        (insert "Done ")))))
 
 (defun diary-dwim-space ()
   (interactive)
@@ -214,5 +214,26 @@
   (save-excursion
     (diary-goto-next-heading-exclusive)
     (diary-break-out-lines)))
+
+(defun diary-stash ()
+  (interactive)
+  (let* ((content (buffer-substring (region-beginning) (region-end)))
+         (id (diary-generate-nanoid))
+         (dir (replace-regexp-in-string "\\.diary" "" (file-name-nondirectory (buffer-file-name))))
+         (fp (concat dir "/" id ".md")))
+    (delete-region (region-beginning) (region-end))
+    (insert (format "[%s](%s)" id fp))
+    (with-current-buffer (find-file fp)
+      (insert content)
+      (save-buffer)
+      (kill-buffer))))
+
+(defun diary-generate-nanoid ()
+  "Generate a Nano ID of the form `diary_NGMyMDVkZjZiYTVlZTVhM' using SHA-1."
+  (let* ((random-string (format "%s%s%S" (emacs-pid) (current-time-string) (random)))
+         (sha1-hash (secure-hash 'sha1 random-string))
+         (base64-encoded (base64-encode-string sha1-hash))
+         (nanoid (string-trim-right (substring base64-encoded 0 21))))
+    (concat "note_" nanoid)))
 
 (provide 'diary-mode)
