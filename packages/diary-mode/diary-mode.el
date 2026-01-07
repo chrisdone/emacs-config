@@ -241,4 +241,6 @@
          (nanoid (string-trim-right (substring base64-encoded 0 21))))
     (concat "note_" nanoid)))
 
+(define-key diary-mode-map (kbd "C-@") 'diary-stash)
+
 (provide 'diary-mode)
