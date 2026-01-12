@@ -222,7 +222,7 @@
                     ""))
          (id (diary-generate-nanoid))
          (dir (replace-regexp-in-string "\\.diary" "" (file-name-nondirectory (buffer-file-name))))
-         (fp (concat dir "/" id ".md")))
+         (fp (concat dir "/" id ".note")))
     (unless (string= "" content)
       (delete-region (region-beginning) (region-end)))
     (insert (format "[%s](%s)" id fp))
