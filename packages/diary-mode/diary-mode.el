@@ -72,6 +72,10 @@
 (defconst diary-heading-regex
   "^[0-9]+ [A-Z][a-z]+ [0-9]+$")
 
+(defcustom diary-screenshots-dir
+  "~/UTM/UTM-Shared/Screenshots"
+  "Directory of where screenshots are stored.")
+
 (defconst diary-keywords
   `((,diary-heading-regex . 'diary-heading-face)
     ("^[A-Z].*$" . 'diary-heading-face)
@@ -242,5 +246,31 @@
     (concat "note_" nanoid)))
 
 (define-key diary-mode-map (kbd "C-@") 'diary-stash)
+
+(defun diary-stash-screenshot ()
+  (interactive)
+  (let ((orig (current-buffer))
+        (file (car (sort (directory-files diary-screenshots-dir
+                                          :absolute
+                                          "\\.png$"
+                                          nil ; sorted
+                                        ; 1 ; return only one result, the first
+                                          )
+                         :lessp 'string<
+                         :reverse t)))
+        (dir (replace-regexp-in-string "\\.diary" "" (file-name-nondirectory (buffer-file-name)))))
+    (when file
+      (let* ((buf (find-file-noselect file))
+             (screenie-name (file-name-nondirectory file))
+             (target-fp (concat dir "/" screenie-name))
+             (dir default-directory))
+        (switch-to-buffer-other-window buf)
+        (if (y-or-n-p "Stash this screenshot?")
+            (progn (copy-file (buffer-file-name) (concat dir "/" target-fp)
+                              :ok-if-already-exists)
+                   (kill-buffer)
+                   (switch-to-buffer-other-window orig)
+                   (insert (format "[%s](%s)" screenie-name target-fp)))
+            (kill-buffer buf))))))
 
 (provide 'diary-mode)
