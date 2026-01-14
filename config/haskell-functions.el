@@ -171,7 +171,13 @@ apply them in the current buffer."
     (haskell-navigate-imports)
     (if (string-match "\n" line)
         (insert line "\n")
-      (insert "import " (replace-regexp-in-string "^import " "" line) "\n"))))
+      (let ((parts (remove-if (lambda (x) (string= x "import"))
+                              (split-string line))))
+        (insert "import "
+                (string-inflection-pascal-case-function (car parts))
+                " "
+                (mapconcat 'identity (cdr parts) " ")
+                "\n")))))
 
 (defun lexx ()
   (interactive)
