@@ -365,7 +365,9 @@ This can be useful when updating or checking out branches outside of Emacs."
 
 (defun unquote-region ()
   (interactive)
-  (replace-string "\\\"" "\"" nil (region-beginning) (region-end)))
+  (let ((string (buffer-string (region-beginning) (region-end))))
+    (delete-region (region-beginning) (region-end))
+    (insert (read string))))
 
 (defun quote-region ()
   (interactive)
