@@ -2,7 +2,8 @@
 (add-hook 'portal-out-mode-hook 'portal-ansi-colors-minor-mode)
 
 (defun my-portal-out-hook ()
-  (auto-revert-tail-mode)
+  ;; (auto-revert-tail-mode)
+  (setq buffer-offer-save nil)
   (goto-char (point-max))
   (push-mark (point-max)))
 
