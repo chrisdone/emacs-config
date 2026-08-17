@@ -5,7 +5,12 @@
 
 ;;
 ;; Synchronous to string:
-;; (llama-tokens-to-string (make-llama-complete-stream :prompt "e=mc2" :n-predict 10))
+;; (llama-insert-tokens
+;;  (make-llama-fill-stream
+;;   :input-prefix "def calculate_area(radius):\n    ; Calculate circle area\n    return "
+;;   :input-suffix "\n\nprint(calculate_area(5))"
+;;   :n-predict 10))
+
 
 ;; Completion example:
 ;;
@@ -170,15 +175,17 @@ prompt, and get the output in *llama-output* buffer."
    :stream stream))
 
 (defun llama-get-token (object)
-  (apply 'concat
-         (mapcar (lambda (choice)
-                   (let ((content (or (plist-get choice :text)
-                                      (let ((delta (plist-get choice :delta)))
-                                        (plist-get delta :content)))))
-                     (if (stringp content)
-                         content
-                       "")))
-                 (plist-get object :choices))))
+  (concat
+   (apply 'concat
+          (mapcar (lambda (choice)
+                    (let ((content (or (plist-get choice :text)
+                                       (let ((delta (plist-get choice :delta)))
+                                         (plist-get delta :content)))))
+                      (if (stringp content)
+                          content
+                        "")))
+                  (plist-get object :choices)))
+   (or (plist-get object :content) "")))
 
 (cl-defun llama-map (&key func stream)
   "Simply apply a FUNC to all objects in the stream."
@@ -254,6 +261,19 @@ prompt, and get the output in *llama-output* buffer."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Source streams
+
+(cl-defun make-llama-fill-stream (&key input-prefix input-suffix n-predict)
+  "Make a SUSPENDED RAW fill stream against the llama server with PROMPT."
+  (make-llama-stream
+   "/infill"
+   (list :input_prefix input-prefix ; ,
+         :input_suffix input-suffix ; ,
+         :n_predict n-predict
+         ; :temperature ; 0.2,
+         ; :top_p ; 0.95,
+         :stop ["\n\n"  "<|endoftext|>"  "<|fim_prefix|>"  "<|fim_suffix|>"  "<|fim_middle|>"]
+         :stream t ; false
+         )))
 
 (cl-defun make-llama-complete-stream (&key prompt n-predict grammar)
   "Make a SUSPENDED RAW complete stream against the llama server with PROMPT."
