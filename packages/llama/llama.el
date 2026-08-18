@@ -9,12 +9,11 @@
 ;;  (make-llama-fill-stream
 ;;   :input-prefix "def calculate_area(radius):\n    ; Calculate circle area\n    return "
 ;;   :input-suffix "\n\nprint(calculate_area(5))"
-;;   :n-predict 10))
-
+;;   :n-predict 512))
 
 ;; Completion example:
 ;;
-;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2" :n-predict 10))
+;; (llama-insert-tokens (make-llama-complete-stream :prompt "e=mc2 is the worst" :n-predict 512))
 
 ;; Chat example:
 ;;
@@ -70,6 +69,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive functions
+
+(defun llama-dwim-fill ()
+  "Fill in the cursor in the middle of the page."
+  (interactive)
+  (let ((prefix (buffer-substring-no-properties (window-start) (point)))
+        (suffix (buffer-substring-no-properties (point) (window-end))))
+    (llama-insert-tokens
+     (make-llama-fill-stream
+      :input-prefix prefix
+      :input-suffix suffix
+      :n-predict 512))))
 
 (defun llama-summarise-buffer ()
   "Split the buffer into paragraphs. Then summarise each one. Then
@@ -164,9 +174,19 @@ prompt, and get the output in *llama-output* buffer."
 
 (defun llama-insert-tokens (stream)
   "Insert all tokens from STREAM into the current buffer."
-  (llama-map
-   :func (lambda (object) (insert (llama-get-token object)))
-   :stream stream))
+  (let ((marker (make-marker)))
+    (set-marker marker (point))
+    (set-marker-insertion-type marker t)
+    (llama-fold-sse-json
+     :fold (lambda (marker object)
+             (when (marker-position marker)
+               (save-excursion
+                 (goto-char (marker-position marker))
+                 (insert (llama-get-token object))))
+             marker)
+     :accum marker
+     :stream stream
+     :end 'identity)))
 
 (defun llama-message-objects (stream)
   "Call MESSAGE on all objects from STREAM into the current buffer."
@@ -266,13 +286,13 @@ prompt, and get the output in *llama-output* buffer."
   "Make a SUSPENDED RAW fill stream against the llama server with PROMPT."
   (make-llama-stream
    "/infill"
-   (list :input_prefix input-prefix ; ,
-         :input_suffix input-suffix ; ,
+   (list :input_prefix input-prefix     ; ,
+         :input_suffix input-suffix     ; ,
          :n_predict n-predict
-         ; :temperature ; 0.2,
-         ; :top_p ; 0.95,
+                                        ; :temperature ; 0.2,
+                                        ; :top_p ; 0.95,
          :stop ["\n\n"  "<|endoftext|>"  "<|fim_prefix|>"  "<|fim_suffix|>"  "<|fim_middle|>"]
-         :stream t ; false
+         :stream t                      ; false
          )))
 
 (cl-defun make-llama-complete-stream (&key prompt n-predict grammar)
@@ -303,7 +323,7 @@ prompt, and get the output in *llama-output* buffer."
              (proc (make-network-process
                     :name "llama-stream"
                     :buffer "*llama-stream*"
-                    :host (shell-command-to-string "/home/chris/Work/chrisdone-artificial/utm/host-ip.hell")
+                    :host  (shell-command-to-string "/home/chris/Work/chrisdone-artificial/utm/host-ip.hell")
                     :service 8080
                     :nowait t)))
         (process-put proc :func func)
@@ -349,9 +369,10 @@ Connection: close\r\n\
       (erase-buffer)
       (insert (mapconcat
                'identity
-               (list "Downloads/llama/bin/llama-server"
+               (list "Downloads/llama/llama-server"
                      "--model"
-                     "UTM-Shared/LLMs/Llama-3.2-3B-Instruct-uncensored.Q4_K_M.gguf"
+                     ;; "UTM-Shared/LLMs/Llama-3.2-3B-Instruct-uncensored.Q4_K_M.gguf"
+                     "UTM-Shared/LLMs/qwen2.5-coder-3b-instruct-q5_k_m.gguf"
                      "--host 0.0.0.0"
                      "--port 8080")
                " "))
