@@ -3206,7 +3206,8 @@ This uses `counsel-ag' with `counsel-ack-base-command' replacing
 
 ;;** `counsel-rg'
 (defcustom counsel-rg-base-command
-  `("rg"
+  `(,(emacs-bin-program "rg")
+    "-g" "*.{hs,tsx,md}" ; only look at these file extensions
     "--max-columns" "240"
     "--with-filename"
     "--no-heading"
