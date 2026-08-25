@@ -33,7 +33,7 @@
 (global-set-key (kbd "M-a") 'backward-up-list)
 (global-set-key (kbd "M-a") 'up-list)
 (global-set-key (kbd "M-g") 'goto-line)
-(global-set-key (kbd "C-\\") 'goto-last-point)
+(global-set-key (kbd "M-\\") 'llama-dwim-fill)
 (global-set-key (kbd "C-,") 'quickjump-forward)
 (global-set-key (kbd "C-m") 'quickjump-backward)
 (global-set-key (kbd "RET") 'newline) ;; Order is important after C-m above.

@@ -291,7 +291,7 @@ prompt, and get the output in *llama-output* buffer."
          :n_predict n-predict
                                         ; :temperature ; 0.2,
                                         ; :top_p ; 0.95,
-         :stop ["\n\n"  "<|endoftext|>"  "<|fim_prefix|>"  "<|fim_suffix|>"  "<|fim_middle|>"]
+         :stop ["\n"  "<|endoftext|>"  "<|fim_prefix|>"  "<|fim_suffix|>"  "<|fim_middle|>"]
          :stream t                      ; false
          )))
 
