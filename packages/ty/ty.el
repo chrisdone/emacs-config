@@ -1,3 +1,6 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ty case experiment
+
 (defmacro ty-case (expr &rest alts)
   "Provide a basic pattern-matching utility based on a familiar sum type encoding.
 Supports OTHERWISE form as in CASE."
@@ -26,6 +29,18 @@ Supports OTHERWISE form as in CASE."
                                  (cdar alt)))
                           ,@(cdr alt)))))
                   alts)))))
+
+(defun term-show (term)
+  (ty-case term
+    ((:var v) (format "v%d" v))
+    ((:con c) (format "%s" c))
+    ((:app f x) (format "(%s %s)" (term-show f) (term-show x)))))
+
+(term-show '(:app (:con "Maybe") (:var 1)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; compile-match experiment
 
 ;; ELISP> (let((e '((:foo 4) . (:bar 4)))) (compile-match (cons (:foo p1) (:bar p2)) e (+ p1 p2) (compile-match (cons (:foo p1) (:baz p2)) e (* p1 p2) 0)))
 ;; 8
@@ -61,10 +76,25 @@ Supports OTHERWISE form as in CASE."
                 k
               (error "Invalid pattern."))))))
 
-(defun term-show (term)
-  (ty-case term
-    ((:var v) (format "v%d" v))
-    ((:con c) (format "%s" c))
-    ((:app f x) (format "(%s %s)" (term-show f) (term-show x)))))
+;; ELISP> (macroexpand-all '(compile-match (cons (:foo p1) (:bar p2)) '((:foo 4) . (:bar 4)) (+ p1 p2) 0))
+;; (let ((e1208 '((:foo 4) :bar 4)))
+;;   (if (consp e1208)
+;;       (let ((e1209 (car e1208)))
+;;         (if (and (consp e1209) (eq (car e1209) :foo))
+;;             (let ((e1210 (cdr e1209)))
+;;               (if (consp e1210)
+;;                   (let ((p1 (car e1210)))
+;;                     (let ((e1211 (cdr e1208)))
+;;                       (if (and (consp e1211) (eq (car e1211) :bar))
+;;                           (let ((e1212 (cdr e1211)))
+;;                             (if (consp e1212)
+;;                                 (let ((p2 (car e1212))) (+ p1 p2))
+;;                               0))
+;;                         0)))
+;;                 0))
+;;           0))
+;;     0))
 
-(term-show '(:app (:con "Maybe") (:var 1)))
+;; note: successive applies lead to combinatorial explosion
+;; (let((e '((:foo 4) . (:baz 4)))) (compile-match (cons (:foo p1) (:bar p2)) e (+ p1 p2) (compile-match (cons (:foo p1) (:baz p2)) e (* p1 p2) 0)))
+;; is very large output
