@@ -27,6 +27,40 @@ Supports OTHERWISE form as in CASE."
                           ,@(cdr alt)))))
                   alts)))))
 
+;; ELISP> (let((e '((:foo 4) . (:bar 4)))) (compile-match (cons (:foo p1) (:bar p2)) e (+ p1 p2) (compile-match (cons (:foo p1) (:baz p2)) e (* p1 p2) 0)))
+;; 8
+;;  (#o10, #x8, ?\C-h)
+;; ELISP> (let((e '((:foo 4) . (:baz 4)))) (compile-match (cons (:foo p1) (:bar p2)) e (+ p1 p2) (compile-match (cons (:foo p1) (:baz p2)) e (* p1 p2) 0)))
+;; 16
+
+(defmacro compile-match (p e k f)
+  (if (and (consp p) (eq (car p) 'cons))
+      (let ((e. (gensym "e")))
+        `(let ((,e. ,e))
+           (if (consp ,e.)
+               (compile-match
+                ,(cadr p) (car ,e.)
+                (compile-match ,(caddr p) (cdr ,e.)
+                               ,k ,f)
+                ,f)
+             ,f)))
+    (if (and (consp p) (keywordp (car p)))
+        (let ((e. (gensym "e")))
+          `(let ((,e. ,e))
+             (if (and (consp ,e.) (eq (car ,e.) ,(car p)))
+                 (compile-match ,(cdr p) (cdr ,e.) ,k ,f)
+               ,f)))
+        (if (consp p)
+            (let ((e. (gensym "e")))
+              `(let ((,e. ,e))
+                 (if (consp ,e.)
+                     (let ((,(car p) (car ,e.)))
+                       (compile-match ,(cdr p) (cdr ,e.) ,k ,f))
+                     ,f)))
+            (if (null p)
+                k
+              (error "Invalid pattern."))))))
+
 (defun term-show (term)
   (ty-case term
     ((:var v) (format "v%d" v))
