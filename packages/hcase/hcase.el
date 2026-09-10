@@ -3,8 +3,8 @@
 
 (defmacro hcase (e &rest ps)
   "Supports cases of the form (HCASE E ((P RHS) (P2 RHS2)))
-  where P is of the form X for anything, (A B C) for lists, (CONS P Q),
-  or (:foo A B C) for a list prefixed by some keyword."
+  where P is of the form (CONS X Y) for a pair, or (:FOO A B C) for a
+  list prefixed by some keyword."
   (declare (indent 1))
   (let* ((label. (gensym "label"))
          (e. (gensym "expr")))
@@ -59,14 +59,3 @@
                 (otherwise
                  'boo))
               'boo)))
-
-(ert-deftest otherwise-list ()
-  "Check that lists work."
-  (should (eq (hcase (list 1 2 3)
-                ((a b c)
-                 'ok))
-              'ok)))
-
-(ert-deftest wildcard ()
-  "Check that lists work."
-  (should (equal (hcase (list 1 2 3) ((x) x)) 1)))
