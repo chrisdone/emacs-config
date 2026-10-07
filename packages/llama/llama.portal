@@ -22,12 +22,6 @@ portal_MDA2NGVkOTFlMjM3MDgyM
 ################################################################################
 # Storing embeddings into quadrant
 
-# Get the embedding for a fragment
-portal_YTQ2NzcwYjgyOGE2NDVhN
-# (0) curl -s http://localhost:9990/v1/embeddings -H "Content-Type: application/json" -X POST --data-binary "@epayload.json"
-# Started: 2026-10-07 14:56:17, exited: 2026-10-07 14:56:17 => 77.999 ms
-# {"model":"UTM-Shared/LLMs/bge-m3-Q8_0.gguf","object":"list","usage":{"prompt_t
-
 # Make a collection
 portal_ZmUyMzI1NzRkNGIzYjgzM
 # (0) curl -X PUT http://localhost:6333/collections/my_documents  -H 'Content-Type: application/json'  -d '{"vectors": {"size": 1024, "distance": "Cosine"}}'
@@ -36,6 +30,12 @@ portal_ZmUyMzI1NzRkNGIzYjgzM
 #   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Curren
 #                                  Dload  Upload   Total   Spent    Left  Speed 
 #   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+# Get the embedding for a fragment
+portal_YTQ2NzcwYjgyOGE2NDVhN
+# (0) curl -s http://localhost:9990/v1/embeddings -H "Content-Type: application/json" -X POST --data-binary "@epayload.json"
+# Started: 2026-10-07 14:56:17, exited: 2026-10-07 14:56:17 => 77.999 ms
+# {"model":"UTM-Shared/LLMs/bge-m3-Q8_0.gguf","object":"list","usage":{"prompt_t
 
 # Store a document
 portal_NzNkZTM0OWNmNzU4MjFmY
@@ -66,3 +66,11 @@ portal_ZjE3YTZhNTQ1ZTc3NzlhM
 #   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Curren
 #                                  Dload  Upload   Total   Spent    Left  Speed 
 #   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+################################################################################
+## Hell script
+
+portal_NmFkMjBiNmU5Y2FhYmFlO
+# (0) echo 'Wibble' | hell llama.hell get-embeddings
+# Started: 2026-10-07 15:32:09, exited: 2026-10-07 15:32:09 => 92.009 ms
+# [-3.571087867021561e-2,1.0786690749228e-2,-2.743443101644516e-2,1.692454889416
