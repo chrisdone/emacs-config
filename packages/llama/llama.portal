@@ -1,0 +1,68 @@
+################################################################################
+Running services
+
+portal_Y2RhYjIxNzEwMWU4OGQ4O
+# (◑) ssh -L 9990:localhost:9990 host Downloads/llama/llama-server -m UTM-Shared/LLMs/bge-m3-Q8_0.gguf --embeddings -ngl 99 -c 8192 -b 8192 -ub 8192 --port 9990
+# Started: 2026-10-07 14:40:22
+# 6.23.258.920 I slot launch_slot_: id  2 | task 2 | processing task, is_child =
+# 6.23.308.370 I slot      release: id  2 | task 2 | stop processing: n_tokens =
+# 15.54.380.580 I slot get_availabl: id  1 | task -1 | selected slot by LRU, t_l
+# 15.54.380.591 I slot launch_slot_: id  1 | task 4 | processing task, is_child 
+# 15.54.448.912 I slot      release: id  1 | task 4 | stop processing: n_tokens 
+
+portal_MDA2NGVkOTFlMjM3MDgyM
+# (◒) qdrant
+# Started: 2026-10-07 14:41:00
+# 2026-10-07T13:43:26.218889Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-07T13:44:51.726486Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-07T13:45:15.985976Z  INFO actix_web::middleware::logger: 127.0.0.1 "GE
+# 2026-10-07T13:48:00.381664Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-07T13:48:08.800063Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
+
+################################################################################
+# Storing embeddings into quadrant
+
+# Get the embedding for a fragment
+portal_YTQ2NzcwYjgyOGE2NDVhN
+# (0) curl -s http://localhost:9990/v1/embeddings -H "Content-Type: application/json" -X POST --data-binary "@epayload.json"
+# Started: 2026-10-07 14:56:17, exited: 2026-10-07 14:56:17 => 77.999 ms
+# {"model":"UTM-Shared/LLMs/bge-m3-Q8_0.gguf","object":"list","usage":{"prompt_t
+
+# Make a collection
+portal_ZmUyMzI1NzRkNGIzYjgzM
+# (0) curl -X PUT http://localhost:6333/collections/my_documents  -H 'Content-Type: application/json'  -d '{"vectors": {"size": 1024, "distance": "Cosine"}}'
+# Started: 2026-10-07 14:41:27, exited: 2026-10-07 14:41:28 => 370.999 ms
+# {"result":true,"status":"ok","time":0.353531591}                              
+#   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Curren
+#                                  Dload  Upload   Total   Spent    Left  Speed 
+#   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+# Store a document
+portal_NzNkZTM0OWNmNzU4MjFmY
+# (0) curl -X PUT http://localhost:6333/collections/my_documents/points?wait=true -H "content-type: application/json" -d "@frag.json"
+# Started: 2026-10-07 14:44:51, exited: 2026-10-07 14:44:51 => 29.000 ms
+# {"result":{"operation_id":1,"status":"completed"},"status":"ok","time":0.01841
+#   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Curren
+#                                  Dload  Upload   Total   Spent    Left  Speed 
+#   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+################################################################################
+# Querying quadrant
+# 1) Get the embedding for the English-language query
+# 2) Search qdrant with the vector
+
+portal_Mjc1MmRkYTc1OTBiNWE0N
+# (0) curl -X POST http://localhost:9990/embedding -H 'Content-Type: application/json' -d '{"content": "What version of macOS do I need?"}'
+# Started: 2026-10-07 14:46:46, exited: 2026-10-07 14:46:46 => 65.000 ms
+# [{"index":0,"embedding":[[0.012827351689338684,-0.014420255087316036,-0.065873
+#   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Curren
+#                                  Dload  Upload   Total   Spent    Left  Speed 
+#   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+portal_ZjE3YTZhNTQ1ZTc3NzlhM
+# (0) curl -X POST http://localhost:6333/collections/my_documents/points/search -H "content-type: application/json" -d "@qquery.json"
+# Started: 2026-10-07 14:48:08, exited: 2026-10-07 14:48:08 => 38.000 ms
+# {"result":[{"id":1,"version":1,"score":0.58868986,"payload":{"file_name":"read
+#   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Curren
+#                                  Dload  Upload   Total   Spent    Left  Speed 
+#   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
