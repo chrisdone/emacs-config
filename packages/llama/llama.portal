@@ -70,7 +70,8 @@ portal_ZjE3YTZhNTQ1ZTc3NzlhM
 ################################################################################
 ## Hell script
 
-portal_NmFkMjBiNmU5Y2FhYmFlO
+portal_ZmIzMzFjOThjMzFjZDg5Y
 # (0) echo 'Wibble' | hell llama.hell get-embeddings
-# Started: 2026-10-07 15:32:09, exited: 2026-10-07 15:32:09 => 92.009 ms
+# Started: 2026-10-07 16:38:50, exited: 2026-10-07 16:38:50 => 71.990 ms
+# /home/chris/Work/chrisdone-artificial/emacs-config/packages/llama/
 # [-3.571087867021561e-2,1.0786690749228e-2,-2.743443101644516e-2,1.692454889416

@@ -36,27 +36,15 @@ getEmbeddings = \input -> do
         "-H", "Content-Type: application/json",
         "-X", "POST",
         "--data-binary", "@-"]
-  vector <- case Json.decode output of
-    Maybe.Just value ->
-      case value of
-        Json.Object map ->
-          case Map.lookup "data" map of
-            Maybe.Just embeddings' ->
-              case embeddings' of
-                Json.Array embeddings -> 
-                  case Maybe.listToMaybe $ Vector.toList embeddings of
-                    Maybe.Just embedding ->
-                      case embedding of
-                        Json.Object embed ->
-                          case Map.lookup "embedding" embed of
-                            Maybe.Just vector' -> case vector' of
-                              Json.Array vector -> IO.pure vector
-                              _ -> Error.error "Embeddings should be an array."
-                            _ -> Error.error "Missing embedding in object."
-                        _ -> Error.error "Embedding should be an object."
-                    _ -> Error.error "No embeddings!"
-                _ -> Error.error "Embeddings should be an array."
-            _ -> Error.error "No data field from /v1/embeddings."
-        _ -> Error.error "Expected an object from /v1/embeddings."
-    Maybe.Nothing -> Error.error "Bad JSON decode from /v1/embeddings."
+  json <- Main.jq (Text.decodeUtf8 output) [".data[0].embedding", "-j"]
+  vector <- 
+    case json of
+      Json.Array vector -> IO.pure vector
+      _ -> Error.error "Embeddings should be an array."
   IO.pure vector
+
+jq :: Text -> [Text] -> IO Value = \json args -> do
+  out <- ByteString.readProcessStdout_ $ Text.setStdin json $ Process.proc "jq" args
+  case Json.decode out of
+    Maybe.Just value -> IO.pure value
+    _ -> Error.error "Bad JSON parse."
