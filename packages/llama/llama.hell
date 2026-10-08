@@ -1,12 +1,38 @@
+--------------------------------------------------------------------------------
+-- Types
+
 data Command
   = GetEmbeddings
-  | OK
+  | StoreFragment Main.Fragment
+
+-- <https://qdrant.tech/documentation/manage-data/points/>
+data Point = Point {
+ id :: Text,
+ vector :: Vector Value,
+ payload :: Text
+ }
+
+data Fragment = Fragment {
+ sample :: Text,
+ metadata :: Text
+ }
+
+--------------------------------------------------------------------------------
+-- Main entry point
 
 parseGetEmbeddings = Applicative.pure Main.GetEmbeddings
+parseStoreFragment =
+  Main.StoreFragment <$>
+    (
+      (\metadata sample -> Main.Fragment { metadata, sample })
+      <$> Options.strOption (Option.long "metadata" <> Option.help "Metadata")
+      <*> Options.strOption (Option.long "sample" <> Option.help "Sample content")
+    )
 
 cmdParser =
   Options.hsubparser
-    ( Options.command "get-embeddings"    (Options.info Main.parseGetEmbeddings (Options.progDesc "Get embeddings"))
+    ( Options.command "get-embeddings" (Options.info Main.parseGetEmbeddings (Options.progDesc "Get embeddings")) <>
+    Options.command "store-fragment" (Options.info Main.parseStoreFragment (Options.progDesc "Store fragment"))
     )
 
 main = do
@@ -14,18 +40,30 @@ main = do
   cmd <- Options.execParser opts
   case cmd of
     GetEmbeddings -> Main.getEmbeddingsCmd
-    OK -> Text.putStrLn "OK"
+    StoreFragment fragment -> Main.storeFragment fragment
 
 --------------------------------------------------------------------------------
 -- Commands
 
-getEmbeddingsCmd = do
+getEmbeddingsCmd :: IO () = do
   text <- Text.getContents
   vector <- Main.getEmbeddings text
   ByteString.hPutStr IO.stdout $ Json.encode $ Json.Array vector
 
 --------------------------------------------------------------------------------
--- Utilities
+-- Model
+
+storeFragment :: Main.Fragment -> IO () = \fragment -> do
+  id <- Main.uuidv4
+  vector <- Main.getEmbeddings $ Record.get @"sample" fragment
+  Main.putPoints Main.Point {
+      id,
+      payload = Record.get @"metadata" fragment,
+      vector
+    }
+
+--------------------------------------------------------------------------------
+-- API clients
 
 getEmbeddings = \input -> do
   let payload = Json.Object $ Map.fromList [("input", Json.String input)]
@@ -35,6 +73,7 @@ getEmbeddings = \input -> do
         ["-s", "http://localhost:9990/v1/embeddings",
         "-H", "Content-Type: application/json",
         "-X", "POST",
+        "-f",
         "--data-binary", "@-"]
   json <- Main.jq (Text.decodeUtf8 output) [".data[0].embedding", "-j"]
   vector <- 
@@ -43,8 +82,36 @@ getEmbeddings = \input -> do
       _ -> Error.error "Embeddings should be an array."
   IO.pure vector
 
+-- Note: assumes a specific collection called my_documents.
+putPoints = \(point :: Main.Point) -> do
+  let payload = Json.Object $ Map.fromList [("points", Json.Array $ Vector.fromList [
+          Json.Object $ Map.fromList [
+            ("id", Json.String $ Record.get @"id" point),
+            ("vector", Json.Array $ Record.get @"vector" point),
+            ("payload", Maybe.maybe (Error.error "putPoints: Bad JSON payload!") Function.id
+                          $ Json.decode $ Text.encodeUtf8 $ Record.get @"payload" point)
+           ]
+        ])]
+  -- ByteString.hPutStr IO.stdout $ Json.encode payload
+  Process.runProcess_ $
+    Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
+    Process.proc "curl"
+        ["-s", "http://localhost:6333/collections/my_documents/points?wait=true",
+        "-H", "Content-Type: application/json",
+        "-X", "PUT",
+        "--data-binary", "@-"]
+
+--------------------------------------------------------------------------------
+-- Utilities
+
 jq :: Text -> [Text] -> IO Value = \json args -> do
   out <- ByteString.readProcessStdout_ $ Text.setStdin json $ Process.proc "jq" args
   case Json.decode out of
     Maybe.Just value -> IO.pure value
     _ -> Error.error "Bad JSON parse."
+
+sha256 = \content ->
+  Functor.fmap (Text.take 64) $ Text.readProcessStdout_ $ Text.setStdin content $
+    Process.proc "sha256sum" ["-"]
+
+uuidv4 = Functor.fmap Text.strip $ Text.readFile "/proc/sys/kernel/random/uuid"
