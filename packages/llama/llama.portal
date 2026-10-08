@@ -2,22 +2,22 @@
 Running services
 
 portal_YTRjMDI5NDM5M2QyYmRmY
-# (◓) ssh -L 9990:localhost:9990 host Downloads/llama/llama-server -m UTM-Shared/LLMs/bge-m3-Q8_0.gguf --embeddings -ngl 99 -c 8192 -b 8192 -ub 8192 --port 9990
+# (◑) ssh -L 9990:localhost:9990 host Downloads/llama/llama-server -m UTM-Shared/LLMs/bge-m3-Q8_0.gguf --embeddings -ngl 99 -c 8192 -b 8192 -ub 8192 --port 9990
 # Started: 2026-10-08 09:40:25
-# 2.07.401.103 I slot launch_slot_: id  2 | task 2 | processing task, is_child =
-# 2.07.434.511 I slot      release: id  2 | task 2 | stop processing: n_tokens =
-# 4.50.983.229 I slot get_availabl: id  2 | task -1 | selected slot by LCP simil
-# 4.50.983.237 I slot launch_slot_: id  2 | task 4 | processing task, is_child =
-# 4.51.012.708 I slot      release: id  2 | task 4 | stop processing: n_tokens =
+# 11.04.107.868 I slot launch_slot_: id  2 | task 14 | processing task, is_child
+# 11.04.140.413 I slot      release: id  2 | task 14 | stop processing: n_tokens
+# 12.16.501.485 I slot get_availabl: id  2 | task -1 | selected slot by LCP simi
+# 12.16.501.499 I slot launch_slot_: id  2 | task 16 | processing task, is_child
+# 12.16.531.510 I slot      release: id  2 | task 16 | stop processing: n_tokens
 
 portal_MDA2NGVkOTFlMjM3MDgyM
-# (◑) qdrant
+# (◒) qdrant
 # Started: 2026-10-07 14:41:00
-# 2026-10-07T13:45:15.985976Z  INFO actix_web::middleware::logger: 127.0.0.1 "GE
-# 2026-10-07T13:48:00.381664Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
-# 2026-10-07T13:48:08.800063Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
-# 2026-10-08T08:42:32.756573Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
-# 2026-10-08T08:45:16.332628Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
+# 2026-10-08T08:48:39.431375Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-08T08:49:19.779218Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-08T08:51:01.503482Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-08T08:51:29.454916Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-08T08:52:41.859216Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
 
 ################################################################################
 # Storing embeddings into quadrant
@@ -70,16 +70,34 @@ portal_ZjE3YTZhNTQ1ZTc3NzlhM
 ################################################################################
 ## Hell script
 
-portal_MDdiNzVhZTFjZTcxNGVhO
-# (0) hell --check llama.hell 
-# Started: 2026-10-08 09:34:30, exited: 2026-10-08 09:34:30 => 50.000 ms
-
-portal_N2NmMWUzZDM5ODZmZDY4M
+portal_ZjE5NzcxMjhiY2Q2ZThhM
 # (0) echo 'Wibble' | hell llama.hell get-embeddings
-# Started: 2026-10-08 09:40:37, exited: 2026-10-08 09:40:37 => 96.001 ms
-# [-3.571087867021561e-2,1.0786690749228e-2,-2.743443101644516e-2,1.692454889416
+# Started: 2026-10-08 16:45:37, exited: 2026-10-08 16:45:37 => 100.000 ms
+# [{"id":1,"payload":{"content":"# Brossa\n\n[![Build status](https://badge.buil
 
 portal_OGZlNDE3ZWUwNDZiYTc4N
 # (0) hell llama.hell store-fragment --metadata '{"place":"some place"}' --sample "The DYKN is a subset of APFL."
 # Started: 2026-10-08 09:52:41, exited: 2026-10-08 09:52:41 => 111.000 ms
 # {"result":{"operation_id":2,"status":"completed"},"status":"ok","time":0.01609
+
+portal_ZmVlZTI0ZWQ2M2JhYmFjN
+# (0) hell llama.hell search-fragments --limit 5 --query 'Give me APFL subsets.'
+# Started: 2026-10-08 16:55:02, exited: 2026-10-08 16:55:02 => 177.000 ms
+# [{"id":"08128e9c-ff1a-44ed-a888-437552f456f0","payload":{"place":"some place"}
+
+portal_YzFhOGUzOWM3ZDYzMTc2N
+# (0) cd ../../; ./claude-check.sh
+# Started: 2026-10-08 16:11:22, exited: 2026-10-08 16:11:22 => 54.999 ms
+
+portal_OWUzZTlmZjZjY2MyMjAxZ
+# (0) hell --check llama.hell 
+# Started: 2026-10-08 16:53:29, exited: 2026-10-08 16:53:29 => 106.000 ms
+
+portal_ODc0ZjNlYzc1MjI5YTQwN
+# (0) cd /home/chris/Work/chrisdone-artificial/emacs-config/; cat .prompt && cat .prompt | nix run -- github:sadjow/claude-code-nix -p --output-format stream-json --verbose --permission-mode bypassPermissions --allowed-tools 'Read,Bash(grep:*),Bash(cat:*),Bash(ls:*),Bash(./claude-check.sh)' --add-dir `pwd` | jq
+# Started: 2026-10-08 16:50:17, exited: 2026-10-08 16:50:43 => 25.523 s
+#   "time_to_request_ms": 191,                                                  
+#   "first_content_frame_ms": 2010,                                             
+#   "queued_turn_count": 0,                                                     
+#   "result_index": 0                                                           
+# }                                                                             
