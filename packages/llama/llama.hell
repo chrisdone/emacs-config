@@ -118,6 +118,26 @@ putPoints = \(point :: Main.Point) -> do
         "-X", "PUT",
         "--data-binary", "@-"]
 
+-- Note: assumes a specific collection called my_documents.
+searchPoints :: Vector Value -> Double -> IO (Vector Value) = \vector limit -> do
+  let payload = Json.Object $ Map.fromList [
+        ("vector", Json.Array vector),
+        ("limit", Json.Number limit),
+        ("with_payload", Json.Bool Bool.True)
+       ]
+  output <- ByteString.readProcessStdout_ $
+    Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
+    Process.proc "curl"
+        ["-s", "http://localhost:6333/collections/my_documents/points/search",
+        "-H", "Content-Type: application/json",
+        "-X", "POST",
+        "-f",
+        "--data-binary", "@-"]
+  json <- Main.jq (Text.decodeUtf8 output) [".result", "-j"]
+  case json of
+    Json.Array results -> IO.pure results
+    _ -> Error.error "Search results should be an array."
+
 --------------------------------------------------------------------------------
 -- Utilities
 
