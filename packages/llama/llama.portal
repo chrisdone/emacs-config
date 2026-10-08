@@ -70,19 +70,19 @@ portal_ZjE3YTZhNTQ1ZTc3NzlhM
 ################################################################################
 ## Hell script
 
-portal_ZjE5NzcxMjhiY2Q2ZThhM
+portal_YTI5ZjZmYzlmZjQ1ZmFlM
 # (0) echo 'Wibble' | hell llama.hell get-embeddings
-# Started: 2026-10-08 16:45:37, exited: 2026-10-08 16:45:37 => 100.000 ms
-# [{"id":1,"payload":{"content":"# Brossa\n\n[![Build status](https://badge.buil
+# Started: 2026-10-08 16:58:31, exited: 2026-10-08 16:58:31 => 137.000 ms
+# [-3.571087867021561e-2,1.0786690749228e-2,-2.743443101644516e-2,1.692454889416
 
-portal_OGZlNDE3ZWUwNDZiYTc4N
-# (0) hell llama.hell store-fragment --metadata '{"place":"some place"}' --sample "The DYKN is a subset of APFL."
-# Started: 2026-10-08 09:52:41, exited: 2026-10-08 09:52:41 => 111.000 ms
-# {"result":{"operation_id":2,"status":"completed"},"status":"ok","time":0.01609
+portal_NTA0ZmI1YjM2NDUwY2RmZ
+# (0) hell llama.hell store-fragment --metadata '{"place":"some place"}' --sample "The DYKN is a subset of APFL." --collection my_documents
+# Started: 2026-10-08 16:58:23, exited: 2026-10-08 16:58:23 => 193.000 ms
+# {"result":{"operation_id":3,"status":"completed"},"status":"ok","time":0.01800
 
-portal_ZmVlZTI0ZWQ2M2JhYmFjN
-# (0) hell llama.hell search-fragments --limit 5 --query 'Give me APFL subsets.'
-# Started: 2026-10-08 16:55:02, exited: 2026-10-08 16:55:02 => 177.000 ms
+portal_ODhkZWJlNTU2YjVlNjIzO
+# (0) hell llama.hell search-fragments --collection my_documents --limit 5 --query 'Give me APFL subsets.'
+# Started: 2026-10-08 16:58:12, exited: 2026-10-08 16:58:13 => 155.000 ms
 # [{"id":"08128e9c-ff1a-44ed-a888-437552f456f0","payload":{"place":"some place"}
 
 portal_YzFhOGUzOWM3ZDYzMTc2N
@@ -93,11 +93,11 @@ portal_OWUzZTlmZjZjY2MyMjAxZ
 # (0) hell --check llama.hell 
 # Started: 2026-10-08 16:53:29, exited: 2026-10-08 16:53:29 => 106.000 ms
 
-portal_ODc0ZjNlYzc1MjI5YTQwN
+portal_NDBhNWQwOWNkNDE3NDk5M
 # (0) cd /home/chris/Work/chrisdone-artificial/emacs-config/; cat .prompt && cat .prompt | nix run -- github:sadjow/claude-code-nix -p --output-format stream-json --verbose --permission-mode bypassPermissions --allowed-tools 'Read,Bash(grep:*),Bash(cat:*),Bash(ls:*),Bash(./claude-check.sh)' --add-dir `pwd` | jq
-# Started: 2026-10-08 16:50:17, exited: 2026-10-08 16:50:43 => 25.523 s
-#   "time_to_request_ms": 191,                                                  
-#   "first_content_frame_ms": 2010,                                             
+# Started: 2026-10-08 16:57:26, exited: 2026-10-08 16:57:48 => 22.439 s
+#   "time_to_request_ms": 201,                                                  
+#   "first_content_frame_ms": 2137,                                             
 #   "queued_turn_count": 0,                                                     
 #   "result_index": 0                                                           
 # }                                                                             

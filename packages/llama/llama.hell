@@ -14,11 +14,13 @@ data Point = Point {
  }
 
 data Search = Search {
+ collection :: Text,
  query :: Text,
  limit :: Int
  }
 
 data Fragment = Fragment {
+ collection :: Text,
  sample :: Text,
  metadata :: Text
  }
@@ -27,19 +29,24 @@ data Fragment = Fragment {
 -- Main entry point
 
 parseGetEmbeddings = Applicative.pure Main.GetEmbeddings
+
+parseCollection = Options.strOption (Option.long "collection" <> Option.help "Qdrant collection name")
+
 parseStoreFragment =
   Main.StoreFragment <$>
     (
-      (\metadata sample -> Main.Fragment { metadata, sample })
-      <$> Options.strOption (Option.long "metadata" <> Option.help "Metadata")
+      (\collection metadata sample -> Main.Fragment { collection, metadata, sample })
+      <$> Main.parseCollection
+      <*> Options.strOption (Option.long "metadata" <> Option.help "Metadata")
       <*> Options.strOption (Option.long "sample" <> Option.help "Sample content")
     )
 
 parseSearchFragments =
   Main.SearchFragments <$>
     (
-      (\query limit -> Main.Search { query, limit })
-      <$> Options.strOption (Option.long "query" <> Option.help "Search query")
+      (\collection query limit -> Main.Search { collection, query, limit })
+      <$> Main.parseCollection
+      <*> Options.strOption (Option.long "query" <> Option.help "Search query")
       <*> Functor.fmap
             (\(s :: Text) -> Maybe.maybe (Error.error "--limit: expected an integer") Function.id (Int.readMaybe s))
             (Options.strOption (Option.long "limit" <> Option.help "Max number of results"))
@@ -64,7 +71,7 @@ main = do
 -- Commands
 
 searchFragmentsCmd = \search -> do
-  results <- Main.searchFragments (Record.get @"query" search) (Record.get @"limit" search)
+  results <- Main.searchFragments (Record.get @"collection" search) (Record.get @"query" search) (Record.get @"limit" search)
   ByteString.hPutStr IO.stdout $ Json.encode $ Json.Array results
 
 getEmbeddingsCmd :: IO () = do
@@ -78,15 +85,15 @@ getEmbeddingsCmd :: IO () = do
 storeFragment :: Main.Fragment -> IO () = \fragment -> do
   id <- Main.uuidv4
   vector <- Main.getEmbeddings $ Record.get @"sample" fragment
-  Main.putPoints Main.Point {
+  Main.putPoints (Record.get @"collection" fragment) Main.Point {
       id,
       payload = Record.get @"metadata" fragment,
       vector
     }
 
-searchFragments :: Text -> Int -> IO (Vector Value) = \query limit -> do
+searchFragments :: Text -> Text -> Int -> IO (Vector Value) = \collection query limit -> do
   vector <- Main.getEmbedding query
-  Main.searchPoints vector (Double.fromInt limit)
+  Main.searchPoints collection vector (Double.fromInt limit)
 
 --------------------------------------------------------------------------------
 -- API clients
@@ -125,8 +132,7 @@ getEmbedding :: Text -> IO (Vector Value) = \content -> do
     Json.Array vector -> IO.pure vector
     _ -> Error.error "Embedding should be an array."
 
--- Note: assumes a specific collection called my_documents.
-putPoints = \(point :: Main.Point) -> do
+putPoints = \(collection :: Text) (point :: Main.Point) -> do
   let payload = Json.Object $ Map.fromList [("points", Json.Array $ Vector.fromList [
           Json.Object $ Map.fromList [
             ("id", Json.String $ Record.get @"id" point),
@@ -139,13 +145,12 @@ putPoints = \(point :: Main.Point) -> do
   Process.runProcess_ $
     Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
     Process.proc "curl"
-        ["-s", "http://localhost:6333/collections/my_documents/points?wait=true",
+        ["-s", "http://localhost:6333/collections/" <> collection <> "/points?wait=true",
         "-H", "Content-Type: application/json",
         "-X", "PUT",
         "--data-binary", "@-"]
 
--- Note: assumes a specific collection called my_documents.
-searchPoints :: Vector Value -> Double -> IO (Vector Value) = \vector limit -> do
+searchPoints :: Text -> Vector Value -> Double -> IO (Vector Value) = \collection vector limit -> do
   let payload = Json.Object $ Map.fromList [
         ("vector", Json.Array vector),
         ("limit", Json.Number limit),
@@ -154,7 +159,7 @@ searchPoints :: Vector Value -> Double -> IO (Vector Value) = \vector limit -> d
   output <- ByteString.readProcessStdout_ $
     Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
     Process.proc "curl"
-        ["-s", "http://localhost:6333/collections/my_documents/points/search",
+        ["-s", "http://localhost:6333/collections/" <> collection <> "/points/search",
         "-H", "Content-Type: application/json",
         "-X", "POST",
         "-f",
