@@ -62,6 +62,10 @@ storeFragment :: Main.Fragment -> IO () = \fragment -> do
       vector
     }
 
+searchFragments :: Text -> Int -> IO (Vector Value) = \query limit -> do
+  vector <- Main.getEmbedding query
+  Main.searchPoints vector (Double.fromInt limit)
+
 --------------------------------------------------------------------------------
 -- API clients
 
