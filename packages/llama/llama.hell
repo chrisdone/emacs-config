@@ -82,6 +82,23 @@ getEmbeddings = \input -> do
       _ -> Error.error "Embeddings should be an array."
   IO.pure vector
 
+-- Uses llama-server's non-OpenAI /embedding endpoint, which returns
+-- [{"index":0,"embedding":[[...]]}].
+getEmbedding :: Text -> IO (Vector Value) = \content -> do
+  let payload = Json.Object $ Map.fromList [("content", Json.String content)]
+  output <- ByteString.readProcessStdout_ $
+    Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
+    Process.proc "curl"
+        ["-s", "http://localhost:9990/embedding",
+        "-H", "Content-Type: application/json",
+        "-X", "POST",
+        "-f",
+        "--data-binary", "@-"]
+  json <- Main.jq (Text.decodeUtf8 output) [".[0].embedding[0]", "-j"]
+  case json of
+    Json.Array vector -> IO.pure vector
+    _ -> Error.error "Embedding should be an array."
+
 -- Note: assumes a specific collection called my_documents.
 putPoints = \(point :: Main.Point) -> do
   let payload = Json.Object $ Map.fromList [("points", Json.Array $ Vector.fromList [
