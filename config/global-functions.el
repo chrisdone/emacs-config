@@ -404,6 +404,14 @@ configuration repo."
   (interactive)
   (let ((root (magit-get-top-dir)))
     (if root
+        (portal-shell-command (format "cd %s; cat .prompt && cat .prompt | nix run -- github:sadjow/claude-code-nix -p --output-format stream-json --verbose --permission-mode bypassPermissions --allowed-tools 'Read,Bash(grep:*),Bash(cat:*),Bash(ls:*),Bash(./claude-check.sh)' --add-dir `pwd` | jq" root))
+      (error "Claude: Must be in a git repo or else I don't know what to do."))))
+
+(defun -claude ()
+  "Starts or restarts claude on the current project."
+  (interactive)
+  (let ((root (magit-get-top-dir)))
+    (if root
         (if (and (buffer-file-name)
                  (string= (file-name-nondirectory (buffer-file-name))
                           ".prompt"))
