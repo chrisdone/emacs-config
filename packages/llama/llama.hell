@@ -4,12 +4,18 @@
 data Command
   = GetEmbeddings
   | StoreFragment Main.Fragment
+  | SearchFragments Main.Search
 
 -- <https://qdrant.tech/documentation/manage-data/points/>
 data Point = Point {
  id :: Text,
  vector :: Vector Value,
  payload :: Text
+ }
+
+data Search = Search {
+ query :: Text,
+ limit :: Int
  }
 
 data Fragment = Fragment {
@@ -29,10 +35,21 @@ parseStoreFragment =
       <*> Options.strOption (Option.long "sample" <> Option.help "Sample content")
     )
 
+parseSearchFragments =
+  Main.SearchFragments <$>
+    (
+      (\query limit -> Main.Search { query, limit })
+      <$> Options.strOption (Option.long "query" <> Option.help "Search query")
+      <*> Functor.fmap
+            (\(s :: Text) -> Maybe.maybe (Error.error "--limit: expected an integer") Function.id (Int.readMaybe s))
+            (Options.strOption (Option.long "limit" <> Option.help "Max number of results"))
+    )
+
 cmdParser =
   Options.hsubparser
     ( Options.command "get-embeddings" (Options.info Main.parseGetEmbeddings (Options.progDesc "Get embeddings")) <>
-    Options.command "store-fragment" (Options.info Main.parseStoreFragment (Options.progDesc "Store fragment"))
+    Options.command "store-fragment" (Options.info Main.parseStoreFragment (Options.progDesc "Store fragment")) <>
+    Options.command "search-fragments" (Options.info Main.parseSearchFragments (Options.progDesc "Search fragments"))
     )
 
 main = do
@@ -41,9 +58,14 @@ main = do
   case cmd of
     GetEmbeddings -> Main.getEmbeddingsCmd
     StoreFragment fragment -> Main.storeFragment fragment
+    SearchFragments search -> Main.searchFragmentsCmd search
 
 --------------------------------------------------------------------------------
 -- Commands
+
+searchFragmentsCmd = \search -> do
+  results <- Main.searchFragments (Record.get @"query" search) (Record.get @"limit" search)
+  ByteString.hPutStr IO.stdout $ Json.encode $ Json.Array results
 
 getEmbeddingsCmd :: IO () = do
   text <- Text.getContents
