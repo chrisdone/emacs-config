@@ -103,7 +103,7 @@ getEmbeddings = \input -> do
   output <- ByteString.readProcessStdout_ $
     Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
     Process.proc "curl"
-        ["-s", "http://localhost:9990/v1/embeddings",
+        ["-s", Main.embeddingsPrefix <> "/v1/embeddings",
         "-H", "Content-Type: application/json",
         "-X", "POST",
         "-f",
@@ -122,7 +122,7 @@ getEmbedding :: Text -> IO (Vector Value) = \content -> do
   output <- ByteString.readProcessStdout_ $
     Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
     Process.proc "curl"
-        ["-s", "http://localhost:9990/embedding",
+        ["-s", Main.embeddingsPrefix <> "/embedding",
         "-H", "Content-Type: application/json",
         "-X", "POST",
         "-f",
@@ -145,7 +145,7 @@ putPoints = \(collection :: Text) (point :: Main.Point) -> do
   Process.runProcess_ $
     Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
     Process.proc "curl"
-        ["-s", "http://localhost:6333/collections/" <> collection <> "/points?wait=true",
+        ["-s", Main.qdrantPrefix <> "/collections/" <> collection <> "/points?wait=true",
         "-H", "Content-Type: application/json",
         "-X", "PUT",
         "--data-binary", "@-"]
@@ -159,7 +159,7 @@ searchPoints :: Text -> Vector Value -> Double -> IO (Vector Value) = \collectio
   output <- ByteString.readProcessStdout_ $
     Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
     Process.proc "curl"
-        ["-s", "http://localhost:6333/collections/" <> collection <> "/points/search",
+        ["-s", Main.qdrantPrefix <> "/collections/" <> collection <> "/points/search",
         "-H", "Content-Type: application/json",
         "-X", "POST",
         "-f",
@@ -183,3 +183,7 @@ sha256 = \content ->
     Process.proc "sha256sum" ["-"]
 
 uuidv4 = Functor.fmap Text.strip $ Text.readFile "/proc/sys/kernel/random/uuid"
+
+qdrantPrefix = "http://localhost:6333"
+
+embeddingsPrefix = "http://localhost:9990"
