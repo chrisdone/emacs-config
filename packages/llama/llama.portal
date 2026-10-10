@@ -2,22 +2,22 @@
 Running services
 
 portal_YTRjMDI5NDM5M2QyYmRmY
-# (◑) ssh -L 9990:localhost:9990 host Downloads/llama/llama-server -m UTM-Shared/LLMs/bge-m3-Q8_0.gguf --embeddings -ngl 99 -c 8192 -b 8192 -ub 8192 --port 9990
+# (◐) ssh -L 9990:localhost:9990 host Downloads/llama/llama-server -m UTM-Shared/LLMs/bge-m3-Q8_0.gguf --embeddings -ngl 99 -c 8192 -b 8192 -ub 8192 --port 9990
 # Started: 2026-10-08 09:40:25
-# 11.04.107.868 I slot launch_slot_: id  2 | task 14 | processing task, is_child
-# 11.04.140.413 I slot      release: id  2 | task 14 | stop processing: n_tokens
-# 12.16.501.485 I slot get_availabl: id  2 | task -1 | selected slot by LCP simi
-# 12.16.501.499 I slot launch_slot_: id  2 | task 16 | processing task, is_child
-# 12.16.531.510 I slot      release: id  2 | task 16 | stop processing: n_tokens
+# 2196.25.002.803 I slot launch_slot_: id  2 | task 38 | processing task, is_chi
+# 2196.25.033.006 I slot      release: id  2 | task 38 | stop processing: n_toke
+# 2196.42.421.894 I slot get_availabl: id  2 | task -1 | selected slot by LCP si
+# 2196.42.421.905 I slot launch_slot_: id  2 | task 40 | processing task, is_chi
+# 2196.42.452.815 I slot      release: id  2 | task 40 | stop processing: n_toke
 
 portal_MDA2NGVkOTFlMjM3MDgyM
-# (◒) qdrant
+# (◐) qdrant
 # Started: 2026-10-07 14:41:00
-# 2026-10-08T08:48:39.431375Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
-# 2026-10-08T08:49:19.779218Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
-# 2026-10-08T08:51:01.503482Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
-# 2026-10-08T08:51:29.454916Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
-# 2026-10-08T08:52:41.859216Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-08T15:58:23.527209Z  INFO actix_web::middleware::logger: 127.0.0.1 "PU
+# 2026-10-09T21:15:23.210184Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
+# 2026-10-09T21:16:09.823390Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
+# 2026-10-09T21:16:50.389108Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
+# 2026-10-09T21:17:07.806918Z  INFO actix_web::middleware::logger: 127.0.0.1 "PO
 
 ################################################################################
 # Storing embeddings into quadrant
@@ -85,19 +85,33 @@ portal_ODhkZWJlNTU2YjVlNjIzO
 # Started: 2026-10-08 16:58:12, exited: 2026-10-08 16:58:13 => 155.000 ms
 # [{"id":"08128e9c-ff1a-44ed-a888-437552f456f0","payload":{"place":"some place"}
 
+portal_MzNjZTJkNGNmZjJhNjM1Y
+# (0) hell llama.hell create-document --name '76ed50dbcbf6c6a4cc148d511f8f90311ea5b256'
+# Started: 2026-10-10 20:54:46, exited: 2026-10-10 20:54:47 => 590.997 ms
+# {"result":true,"status":"ok","time":0.365606544}                              
+
+portal_ODY0YTBmYWY5ZTk4MDFjM
+# (0) hell llama.hell create-document --help
+# Started: 2026-10-09 22:54:07, exited: 2026-10-09 22:54:07 => 202.998 ms
+# Available options:                                                            
+#   --name ARG               Qdrant collection name                             
+#   --size ARG               Vector size (default: 1024)                        
+#   --distance ARG           Distance metric (default: Cosine)                  
+#   -h,--help                Show this help text                                
+
 portal_YzFhOGUzOWM3ZDYzMTc2N
 # (0) cd ../../; ./claude-check.sh
 # Started: 2026-10-08 16:11:22, exited: 2026-10-08 16:11:22 => 54.999 ms
 
-portal_MmU0Nzc5ZjA0N2Q2OTUyZ
+portal_OTg0ODBlZTdiZDllMGQ3O
 # (0) hell --check llama.hell 
-# Started: 2026-10-09 15:00:48, exited: 2026-10-09 15:00:48 => 148.996 ms
+# Started: 2026-10-10 21:01:18, exited: 2026-10-10 21:01:18 => 211.004 ms
 
-portal_NDBhNWQwOWNkNDE3NDk5M
+portal_ODAwMWEzNmRhNDIwYTA1M
 # (0) cd /home/chris/Work/chrisdone-artificial/emacs-config/; cat .prompt && cat .prompt | nix run -- github:sadjow/claude-code-nix -p --output-format stream-json --verbose --permission-mode bypassPermissions --allowed-tools 'Read,Bash(grep:*),Bash(cat:*),Bash(ls:*),Bash(./claude-check.sh)' --add-dir `pwd` | jq
-# Started: 2026-10-08 16:57:26, exited: 2026-10-08 16:57:48 => 22.439 s
-#   "time_to_request_ms": 201,                                                  
-#   "first_content_frame_ms": 2137,                                             
+# Started: 2026-10-10 21:01:55, exited: 2026-10-10 21:02:20 => 25.143 s
+#   "time_to_request_ms": 144,                                                  
+#   "first_content_frame_ms": 1160,                                             
 #   "queued_turn_count": 0,                                                     
 #   "result_index": 0                                                           
 # }                                                                             

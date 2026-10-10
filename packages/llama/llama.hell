@@ -5,6 +5,7 @@ data Command
   = GetEmbeddings
   | StoreFragment Main.Fragment
   | SearchFragments Main.Search
+  | CreateDocument Main.Document
 
 -- <https://qdrant.tech/documentation/manage-data/points/>
 data Point = Point {
@@ -17,6 +18,13 @@ data Search = Search {
  collection :: Text,
  query :: Text,
  limit :: Int
+ }
+
+-- <https://qdrant.tech/documentation/manage-data/collections/>
+data Document = Document {
+ name :: Text,
+ size :: Int,
+ distance :: Text
  }
 
 data Fragment = Fragment {
@@ -52,11 +60,23 @@ parseSearchFragments =
             (Options.strOption (Option.long "limit" <> Option.help "Max number of results"))
     )
 
+parseCreateDocument =
+  Main.CreateDocument <$>
+    (
+      (\name size distance -> Main.Document { name, size, distance })
+      <$> Options.strOption (Option.long "name" <> Option.help "Qdrant collection name")
+      <*> Functor.fmap
+            (\(s :: Text) -> Maybe.maybe (Error.error "--size: expected an integer") Function.id (Int.readMaybe s))
+            (Options.strOption (Option.long "size" <> Option.value "1024" <> Option.help "Vector size (default: 1024)"))
+      <*> Options.strOption (Option.long "distance" <> Option.value "Cosine" <> Option.help "Distance metric (default: Cosine)")
+    )
+
 cmdParser =
   Options.hsubparser
     ( Options.command "get-embeddings" (Options.info Main.parseGetEmbeddings (Options.progDesc "Get embeddings")) <>
     Options.command "store-fragment" (Options.info Main.parseStoreFragment (Options.progDesc "Store fragment")) <>
-    Options.command "search-fragments" (Options.info Main.parseSearchFragments (Options.progDesc "Search fragments"))
+    Options.command "search-fragments" (Options.info Main.parseSearchFragments (Options.progDesc "Search fragments")) <>
+    Options.command "create-document" (Options.info Main.parseCreateDocument (Options.progDesc "Create document collection"))
     )
 
 main = do
@@ -66,6 +86,7 @@ main = do
     GetEmbeddings -> Main.getEmbeddingsCmd
     StoreFragment fragment -> Main.storeFragment fragment
     SearchFragments search -> Main.searchFragmentsCmd search
+    CreateDocument document -> Main.createCollection document
 
 --------------------------------------------------------------------------------
 -- Commands
@@ -148,6 +169,22 @@ putPoints = \(collection :: Text) (point :: Main.Point) -> do
         ["-s", Main.qdrantPrefix <> "/collections/" <> collection <> "/points?wait=true",
         "-H", "Content-Type: application/json",
         "-X", "PUT",
+        "--data-binary", "@-"]
+
+createCollection :: Main.Document -> IO () = \document -> do
+  let payload = Json.Object $ Map.fromList [
+        ("vectors", Json.Object $ Map.fromList [
+            ("size", Json.Number $ Double.fromInt $ Record.get @"size" document),
+            ("distance", Json.String $ Record.get @"distance" document)
+          ])
+       ]
+  Process.runProcess_ $
+    Text.setStdin (Text.decodeUtf8 $ Json.encode payload) $
+    Process.proc "curl"
+        ["-s", Main.qdrantPrefix <> "/collections/" <> Record.get @"name" document,
+        "-H", "Content-Type: application/json",
+        "-X", "PUT",
+        "-f",
         "--data-binary", "@-"]
 
 searchPoints :: Text -> Vector Value -> Double -> IO (Vector Value) = \collection vector limit -> do
